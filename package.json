@@ -1,0 +1,18 @@
+{
+  "name": "save-children",
+  "version": "0.0.1",
+  "description": "game",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "build": "browserify app/js/main.js > dist/lib.js"
+  },
+  "author": "izuick@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.2",
+    "underscore": "^1.8.3",
+    "watchify": "^3.9.0"
+  }
+}
