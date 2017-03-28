@@ -1,6 +1,7 @@
 var fs = require('fs');
 var browserify = require('browserify');
 var watchify = require('watchify');
+var errorify = require('errorify');
 var express = require("express");
 var app = express();
 
@@ -8,13 +9,13 @@ var app = express();
 var port = 3000;
 var staticFolder = 'dist';
 var source = 'app/js/main.js';
-var dist = 'dist/lib.js';
+var dist = 'dist/js/lib.js';
 
 var b = browserify({
   entries: [source],
   cache: {},
   packageCache: {},
-  plugin: [watchify]
+  plugin: [watchify, errorify]
 });
 
 b.on('update', bundle);
