@@ -8,9 +8,9 @@ module.exports = function(game, Phaser){
     }
 
     this.create = function(){
-      sprite = game.add.sprite(16, 16, 'guy');
+      sprite = game.add.sprite(0, 0, 'guy');
       game.physics.enable(sprite);
-      sprite.body.setCircle(8);
+      sprite.body.setSize(32, 32, 0, 0);
       sprite.body.collideWorldBounds = true;
 
       cursors = game.input.keyboard.createCursorKeys();
