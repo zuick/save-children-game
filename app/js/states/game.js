@@ -14,6 +14,9 @@ module.exports = function(game, Phaser){
     update: function(){  
       hero.update();
       game.physics.arcade.collide(hero.getCollider(), map.getColliderLayer());
+    },
+    render: function(){
+      hero.render();
     }
   }
 }
