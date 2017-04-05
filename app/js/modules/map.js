@@ -3,7 +3,7 @@ var config = require('../config');
 module.exports = function(game, Phaser){
   function Map(){
     var map;
-    var background;
+    var mainLayer;
     var walls;
 
     this.preload = function(){
@@ -14,11 +14,9 @@ module.exports = function(game, Phaser){
     this.create = function(){
       map = game.add.tilemap('map');
       map.addTilesetImage('tilemap', 'tilemap');
-      map.setCollision(config.map.collisionIndexes, true, 'walls');
 
-      background = map.createLayer('background');
-      walls = map.createLayer('walls');
-      background.resizeWorld();
+      mainLayer = map.createLayer('main');
+      mainLayer.resizeWorld();      
     }
 
     this.getColliderLayer = function(){
