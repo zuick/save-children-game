@@ -46,6 +46,8 @@ module.exports = function(game, Phaser){
 
     this.getDestinationPoint = function(){
       currentTile = map.getTileCoords(sprite.x, sprite.y);
+
+      //map.getTileWays(currentTile.x, currentTile.y);
       // observe tile by tile in current direction,
       // detect possible ways for each tile
       // set tile as destination if it has ortogonal way or tiles finished

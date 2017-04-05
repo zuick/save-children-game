@@ -16,7 +16,7 @@ module.exports = function(game, Phaser){
       map.addTilesetImage('tilemap', 'tilemap');
 
       mainLayer = map.createLayer('main');
-      mainLayer.resizeWorld();      
+      mainLayer.resizeWorld();
     }
 
     this.getColliderLayer = function(){
@@ -32,6 +32,39 @@ module.exports = function(game, Phaser){
         return void 0;
       }
       return map.layer.data[y][x];
+    }
+
+    this.getTileWays = function(x, y){
+      var tiles = [
+        {
+          name: 'up',
+          tile: this.getTile(x, y - 1)
+        },
+        {
+          name: 'down',
+          tile: this.getTile(x, y + 1)
+        },
+        {
+          name: 'left',
+          tile: this.getTile(x - 1, y)
+        },
+        {
+          name: 'right',
+          tile: this.getTile(x + 1, y)
+        },
+      ];
+
+      return tiles
+        .filter(
+          function(t){ return t.tile && !this.isWall(t.tile)}.bind(this)
+        )
+        .map(
+          function(t){ return t.name}
+        )
+    }
+
+    this.isWall = function(tile){
+      return config.map.walls.indexOf(tile.index) !== -1;
     }
 
     this.get = function(){
