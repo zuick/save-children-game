@@ -24,6 +24,10 @@ module.exports = function(game, Phaser){
     this.getColliderLayer = function(){
       return walls;
     }
+
+    this.getMap = function(){
+      return map;
+    }
   }
   return new Map();
 }

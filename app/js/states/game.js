@@ -9,9 +9,9 @@ module.exports = function(game, Phaser){
     create: function() {
       game.physics.startSystem(Phaser.Physics.ARCADE);
       map.create();
-      hero.create();
+      hero.create(map.getMap());
     },
-    update: function(){  
+    update: function(){
       hero.update();
       game.physics.arcade.collide(hero.getCollider(), map.getColliderLayer());
     },
