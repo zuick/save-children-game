@@ -25,7 +25,18 @@ module.exports = function(game, Phaser){
       return walls;
     }
 
-    this.getMap = function(){
+    this.getTileCoords = function(x, y){
+      return { x: Math.floor(x / map.tileWidth), y: Math.floor(y / map.tileHeight)}
+    }
+
+    this.getTile = function(x, y){
+      if( x >= map.width || y >= map.height || x < 0 || y < 0 ){
+        return void 0;
+      }
+      return map.layer.data[y][x];
+    }
+
+    this.get = function(){
       return map;
     }
   }

@@ -20,13 +20,13 @@ module.exports = function(game, Phaser){
       var delta = speed * game.time.elapsedMS / 1000;
       switch(currentDir){
         case 'up':
-          sprite.x += delta;
+          sprite.x -= delta;
         break;
         case 'right':
           sprite.x += delta;
         break;
         case 'down':
-          sprite.y -= delta;
+          sprite.y += delta;
         break;
         case 'left':
           sprite.x -= delta;
@@ -44,12 +44,8 @@ module.exports = function(game, Phaser){
       return directions[parseInt(Math.random() * directions.length)];
     }
 
-    this.getCurrentTile = function(){
-      return { x: Math.floor(sprite.x / map.tileWidth), y: Math.floor(sprite.y / map.tileHeight)}
-    }
-
     this.getDestinationPoint = function(){
-      currentTile = this.getCurrentTile();
+      currentTile = map.getTileCoords(sprite.x, sprite.y);
       // observe tile by tile in current direction,
       // detect possible ways for each tile
       // set tile as destination if it has ortogonal way or tiles finished
@@ -61,7 +57,7 @@ module.exports = function(game, Phaser){
 
     this.render = function(){
       game.debug.text(currentDir, 100, game.height - 20);
-      game.debug.geom(new Phaser.Point(currentTile.x * map.tileWidth + map.tileWidth / 2, currentTile.y * map.tileHeight + map.tileHeight / 2), 'rgba(0, 256, 0, 1)');
+      game.debug.geom(new Phaser.Point(currentTile.x * map.get().tileWidth + map.get().tileWidth / 2, currentTile.y * map.get().tileHeight + map.get().tileHeight / 2), 'rgba(0, 256, 0, 1)');
     }
   }
   return new Hero();

@@ -6,9 +6,9 @@ module.exports = function(game, Phaser){
       map.preload();
       hero.preload();
     },
-    create: function() {      
+    create: function() {
       map.create();
-      hero.create(map.getMap());
+      hero.create(map);
     },
     update: function(){
       hero.update();
