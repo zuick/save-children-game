@@ -6,14 +6,12 @@ module.exports = function(game, Phaser){
       map.preload();
       hero.preload();
     },
-    create: function() {
-      game.physics.startSystem(Phaser.Physics.ARCADE);
+    create: function() {      
       map.create();
       hero.create(map.getMap());
     },
     update: function(){
       hero.update();
-      game.physics.arcade.collide(hero.getCollider(), map.getColliderLayer());
     },
     render: function(){
       hero.render();

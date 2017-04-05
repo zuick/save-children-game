@@ -12,28 +12,24 @@ module.exports = function(game, Phaser){
 
     this.create = function(_map){
       sprite = game.add.sprite(0, 0, 'guy');
-      game.physics.enable(sprite);
-      sprite.body.setSize(32, 32, 0, 0);
-      sprite.body.collideWorldBounds = true;
       currentDir = this.getRandomDirection();
       map = _map;
     }
 
     this.update = function(){
-      sprite.body.velocity.x = 0;
-      sprite.body.velocity.y = 0;
+      var delta = speed * game.time.elapsedMS / 1000;
       switch(currentDir){
         case 'up':
-          sprite.body.velocity.y = -speed;
+          sprite.x += delta;
         break;
         case 'right':
-          sprite.body.velocity.x = speed;
+          sprite.x += delta;
         break;
         case 'down':
-          sprite.body.velocity.y = speed;
+          sprite.y -= delta;
         break;
         case 'left':
-          sprite.body.velocity.x = -speed;
+          sprite.x -= delta;
         break;
 
         default: break;
