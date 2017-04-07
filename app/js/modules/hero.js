@@ -1,3 +1,5 @@
+var directions = require('./directions');
+
 module.exports = function(game, Phaser){
   function Hero(){
     var sprite;
@@ -11,16 +13,17 @@ module.exports = function(game, Phaser){
     }
 
     this.create = function(_map){
-      sprite = game.add.sprite(0, 0, 'guy');
-      currentDir = this.getRandomDirection();
       map = _map;
+      sprite = game.add.sprite(0, 0, 'guy');
+      currentDir = directions.getRandom();
+      currentTile = map.getTileCoords(sprite.x, sprite.y);
     }
 
     this.update = function(){
       var delta = speed * game.time.elapsedMS / 1000;
       switch(currentDir){
         case 'up':
-          sprite.x -= delta;
+          sprite.y -= delta;
         break;
         case 'right':
           sprite.x += delta;
@@ -38,15 +41,12 @@ module.exports = function(game, Phaser){
       this.getDestinationPoint();
     }
 
-    this.getRandomDirection = function(){
-      //var directions = ['up', 'right', 'down', 'left'];
-      var directions = ['right', 'down'];
-      return directions[parseInt(Math.random() * directions.length)];
-    }
-
     this.getDestinationPoint = function(){
-      currentTile = map.getTileCoords(sprite.x, sprite.y);
-
+      var newTile = map.getTileCoords(sprite.x, sprite.y);
+      if(currentTile.x !== newTile.x || currentTile.y !== newTile.y){
+        currentTile = newTile;
+        console.log(map.getTilesInDirection(currentDir, currentTile).map(function(t){ return t.index}));
+      }
       //map.getTileWays(currentTile.x, currentTile.y);
       // observe tile by tile in current direction,
       // detect possible ways for each tile

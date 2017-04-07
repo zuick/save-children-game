@@ -1,4 +1,5 @@
 var config = require('../config');
+var directions = require('./directions');
 
 module.exports = function(game, Phaser){
   function Map(){
@@ -23,8 +24,8 @@ module.exports = function(game, Phaser){
       return walls;
     }
 
-    this.getTileCoords = function(x, y){
-      return { x: Math.floor(x / map.tileWidth), y: Math.floor(y / map.tileHeight)}
+    this.getTileCoords = function(worldX, worldY){
+      return { x: Math.floor(worldX / map.tileWidth), y: Math.floor(worldY / map.tileHeight)}
     }
 
     this.getTile = function(x, y){
@@ -32,6 +33,25 @@ module.exports = function(game, Phaser){
         return void 0;
       }
       return map.layer.data[y][x];
+    }
+
+    this.getTilesInDirection = function(dir, start){
+      var tiles = [];
+      var delta = directions.isPositive(dir) ? 1 : -1;
+      var inc = function(value){
+        return value + delta;
+      }
+      if(directions.isVertical(dir)){
+        for(var y = start.y; y < map.height && y >= 0; y = inc(y)){
+          tiles.push(this.getTile(start.x, y));
+        }
+      }else{
+        for(var x = start.x; x < map.width && x >= 0; x = inc(x)){
+          tiles.push(this.getTile(x, start.y));
+        }
+      }
+
+      return tiles;
     }
 
     this.getTileWays = function(x, y){
