@@ -5,7 +5,7 @@ module.exports = function(game, Phaser){
     var sprite;
     var speed = 10;
     var currentDir;
-    var distination;
+    var distinationTile;
     var map;
     var currentTile;
     this.preload = function(){
@@ -45,9 +45,9 @@ module.exports = function(game, Phaser){
       var newTile = map.getTileCoords(sprite.x, sprite.y);
       if(currentTile.x !== newTile.x || currentTile.y !== newTile.y){
         currentTile = newTile;
-        console.log(map.getTilesInDirection(currentDir, currentTile).map(function(t){ return t.index}));
+        var wayTiles = map.getTilesInDirection(currentDir, currentTile);
+        
       }
-      //map.getTileWays(currentTile.x, currentTile.y);
       // observe tile by tile in current direction,
       // detect possible ways for each tile
       // set tile as destination if it has ortogonal way or tiles finished
@@ -59,7 +59,9 @@ module.exports = function(game, Phaser){
 
     this.render = function(){
       game.debug.text(currentDir, 100, game.height - 20);
-      game.debug.geom(new Phaser.Point(currentTile.x * map.get().tileWidth + map.get().tileWidth / 2, currentTile.y * map.get().tileHeight + map.get().tileHeight / 2), 'rgba(0, 256, 0, 1)');
+      if(map && distinationTile){
+        map.debugTile(distinationTile);
+      }
     }
   }
   return new Hero();

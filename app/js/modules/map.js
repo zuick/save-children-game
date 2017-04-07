@@ -54,7 +54,9 @@ module.exports = function(game, Phaser){
       return tiles;
     }
 
-    this.getTileWays = function(x, y){
+    this.getTileWays = function(tile){
+      var x = tile.x;
+      var y = tile.y;
       var tiles = [
         {
           name: 'up',
@@ -89,6 +91,16 @@ module.exports = function(game, Phaser){
 
     this.get = function(){
       return map;
+    }
+
+    this.debugTile = function(tile){
+      game.debug.geom(
+        new Phaser.Point(
+          tile.x * map.tileWidth + map.tileWidth / 2,
+          tile.y * map.tileHeight + map.tileHeight / 2
+        ),
+        'rgba(0, 256, 255, 1)'
+      );
     }
   }
   return new Map();
