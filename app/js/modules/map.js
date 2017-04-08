@@ -25,7 +25,7 @@ module.exports = function(game, Phaser){
     }
 
     this.getTileAt = function(worldX, worldY){
-      return this.getTile(Math.floor(worldX / map.tileWidth), Math.floor(worldY / map.tileHeight));
+      return this.getTile(Math.floor(Math.round(worldX) / map.tileWidth), Math.floor(Math.round(worldY) / map.tileHeight));
     }
 
     this.getTile = function(x, y){

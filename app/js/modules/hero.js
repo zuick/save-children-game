@@ -6,7 +6,7 @@ module.exports = function(game, Phaser){
     var sprite;
     var speed = 50;
     var currentDir;
-    var destinationTile;
+    var destination;
     var map;
     this.preload = function(){
       game.load.image('guy', 'assets/guy.png');
@@ -18,16 +18,16 @@ module.exports = function(game, Phaser){
     }
 
     this.update = function(){
-      if(!destinationTile){
+      if(!destination){
         var currentTile = map.getTileAt(sprite.x, sprite.y);
         currentDir = directions.getRandomFrom(map.getTileWays(currentTile));
-        destinationTile = this.getDestinationFrom(currentTile);
-      }
-
-      if(currentDir){
+        destination = this.getDestinationFrom(currentTile);
+      }else if(currentDir){
         var delta = this.getDeltaToDest();
         if(delta.x === 0 && delta.y === 0){
-          console.log("destination get");
+          var currentTile = map.getTileAt(sprite.x, sprite.y);
+          currentDir = destination.dir;
+          destination = this.getDestinationFrom(currentTile);
         }else{
           sprite.x += delta.x;
           sprite.y += delta.y;
@@ -36,7 +36,7 @@ module.exports = function(game, Phaser){
     }
 
     this.getDeltaToDest = function(){
-      var dwp = map.getTileWorldXY(destinationTile);
+      var dwp = map.getTileWorldXY(destination.tile);
       var delta = speed * game.time.elapsedMS / 1000;
       var dx = dwp.x - (sprite.x + (sprite.texture.width / 2));
       var dy = dwp.y - (sprite.y + (sprite.texture.height / 2));
@@ -53,11 +53,11 @@ module.exports = function(game, Phaser){
           var ways = map.getTileWays(directionTiles[i]);
           var possibleTurns = difference(ways, [currentDir, directions.getOpposite(currentDir)]);
           if(possibleTurns.length > 0){
-            return directionTiles[i];
+            return  { tile: directionTiles[i], dir: directions.getRandomFrom(possibleTurns) };
           }
       }
 
-      return currentTile;
+      return { tile: currentTile, dir: currentDir };
     }
 
 
@@ -67,8 +67,8 @@ module.exports = function(game, Phaser){
 
     this.render = function(){
       game.debug.text(currentDir, 100, game.height - 20);
-      if(map && destinationTile){
-        map.debugTile(destinationTile);
+      if(map && destination && destination.tile){
+        map.debugTile(destination.tile);
       }
     }
   }
