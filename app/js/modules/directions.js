@@ -16,7 +16,10 @@ module.exports = {
     return this.horizontal[0];
   },
   getRandom: function(){
-    var directions = this.getAll();
+    return this.getRandomFrom(this.getAll());
+  },
+  getRandomFrom: function(directions){
+    if(directions.length == 0) return '';
     return directions[parseInt(Math.random() * directions.length)];
   },
   isVertical: function(dir){

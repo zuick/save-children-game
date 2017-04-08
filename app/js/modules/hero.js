@@ -1,13 +1,13 @@
 var directions = require('./directions');
+var difference = require('lodash.difference');
 
 module.exports = function(game, Phaser){
   function Hero(){
     var sprite;
-    var speed = 10;
+    var speed = 50;
     var currentDir;
-    var distinationTile;
+    var destinationTile;
     var map;
-    var currentTile;
     this.preload = function(){
       game.load.image('guy', 'assets/guy.png');
     }
@@ -15,43 +15,44 @@ module.exports = function(game, Phaser){
     this.create = function(_map){
       map = _map;
       sprite = game.add.sprite(0, 0, 'guy');
-      currentDir = directions.getRandom();
-      currentTile = map.getTileCoords(sprite.x, sprite.y);
     }
 
     this.update = function(){
+      if(!destinationTile){
+        var currentTile = map.getTileAt(sprite.x, sprite.y);
+        currentDir = directions.getRandomFrom(map.getTileWays(currentTile));
+        destinationTile = this.getDestinationFrom(currentTile);
+      }
+
+      if(currentDir){
+        var delta = this.getDeltaToDest();
+        sprite.x += delta.x;
+        sprite.y += delta.y;
+      }
+    }
+
+    this.getDeltaToDest = function(){
+      var dwp = map.getTileWorldXY(destinationTile);
       var delta = speed * game.time.elapsedMS / 1000;
-      switch(currentDir){
-        case 'up':
-          sprite.y -= delta;
-        break;
-        case 'right':
-          sprite.x += delta;
-        break;
-        case 'down':
-          sprite.y += delta;
-        break;
-        case 'left':
-          sprite.x -= delta;
-        break;
-
-        default: break;
+      return {
+        x: sprite.x + (sprite.texture.width / 2) < dwp.x ? delta : -delta,
+        y: sprite.y + (sprite.texture.height / 2) < dwp.y ? delta : -delta
       }
-
-      this.getDestinationPoint();
     }
 
-    this.getDestinationPoint = function(){
-      var newTile = map.getTileCoords(sprite.x, sprite.y);
-      if(currentTile.x !== newTile.x || currentTile.y !== newTile.y){
-        currentTile = newTile;
-        var wayTiles = map.getTilesInDirection(currentDir, currentTile);
-        
+    this.getDestinationFrom = function(currentTile){
+      var directionTiles = map.getTilesInDirection(currentDir, currentTile);
+      for(var i = 0; i < directionTiles.length; i++){
+          var ways = map.getTileWays(directionTiles[i]);
+          var possibleTurns = difference(ways, [currentDir, directions.getOpposite(currentDir)]);
+          if(possibleTurns.length > 0){
+            return directionTiles[i];
+          }
       }
-      // observe tile by tile in current direction,
-      // detect possible ways for each tile
-      // set tile as destination if it has ortogonal way or tiles finished
+
+      return currentTile;
     }
+
 
     this.getCollider = function(){
       return sprite;
@@ -59,8 +60,8 @@ module.exports = function(game, Phaser){
 
     this.render = function(){
       game.debug.text(currentDir, 100, game.height - 20);
-      if(map && distinationTile){
-        map.debugTile(distinationTile);
+      if(map && destinationTile){
+        map.debugTile(destinationTile);
       }
     }
   }

@@ -24,8 +24,8 @@ module.exports = function(game, Phaser){
       return walls;
     }
 
-    this.getTileCoords = function(worldX, worldY){
-      return { x: Math.floor(worldX / map.tileWidth), y: Math.floor(worldY / map.tileHeight)}
+    this.getTileAt = function(worldX, worldY){
+      return this.getTile(Math.floor(worldX / map.tileWidth), Math.floor(worldY / map.tileHeight));
     }
 
     this.getTile = function(x, y){
@@ -42,11 +42,11 @@ module.exports = function(game, Phaser){
         return value + delta;
       }
       if(directions.isVertical(dir)){
-        for(var y = start.y; y < map.height && y >= 0; y = inc(y)){
+        for(var y = inc(start.y); y < map.height && y >= 0; y = inc(y)){
           tiles.push(this.getTile(start.x, y));
         }
       }else{
-        for(var x = start.x; x < map.width && x >= 0; x = inc(x)){
+        for(var x = inc(start.x); x < map.width && x >= 0; x = inc(x)){
           tiles.push(this.getTile(x, start.y));
         }
       }
@@ -85,6 +85,10 @@ module.exports = function(game, Phaser){
         )
     }
 
+    this.getTileWorldXY = function(tile){
+      return { x: tile.x * map.tileWidth + map.tileWidth / 2, y: tile.y * map.tileHeight + map.tileHeight / 2 };
+    }
+
     this.isWall = function(tile){
       return config.map.walls.indexOf(tile.index) !== -1;
     }
@@ -94,11 +98,9 @@ module.exports = function(game, Phaser){
     }
 
     this.debugTile = function(tile){
+      var worldPosition = this.getTileWorldXY(tile);
       game.debug.geom(
-        new Phaser.Point(
-          tile.x * map.tileWidth + map.tileWidth / 2,
-          tile.y * map.tileHeight + map.tileHeight / 2
-        ),
+        new Phaser.Point(worldPosition.x, worldPosition.y),
         'rgba(0, 256, 255, 1)'
       );
     }
