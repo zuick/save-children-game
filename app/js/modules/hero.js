@@ -26,17 +26,24 @@ module.exports = function(game, Phaser){
 
       if(currentDir){
         var delta = this.getDeltaToDest();
-        sprite.x += delta.x;
-        sprite.y += delta.y;
+        if(delta.x === 0 && delta.y === 0){
+          console.log("destination get");
+        }else{
+          sprite.x += delta.x;
+          sprite.y += delta.y;
+        }
       }
     }
 
     this.getDeltaToDest = function(){
       var dwp = map.getTileWorldXY(destinationTile);
       var delta = speed * game.time.elapsedMS / 1000;
+      var dx = dwp.x - (sprite.x + (sprite.texture.width / 2));
+      var dy = dwp.y - (sprite.y + (sprite.texture.height / 2));
+
       return {
-        x: sprite.x + (sprite.texture.width / 2) < dwp.x ? delta : -delta,
-        y: sprite.y + (sprite.texture.height / 2) < dwp.y ? delta : -delta
+        x: Math.sign(dx) * Math.min(Math.abs(dx), delta),
+        y: Math.sign(dy) * Math.min(Math.abs(dy), delta)
       }
     }
 
