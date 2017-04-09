@@ -2,19 +2,16 @@ var directions = require('./directions');
 var difference = require('lodash.difference');
 
 module.exports = function(game, Phaser){
-  function Hero(){
+  function Stray(){
     var sprite;
     var speed = 50;
     var currentDir;
     var destination;
     var map;
-    this.preload = function(){
-      game.load.image('guy', 'assets/guy.png');
-    }
 
-    this.create = function(_map){
+    this.create = function(x, y, _map){
       map = _map;
-      sprite = game.add.sprite(0, 0, 'guy');
+      sprite = game.add.sprite(x, y, 'guy');
     }
 
     this.update = function(){
@@ -38,8 +35,8 @@ module.exports = function(game, Phaser){
     this.getDeltaToDest = function(){
       var dwp = map.getTileWorldXY(destination.tile);
       var delta = speed * game.time.elapsedMS / 1000;
-      var dx = dwp.x - (sprite.x + (sprite.texture.width / 2));
-      var dy = dwp.y - (sprite.y + (sprite.texture.height / 2));
+      var dx = dwp.x - sprite.x;
+      var dy = dwp.y - sprite.y;
 
       return {
         x: Math.sign(dx) * Math.min(Math.abs(dx), delta),
@@ -75,5 +72,6 @@ module.exports = function(game, Phaser){
       }
     }
   }
-  return new Hero();
+
+  return Stray;
 }

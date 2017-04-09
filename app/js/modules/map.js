@@ -6,6 +6,7 @@ module.exports = function(game, Phaser){
     var map;
     var mainLayer;
     var walls;
+    var children;
 
     this.preload = function(){
       game.load.tilemap('map', 'assets/levels/level-1.json', null, Phaser.Tilemap.TILED_JSON);
@@ -20,6 +21,28 @@ module.exports = function(game, Phaser){
       mainLayer.resizeWorld();
     }
 
+    this.getTilesInLayer = function(layerName, indexes){
+      var result = [];
+      var layer = this.getLayer(layerName);
+      if(layer){
+        layer.data.forEach(function(row){
+          row.forEach(function(tile){
+            if(indexes.indexOf(tile.index) !== -1){
+              result.push(tile);
+            }
+          })
+        })
+      }
+      return result;
+    }
+
+    this.getLayer = function(name){
+      var index = map.getLayerIndex(name);
+      if(index >= 0){
+        return map.layers[index];
+      }
+    }
+
     this.getColliderLayer = function(){
       return walls;
     }
@@ -28,11 +51,15 @@ module.exports = function(game, Phaser){
       return this.getTile(Math.floor(Math.round(worldX) / map.tileWidth), Math.floor(Math.round(worldY) / map.tileHeight));
     }
 
-    this.getTile = function(x, y){
-      if( x >= map.width || y >= map.height || x < 0 || y < 0 ){
-        return void 0;
+    this.getTile = function(x, y, layerName){
+      layerName = layerName || config.map.main.name;
+      var layer = this.getLayer(layerName);
+      if(layer){
+        if( x >= map.width || y >= map.height || x < 0 || y < 0 ){
+          return void 0;
+        }
+        return layer.data[y][x];
       }
-      return map.layer.data[y][x];
     }
 
     this.getTilesInDirection = function(dir, start){
@@ -86,11 +113,11 @@ module.exports = function(game, Phaser){
     }
 
     this.getTileWorldXY = function(tile){
-      return { x: tile.x * map.tileWidth + map.tileWidth / 2, y: tile.y * map.tileHeight + map.tileHeight / 2 };
+      return { x: tile.x * map.tileWidth, y: tile.y * map.tileHeight };
     }
 
     this.isWall = function(tile){
-      return config.map.walls.indexOf(tile.index) !== -1;
+      return config.map.main.walls.indexOf(tile.index) !== -1;
     }
 
     this.get = function(){

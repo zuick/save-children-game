@@ -1,20 +1,27 @@
+var config = require('../config');
 module.exports = function(game, Phaser){
   var map = require('../modules/map')(game, Phaser);
-  var hero = require('../modules/hero')(game, Phaser);
+  var Stray = require('../modules/stray')(game, Phaser);
+  var children = [];
+
   return {
     preload: function() {
       map.preload();
-      hero.preload();
+      game.load.image('guy', 'assets/guy.png');
     },
     create: function() {
       map.create();
-      hero.create(map);
+      map.getTilesInLayer(config.map.children.name, config.map.children.children).forEach(function(tile){
+        var worldPosition = map.getTileWorldXY(tile);
+        var child = new Stray();
+        child.create(worldPosition.x, worldPosition.y, map);
+        children.push(child);
+      });
     },
     update: function(){
-      hero.update();
-    },
-    render: function(){
-      hero.render();
+      children.forEach(function(child){
+        child.update();
+      })
     }
   }
 }
