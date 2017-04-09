@@ -4,7 +4,7 @@ var difference = require('lodash.difference');
 module.exports = function(game, Phaser){
   function Stray(){
     var sprite;
-    var speed = 50;
+    var speed = 20;
     var currentDir;
     var destination;
     var map;
@@ -12,6 +12,8 @@ module.exports = function(game, Phaser){
     this.create = function(x, y, _map){
       map = _map;
       sprite = game.add.sprite(x, y, 'guy');
+      game.physics.enable(sprite);
+      sprite.body.setSize(sprite.texture.width, sprite.texture.height, 0, 0);
     }
 
     this.update = function(){
@@ -70,6 +72,10 @@ module.exports = function(game, Phaser){
       if(map && destination && destination.tile){
         map.debugTile(destination.tile);
       }
+    }
+
+    this.destroy = function(){
+      sprite.destroy();
     }
   }
 

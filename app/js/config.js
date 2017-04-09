@@ -9,6 +9,10 @@ module.exports = {
     children: {
       name: "children",
       children: [4]
+    },
+    colliders: {
+      name: "colliders",
+      traps: [2]
     }
   }
 }

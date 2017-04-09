@@ -5,7 +5,6 @@ module.exports = function(game, Phaser){
   function Map(){
     var map;
     var mainLayer;
-    var walls;
     var children;
 
     this.preload = function(){
@@ -41,10 +40,6 @@ module.exports = function(game, Phaser){
       if(index >= 0){
         return map.layers[index];
       }
-    }
-
-    this.getColliderLayer = function(){
-      return walls;
     }
 
     this.getTileAt = function(worldX, worldY){
