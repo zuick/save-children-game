@@ -52,8 +52,11 @@ module.exports = function(game, Phaser){
       for(var i = 0; i < directionTiles.length; i++){
           var ways = map.getTileWays(directionTiles[i]);
           var possibleTurns = difference(ways, [currentDir, directions.getOpposite(currentDir)]);
-          if(possibleTurns.length > 0){
-            return  { tile: directionTiles[i], dir: directions.getRandomFrom(possibleTurns) };
+          var possibleTurnsWithStraight = difference(ways, [directions.getOpposite(currentDir)]);
+          if(possibleTurnsWithStraight.length === 0){
+            return  { tile: directionTiles[i], dir: directions.getOpposite(currentDir) };
+          }else if(possibleTurns.length > 0){
+            return  { tile: directionTiles[i], dir: directions.getRandomFrom(possibleTurnsWithStraight) };
           }
       }
 
