@@ -8,7 +8,6 @@ module.exports = function(game, Phaser){
     var currentDir;
     var destination;
     var map;
-
     this.create = function(x, y, _map){
       map = _map;
       sprite = game.add.sprite(x, y, 'guy');
@@ -80,6 +79,25 @@ module.exports = function(game, Phaser){
 
     this.onTrap = function(){
       this.destroy();
+    }
+
+    this.isOverlap = function(tile){
+      var x = sprite.x;
+      var y = sprite.y;
+      var w = sprite.texture.width;
+      var h = sprite.texture.height;
+      var tiles = [];
+      tiles.push(map.getTileAt(x, y));
+      tiles.push(map.getTileAt(x + w, y));
+      tiles.push(map.getTileAt(x, y + h));
+      tiles.push(map.getTileAt(x + w, y + h));
+      return tiles.indexOf(tile) !== -1;
+    }
+
+    this.onHero = function(){
+      var currentTile = map.getTileAt(sprite.x, sprite.y);
+      currentDir = directions.getOpposite(currentDir);
+      destination = this.getDestinationFrom(currentTile);
     }
   }
 

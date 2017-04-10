@@ -4,11 +4,13 @@ module.exports = function(game, Phaser){
   var Stray = require('../modules/stray')(game, Phaser);
   var Trap = require('../modules/trap')(game, Phaser);
   var Escape = require('../modules/escape')(game, Phaser);
+  var Hero = require('../modules/hero')(game, Phaser);
   var children = [];
   var traps = [];
   var escapes = [];
   var lostChildren = 0;
   var savedChildren = 0;
+  var hero;
 
   return {
     preload: function() {
@@ -16,6 +18,7 @@ module.exports = function(game, Phaser){
       game.load.image('guy', 'assets/guy.png');
       game.load.image('trap', 'assets/trap.png');
       game.load.image('escape', 'assets/escape.png');
+      game.load.image('hero', 'assets/hero.png');
     },
     create: function() {
       game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -23,17 +26,21 @@ module.exports = function(game, Phaser){
       children = this.createGroupFromLayer(config.map.children.name, config.map.children.children, Stray, true);
       traps = this.createGroupFromLayer(config.map.colliders.name, config.map.colliders.traps, Trap, false);
       escapes = this.createGroupFromLayer(config.map.colliders.name, config.map.colliders.escapes, Escape, false);
+      game.input.onDown.add(this.moveHero, this);
     },
     update: function(){
       var _this = this;
       children.forEach(function(child){
-        child.update();
         traps.forEach(function(trap){
           game.physics.arcade.collide(child.getCollider(), trap.getCollider(), _this.trapCollision, null, _this);
-        })
+        });
         escapes.forEach(function(esc){
           game.physics.arcade.collide(child.getCollider(), esc.getCollider(), _this.escapeCollision, null, _this);
-        })
+        });
+        if(hero){
+          game.physics.arcade.collide(child.getCollider(), hero.getCollider(), _this.heroCollision, null, _this);
+        }
+        child.update();
       })
     },
     escapeCollision: function(child, esc){
@@ -41,6 +48,12 @@ module.exports = function(game, Phaser){
     },
     trapCollision: function(child, trap){
       this.removeChild(child, function(){ lostChildren++; });
+    },
+    heroCollision: function(child, hero){
+      var index = children.map(function(c){ return c.getCollider() }).indexOf(child);
+      if(index !== -1){
+        children[index].onHero();
+      }
     },
     removeChild: function(child, onRemove){
       var index = children.map(function(c){ return c.getCollider() }).indexOf(child);
@@ -61,6 +74,22 @@ module.exports = function(game, Phaser){
         group.push(instance);
       });
       return group;
+    },
+    moveHero: function(pointer){
+      if(typeof hero !== 'undefined'){
+        hero.destroy();
+      }
+
+      var x = Math.floor(Math.round(pointer.x) / map.get().tileWidth) * map.get().tileWidth;
+      var y = Math.floor(Math.round(pointer.y) / map.get().tileHeight) * map.get().tileHeight;
+      var tileBehind = map.getTileAt(x, y);
+      if(config.map.main.walls.indexOf(tileBehind.index) === -1){
+        var childOverlap = children.some(function(child){ return child.isOverlap(tileBehind)});
+        if(!childOverlap){
+          hero = new Hero();
+          hero.create(x, y);          
+        }
+      }
     },
     render: function(){
       game.debug.text("In trap: " + lostChildren, 10, game.height - 15);
