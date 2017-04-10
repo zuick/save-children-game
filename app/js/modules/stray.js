@@ -4,7 +4,7 @@ var difference = require('lodash.difference');
 module.exports = function(game, Phaser){
   function Stray(){
     var sprite;
-    var speed = 20;
+    var speed = 25;
     var currentDir;
     var destination;
     var map;
@@ -76,6 +76,10 @@ module.exports = function(game, Phaser){
 
     this.destroy = function(){
       sprite.destroy();
+    }
+
+    this.onTrap = function(){
+      this.destroy();
     }
   }
 

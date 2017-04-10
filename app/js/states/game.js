@@ -5,7 +5,8 @@ module.exports = function(game, Phaser){
   var Trap = require('../modules/trap')(game, Phaser);
   var children = [];
   var traps = [];
-
+  var lostChildren = 0;
+  
   return {
     preload: function() {
       map.preload();
@@ -37,9 +38,16 @@ module.exports = function(game, Phaser){
         })
       })
     },
-    trapCollision: function(obj1, obj2){
-      var child = obj1 instanceof Stray ? obj1 : obj2;
-      console.log("collision", child);
+    trapCollision: function(child, trap){
+      var index = children.map(function(c){ return c.getCollider() }).indexOf(child);
+      if(index !== -1){
+        children[index].onTrap();
+        children.splice(index, 1);
+        lostChildren++;
+      }
+    },
+    render: function(){
+      game.debug.text("In trap: " + lostChildren, 10, game.height - 15);
     }
   }
 }
