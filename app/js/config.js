@@ -12,7 +12,8 @@ module.exports = {
     },
     colliders: {
       name: "colliders",
-      traps: [2]
+      traps: [2],
+      escapes: [5]
     }
   }
 }
