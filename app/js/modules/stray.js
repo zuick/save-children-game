@@ -97,7 +97,12 @@ module.exports = function(game, Phaser){
 
     this.onHero = function(){
       var currentTile = map.getTileAt(sprite.x, sprite.y);
-      currentDir = directions.getOpposite(currentDir);
+      var ways = map.getTileWays(currentTile);
+      if(ways.length > 0){
+        currentDir = directions.getRandomFrom(ways);
+      }else{
+        currentDir = directions.getOpposite(currentDir);
+      }
       destination = this.getDestinationFrom(currentTile);
     }
   }
