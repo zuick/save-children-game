@@ -1,6 +1,6 @@
 module.exports = {
-  width: 256,
-  height: 224,
+  width: 586,
+  height: 320,
   map: {
     main: {
       name: "main",
@@ -15,5 +15,15 @@ module.exports = {
       traps: [2],
       escapes: [5]
     }
-  }
+  },
+  levels: [
+    {
+      src: 'assets/levels/level-1.json',
+      childrenSpeed: 50
+    },
+    {
+      src: 'assets/levels/level-1.json',
+      childrenSpeed: 100
+    }
+  ]
 }

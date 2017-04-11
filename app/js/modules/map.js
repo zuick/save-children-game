@@ -7,13 +7,8 @@ module.exports = function(game, Phaser){
     var mainLayer;
     var children;
 
-    this.preload = function(){
-      game.load.tilemap('map', 'assets/levels/level-1.json', null, Phaser.Tilemap.TILED_JSON);
-      game.load.image('tilemap', 'assets/tilemap.png');
-    }
-
-    this.create = function(){
-      map = game.add.tilemap('map');
+    this.create = function(tilemap){
+      map = game.add.tilemap(tilemap);
       map.addTilesetImage('tilemap', 'tilemap');
 
       mainLayer = map.createLayer('main');

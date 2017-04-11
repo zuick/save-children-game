@@ -5,7 +5,12 @@
   var config = require('./config');
   var game = new Phaser.Game(config.width, config.height, window.Phaser.AUTO, 'game-canvas');
   var gameState = require('./states/game')(game, window.Phaser);
+  var preloaderState = require('./states/preloader')(game, window.Phaser);
+  var startState = require('./states/start')(game, window.Phaser);
 
+  game.state.add('preloader', preloaderState);
+  game.state.add('start', startState);
   game.state.add('game', gameState);
-  game.state.start('game');
+
+  game.state.start('preloader');
 })();

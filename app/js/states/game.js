@@ -5,27 +5,37 @@ module.exports = function(game, Phaser){
   var Trap = require('../modules/trap')(game, Phaser);
   var Escape = require('../modules/escape')(game, Phaser);
   var Hero = require('../modules/hero')(game, Phaser);
-  var children = [];
-  var traps = [];
-  var escapes = [];
-  var lostChildren = 0;
-  var savedChildren = 0;
-  var hero;
+  var children, traps, escapes, lostChildren, savedChildren, hero, currentLevelIndex, initialChildrenCount;
 
   return {
-    preload: function() {
-      map.preload();
-      game.load.image('guy', 'assets/guy.png');
-      game.load.image('trap', 'assets/trap.png');
-      game.load.image('escape', 'assets/escape.png');
-      game.load.image('hero', 'assets/hero.png');
+    init: function(levelIndex){
+      children = [];
+      traps = [];
+      escapes = [];
+      lostChildren = 0;
+      savedChildren = 0;
+      currentLevelIndex = levelIndex;
+      this.loadMap();
     },
-    create: function() {
-      game.physics.startSystem(Phaser.Physics.ARCADE);
-      map.create();
-      children = this.createGroupFromLayer(config.map.children.name, config.map.children.children, Stray, true);
+    shutDown : function(){
+      console.log("shutDown");
+    },
+    loadMap: function(){
+      map.create('level' + currentLevelIndex);
+
+      map.getTilesInLayer(config.map.children.name, config.map.children.children).forEach(function(tile){
+        var worldPosition = map.getTileWorldXY(tile);
+        var instance = new Stray();
+        instance.create(worldPosition.x, worldPosition.y, map, config.levels[currentLevelIndex].childrenSpeed);
+        children.push(instance);
+      });
+      initialChildrenCount = children.length;
       traps = this.createGroupFromLayer(config.map.colliders.name, config.map.colliders.traps, Trap, false);
       escapes = this.createGroupFromLayer(config.map.colliders.name, config.map.colliders.escapes, Escape, false);
+    },
+    create: function() {
+      game.stage.backgroundColor = '#000';
+      game.physics.startSystem(Phaser.Physics.ARCADE);
       game.input.onDown.add(this.moveHero, this);
     },
     update: function(){
@@ -41,7 +51,15 @@ module.exports = function(game, Phaser){
           game.physics.arcade.collide(child.getCollider(), hero.getCollider(), _this.heroCollision, null, _this);
         }
         child.update();
-      })
+      });
+      if(initialChildrenCount === lostChildren + savedChildren){
+        var nextLevelIndex = currentLevelIndex + 1;
+        if(nextLevelIndex >= config.levels.length){
+          game.state.start('start', true, false);
+        }else{
+          game.state.restart(true, false, nextLevelIndex);
+        }
+      }
     },
     escapeCollision: function(child, esc){
       this.removeChild(child, function(){ savedChildren++; });
@@ -65,12 +83,12 @@ module.exports = function(game, Phaser){
         }
       }
     },
-    createGroupFromLayer: function(layerName, itemIndexes, Proto, passMap){
+    createGroupFromLayer: function(layerName, itemIndexes, Proto){
       var group = [];
       map.getTilesInLayer(layerName, itemIndexes).forEach(function(tile){
         var worldPosition = map.getTileWorldXY(tile);
         var instance = new Proto();
-        instance.create(worldPosition.x, worldPosition.y, passMap ? map : void 0);
+        instance.create(worldPosition.x, worldPosition.y);
         group.push(instance);
       });
       return group;
@@ -87,7 +105,7 @@ module.exports = function(game, Phaser){
         var childOverlap = children.some(function(child){ return child.isOverlap(tileBehind)});
         if(!childOverlap){
           hero = new Hero();
-          hero.create(x, y);          
+          hero.create(x, y);
         }
       }
     },

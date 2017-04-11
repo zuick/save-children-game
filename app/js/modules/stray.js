@@ -8,8 +8,9 @@ module.exports = function(game, Phaser){
     var currentDir;
     var destination;
     var map;
-    this.create = function(x, y, _map){
+    this.create = function(x, y, _map, _speed){
       map = _map;
+      speed = _speed;
       sprite = game.add.sprite(x, y, 'guy');
       game.physics.enable(sprite);
       sprite.body.setSize(sprite.texture.width, sprite.texture.height, 0, 0);
