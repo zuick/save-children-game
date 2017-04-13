@@ -71,10 +71,10 @@ module.exports = function(game, Phaser){
       return tiles;
     }
 
-    this.getTileWays = function(tile){
+    this.getTilesAround = function(tile){
       var x = tile.x;
       var y = tile.y;
-      var tiles = [
+      return [
         {
           name: 'up',
           tile: this.getTile(x, y - 1)
@@ -92,13 +92,25 @@ module.exports = function(game, Phaser){
           tile: this.getTile(x + 1, y)
         },
       ];
+    }
 
-      return tiles
+    this.getNextTileFrom = function(tile, dir){
+      return this.getTilesAround(tile)
         .filter(
-          function(t){ return t.tile && !this.isWall(t.tile)}.bind(this)
+          function(t){ return t.tile && t.name === dir; }
         )
         .map(
-          function(t){ return t.name}
+          function(t){ return t.tile }
+        )[0];      
+    }
+
+    this.getTileWays = function(tile){
+      return this.getTilesAround(tile)
+        .filter(
+          function(t){ return t.tile && !this.isWall(t.tile) }.bind(this)
+        )
+        .map(
+          function(t){ return t.name }
         )
     }
 

@@ -6,7 +6,8 @@ module.exports = function(game, Phaser){
     var sprite;
     var speed = 25;
     var currentDir;
-    var destination;
+    var currentTile;
+    var nextTile;
     var map;
     this.create = function(x, y, _map, _speed){
       map = _map;
@@ -17,51 +18,51 @@ module.exports = function(game, Phaser){
     }
 
     this.update = function(){
-      if(!destination){
-        var currentTile = map.getTileAt(sprite.x, sprite.y);
+      currentTile = map.getTileAt(sprite.x, sprite.y);
+      if(!currentDir){
         currentDir = directions.getRandomFrom(map.getTileWays(currentTile));
-        destination = this.getDestinationFrom(currentTile);
-      }else if(currentDir){
-        var delta = this.getDeltaToDest();
-        if(delta.x === 0 && delta.y === 0){
-          var currentTile = map.getTileAt(sprite.x, sprite.y);
-          currentDir = destination.dir;
-          destination = this.getDestinationFrom(currentTile);
-        }else{
-          sprite.x += delta.x;
+      }else{
+        nextTile = map.getNextTileFrom(currentTile, currentDir);
+        if(nextTile){
+          var delta = this.getDeltaTo(nextTile);
+          var nextDeltaTile = map.getTileAt(sprite.x + delta.x, sprite.y + delta.y);
+          if(nextDeltaTile.x === nextTile.x && nextDeltaTile.y === nextTile.y){
+            var ways = map.getTileWays(nextDeltaTile);
+            var backwardDir = directions.getOpposite(currentDir);
+            var canMoveForward = ways.indexOf(currentDir) !== -1;
+            var canMovebackward = ways.indexOf(backwardDir) !== -1;
+            var turnWays = difference(ways, [backwardDir, currentDir]);
+            if(!canMoveForward){
+              if(turnWays.length > 0){
+                currentDir = directions.getRandomFrom(turnWays);
+              }else if(canMovebackward){
+                currentDir = backwardDir;
+              }
+              delta = this.getDeltaTo(nextTile, true);
+            }
+          }
           sprite.y += delta.y;
+          sprite.x += delta.x;          
         }
       }
     }
 
-    this.getDeltaToDest = function(){
-      var dwp = map.getTileWorldXY(destination.tile);
+    this.getDeltaTo = function(tile, isAccurate){
+      var dwp = map.getTileWorldXY(tile);
       var delta = speed * game.time.elapsedMS / 1000;
       var dx = dwp.x - sprite.x;
       var dy = dwp.y - sprite.y;
-
+      if(isAccurate){
+        return {
+          x: Math.sign(dx) * Math.min(Math.abs(dx), delta),
+          y: Math.sign(dy) * Math.min(Math.abs(dy), delta)
+        }
+      }
       return {
-        x: Math.sign(dx) * Math.min(Math.abs(dx), delta),
-        y: Math.sign(dy) * Math.min(Math.abs(dy), delta)
+        x: Math.sign(dx) * delta,
+        y: Math.sign(dy) * delta
       }
     }
-
-    this.getDestinationFrom = function(currentTile){
-      var directionTiles = map.getTilesInDirection(currentDir, currentTile);
-      for(var i = 0; i < directionTiles.length; i++){
-          var ways = map.getTileWays(directionTiles[i]);
-          var possibleTurns = difference(ways, [currentDir, directions.getOpposite(currentDir)]);
-          var possibleTurnsWithStraight = difference(ways, [directions.getOpposite(currentDir)]);
-          if(possibleTurnsWithStraight.length === 0){
-            return  { tile: directionTiles[i], dir: directions.getOpposite(currentDir) };
-          }else if(possibleTurns.length > 0){
-            return  { tile: directionTiles[i], dir: directions.getRandomFrom(possibleTurnsWithStraight) };
-          }
-      }
-
-      return { tile: currentTile, dir: currentDir };
-    }
-
 
     this.getCollider = function(){
       return sprite;
@@ -69,8 +70,9 @@ module.exports = function(game, Phaser){
 
     this.render = function(){
       game.debug.text(currentDir, 100, game.height - 20);
-      if(map && destination && destination.tile){
-        map.debugTile(destination.tile);
+      if(map && currentTile && nextTile){
+        map.debugTile(currentTile);
+        map.debugTile(nextTile);
       }
     }
 
@@ -96,14 +98,7 @@ module.exports = function(game, Phaser){
     }
 
     this.onHero = function(){
-      var currentTile = map.getTileAt(sprite.x, sprite.y);
-      var ways = map.getTileWays(currentTile);
-      if(ways.length > 0){
-        currentDir = directions.getRandomFrom(ways);
-      }else{
-        currentDir = directions.getOpposite(currentDir);
-      }
-      destination = this.getDestinationFrom(currentTile);
+
     }
   }
 
