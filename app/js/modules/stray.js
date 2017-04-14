@@ -18,20 +18,35 @@ module.exports = function(game, Phaser){
     }
 
     this.update = function(){
-      currentTile = map.getTileAt(sprite.x, sprite.y);
       if(!currentDir){
-        currentDir = directions.getRandomFrom(map.getTileWays(currentTile));
+        currentDir = directions.getRandomFrom(
+          map.getTileWays(
+            map.getTileAt(sprite.x, sprite.y)
+          )
+        );
       }else{
+        var x = currentDir === 'right' || currentDir === 'down' ? sprite.x : sprite.x + sprite.texture.width - 1;
+        var y = currentDir === 'right' || currentDir === 'down' ? sprite.y : sprite.y + sprite.texture.height - 1;
+        currentTile = map.getTileAt(x, y);
         nextTile = map.getNextTileFrom(currentTile, currentDir);
         if(nextTile){
           var delta = this.getDeltaTo(nextTile);
-          var nextDeltaTile = map.getTileAt(sprite.x + delta.x, sprite.y + delta.y);
+          var nextDeltaTile = map.getTileAt(x + delta.x, y + delta.y);
           if(nextDeltaTile.x === nextTile.x && nextDeltaTile.y === nextTile.y){
             var ways = map.getTileWays(nextDeltaTile);
             var backwardDir = directions.getOpposite(currentDir);
             var canMoveForward = ways.indexOf(currentDir) !== -1;
-            var canMovebackward = ways.indexOf(backwardDir) !== -1;
+            var canMoveBackward = ways.indexOf(backwardDir) !== -1;
             var turnWays = difference(ways, [backwardDir, currentDir]);
+            /*
+            if(turnWays.length > 0){
+              currentDir = directions.getRandomFrom(turnWays);
+              delta = this.getDeltaTo(nextTile, true);
+            }else if(!canMoveForward && canMoveBackward){
+              currentDir = backwardDir;
+              delta = this.getDeltaTo(nextTile, true);
+            }
+            */
             if(!canMoveForward){
               if(turnWays.length > 0){
                 currentDir = directions.getRandomFrom(turnWays);
@@ -42,7 +57,7 @@ module.exports = function(game, Phaser){
             }
           }
           sprite.y += delta.y;
-          sprite.x += delta.x;          
+          sprite.x += delta.x;
         }
       }
     }
