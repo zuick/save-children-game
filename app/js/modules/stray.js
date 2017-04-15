@@ -115,10 +115,14 @@ module.exports = function(game, Phaser){
       var h = sprite.texture.height;
       var tiles = [];
       tiles.push(map.getTileAt(x, y));
-      tiles.push(map.getTileAt(x + w, y));
-      tiles.push(map.getTileAt(x, y + h));
-      tiles.push(map.getTileAt(x + w, y + h));
+      tiles.push(map.getTileAt(x + w - 1, y));
+      tiles.push(map.getTileAt(x, y + h - 1));
+      tiles.push(map.getTileAt(x + w - 1, y + h - 1));
       return tiles.indexOf(tile) !== -1;
+    }
+
+    this.onTrap = function(){
+      sprite.tint = 0xFF0000;
     }
 
     this.onHero = function(){

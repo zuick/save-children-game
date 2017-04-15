@@ -5,7 +5,7 @@ module.exports = function(game, Phaser){
   var Trap = require('../modules/trap')(game, Phaser);
   var Escape = require('../modules/escape')(game, Phaser);
   var Hero = require('../modules/hero')(game, Phaser);
-  var children, traps, escapes, lostChildren, savedChildren, hero, currentLevelIndex, initialChildrenCount;
+  var children, traps, escapes, lostChildren, savedChildren, hero, currentLevelIndex, initialChildrenCount, gameover;
 
   return {
     init: function(levelIndex){
@@ -15,6 +15,7 @@ module.exports = function(game, Phaser){
       lostChildren = 0;
       savedChildren = 0;
       currentLevelIndex = levelIndex;
+      gameover = false;
       this.loadMap();
     },
     loadMap: function(){
@@ -35,37 +36,48 @@ module.exports = function(game, Phaser){
       game.physics.startSystem(Phaser.Physics.ARCADE);
       game.input.onDown.add(this.moveHero, this);
 
-      //game.input.keyboard.addKey(Phaser.Keyboard.ONE).onUp.add(this.update2, this);
+      game.input.keyboard.addKey(Phaser.Keyboard.N).onUp.add(this.nextLevel, this);
     },
     update: function(){
-      var _this = this;
-      children.forEach(function(child){
-        traps.forEach(function(trap){
-          game.physics.arcade.collide(child.getCollider(), trap.getCollider(), _this.trapCollision, null, _this);
+      if(!gameover){
+        var _this = this;
+        children.forEach(function(child){
+          traps.forEach(function(trap){
+            game.physics.arcade.collide(child.getCollider(), trap.getCollider(), _this.trapCollision, null, _this);
+          });
+          escapes.forEach(function(esc){
+            game.physics.arcade.collide(child.getCollider(), esc.getCollider(), _this.escapeCollision, null, _this);
+          });
+          if(hero){
+            game.physics.arcade.collide(child.getCollider(), hero.getCollider(), _this.heroCollision, null, _this);
+          }
+          child.update();
         });
-        escapes.forEach(function(esc){
-          game.physics.arcade.collide(child.getCollider(), esc.getCollider(), _this.escapeCollision, null, _this);
-        });
-        if(hero){
-          game.physics.arcade.collide(child.getCollider(), hero.getCollider(), _this.heroCollision, null, _this);
+        if(initialChildrenCount === savedChildren){
+          this.nextLevel();
         }
-        child.update();
-      });
-      if(initialChildrenCount === lostChildren + savedChildren){
-        var nextLevelIndex = currentLevelIndex + 1;
-        if(nextLevelIndex >= config.levels.length){
-          //game.state.start('start', true, false);
-          game.state.restart(true, false, 0);
-        }else{
-          game.state.restart(true, false, nextLevelIndex);
-        }
+      }
+    },
+    nextLevel: function(){
+      var nextLevelIndex = currentLevelIndex + 1;
+      if(nextLevelIndex >= config.levels.length){
+        game.state.restart(true, false, 0);
+      }else{
+        game.state.restart(true, false, nextLevelIndex);
       }
     },
     escapeCollision: function(child, esc){
       this.removeChild(child, function(){ savedChildren++; });
     },
     trapCollision: function(child, trap){
-      this.removeChild(child, function(){ lostChildren++; });
+      var index = children.map(function(c){ return c.getCollider() }).indexOf(child);
+      if(index !== -1){
+        children[index].onTrap();
+      }
+      gameover = true;
+      setTimeout(function(){
+        game.state.restart(true, false, currentLevelIndex);
+      }, 1000);
     },
     heroCollision: function(child, hero){
       var index = children.map(function(c){ return c.getCollider() }).indexOf(child);
@@ -79,7 +91,7 @@ module.exports = function(game, Phaser){
         children.splice(index, 1);
         child.destroy();
         if(typeof onRemove === 'function'){
-          onRemove();
+          onRemove(child);
         }
       }
     },
@@ -111,8 +123,6 @@ module.exports = function(game, Phaser){
     },
     render: function(){
       game.debug.text("Level " + (currentLevelIndex + 1), game.width / 2 - 40, 20);
-      game.debug.text("In trap: " + lostChildren, 10, game.height - 15);
-      game.debug.text("Saved: " + savedChildren, game.width - 100, game.height - 15);
     }
   }
 }
