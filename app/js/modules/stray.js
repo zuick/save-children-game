@@ -38,7 +38,6 @@ module.exports = function(game, Phaser){
             var canMoveForward = ways.indexOf(currentDir) !== -1;
             var canMoveBackward = ways.indexOf(backwardDir) !== -1;
             var turnWays = difference(ways, [backwardDir, currentDir]);
-            /*
             if(turnWays.length > 0){
               currentDir = directions.getRandomFrom(turnWays);
               delta = this.getDeltaTo(nextTile, true);
@@ -46,7 +45,7 @@ module.exports = function(game, Phaser){
               currentDir = backwardDir;
               delta = this.getDeltaTo(nextTile, true);
             }
-            */
+            /*
             if(!canMoveForward){
               if(turnWays.length > 0){
                 currentDir = directions.getRandomFrom(turnWays);
@@ -55,6 +54,7 @@ module.exports = function(game, Phaser){
               }
               delta = this.getDeltaTo(nextTile, true);
             }
+            */
           }
           sprite.y += delta.y;
           sprite.x += delta.x;
@@ -64,9 +64,10 @@ module.exports = function(game, Phaser){
 
     this.getDeltaTo = function(tile, isAccurate){
       var dwp = map.getTileWorldXY(tile);
-      var delta = speed * game.time.elapsedMS / 1000;
+      var delta = speed * game.time.physicsElapsed;
       var dx = dwp.x - sprite.x;
       var dy = dwp.y - sprite.y;
+      console.log(dx, dy);
       if(isAccurate){
         return {
           x: Math.sign(dx) * Math.min(Math.abs(dx), delta),
@@ -74,8 +75,8 @@ module.exports = function(game, Phaser){
         }
       }
       return {
-        x: Math.sign(dx) * delta,
-        y: Math.sign(dy) * delta
+        x: Math.abs(dx) > Math.abs(dy) ? Math.sign(dx) * delta : 0,
+        y: Math.abs(dy) > Math.abs(dx) ? Math.sign(dy) * delta : 0
       }
     }
 

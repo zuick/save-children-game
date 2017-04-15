@@ -37,6 +37,8 @@ module.exports = function(game, Phaser){
       game.stage.backgroundColor = '#000';
       game.physics.startSystem(Phaser.Physics.ARCADE);
       game.input.onDown.add(this.moveHero, this);
+
+      //game.input.keyboard.addKey(Phaser.Keyboard.ONE).onUp.add(this.update2, this);
     },
     update: function(){
       var _this = this;
@@ -55,7 +57,8 @@ module.exports = function(game, Phaser){
       if(initialChildrenCount === lostChildren + savedChildren){
         var nextLevelIndex = currentLevelIndex + 1;
         if(nextLevelIndex >= config.levels.length){
-          game.state.start('start', true, false);
+          //game.state.start('start', true, false);
+          game.state.restart(true, false, 0);
         }else{
           game.state.restart(true, false, nextLevelIndex);
         }
