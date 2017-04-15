@@ -17,9 +17,6 @@ module.exports = function(game, Phaser){
       currentLevelIndex = levelIndex;
       this.loadMap();
     },
-    shutDown : function(){
-      console.log("shutDown");
-    },
     loadMap: function(){
       map.create('level' + currentLevelIndex);
 
@@ -113,11 +110,9 @@ module.exports = function(game, Phaser){
       }
     },
     render: function(){
+      game.debug.text("Level " + (currentLevelIndex + 1), game.width / 2 - 40, 20);
       game.debug.text("In trap: " + lostChildren, 10, game.height - 15);
       game.debug.text("Saved: " + savedChildren, game.width - 100, game.height - 15);
-      children.forEach(function(child){
-        child.render();
-      });
     }
   }
 }

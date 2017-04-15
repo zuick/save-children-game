@@ -9,12 +9,18 @@ module.exports = function(game, Phaser){
     var currentTile;
     var nextTile;
     var map;
-    this.create = function(x, y, _map, _speed){
+    var preferForward = false;
+    var floatX;
+    var floatY;
+    this.create = function(x, y, _map, _speed, _preferForward){
       map = _map;
       speed = _speed;
       sprite = game.add.sprite(x, y, 'guy');
       game.physics.enable(sprite);
       sprite.body.setSize(sprite.texture.width, sprite.texture.height, 0, 0);
+      preferForward = _preferForward;
+      floatX = x;
+      floatY = y;
     }
 
     this.update = function(){
@@ -25,8 +31,8 @@ module.exports = function(game, Phaser){
           )
         );
       }else{
-        var x = currentDir === 'right' || currentDir === 'down' ? sprite.x : sprite.x + sprite.texture.width - 1;
-        var y = currentDir === 'right' || currentDir === 'down' ? sprite.y : sprite.y + sprite.texture.height - 1;
+        var x = currentDir === 'right' || currentDir === 'down' ? floatX : floatX + sprite.texture.width - 1;
+        var y = currentDir === 'right' || currentDir === 'down' ? floatY : floatY + sprite.texture.height - 1;
         currentTile = map.getTileAt(x, y);
         nextTile = map.getNextTileFrom(currentTile, currentDir);
         if(nextTile){
@@ -38,26 +44,29 @@ module.exports = function(game, Phaser){
             var canMoveForward = ways.indexOf(currentDir) !== -1;
             var canMoveBackward = ways.indexOf(backwardDir) !== -1;
             var turnWays = difference(ways, [backwardDir, currentDir]);
-            if(turnWays.length > 0){
-              currentDir = directions.getRandomFrom(turnWays);
-              delta = this.getDeltaTo(nextTile, true);
-            }else if(!canMoveForward && canMoveBackward){
-              currentDir = backwardDir;
-              delta = this.getDeltaTo(nextTile, true);
-            }
-            /*
-            if(!canMoveForward){
+            if(preferForward){
+              if(!canMoveForward){
+                if(turnWays.length > 0){
+                  currentDir = directions.getRandomFrom(turnWays);
+                }else if(canMovebackward){
+                  currentDir = backwardDir;
+                }
+                delta = this.getDeltaTo(nextTile, true);
+              }
+            }else{
               if(turnWays.length > 0){
                 currentDir = directions.getRandomFrom(turnWays);
-              }else if(canMovebackward){
+                delta = this.getDeltaTo(nextTile, true);
+              }else if(!canMoveForward && canMoveBackward){
                 currentDir = backwardDir;
+                delta = this.getDeltaTo(nextTile, true);
               }
-              delta = this.getDeltaTo(nextTile, true);
             }
-            */
           }
-          sprite.y += delta.y;
-          sprite.x += delta.x;
+          floatX += delta.x;
+          floatY += delta.y;
+          sprite.x = Math.round(floatX);
+          sprite.y = Math.round(floatY);
         }
       }
     }
@@ -67,7 +76,6 @@ module.exports = function(game, Phaser){
       var delta = speed * game.time.physicsElapsed;
       var dx = dwp.x - sprite.x;
       var dy = dwp.y - sprite.y;
-      console.log(dx, dy);
       if(isAccurate){
         return {
           x: Math.sign(dx) * Math.min(Math.abs(dx), delta),
@@ -75,8 +83,8 @@ module.exports = function(game, Phaser){
         }
       }
       return {
-        x: Math.abs(dx) > Math.abs(dy) ? Math.sign(dx) * delta : 0,
-        y: Math.abs(dy) > Math.abs(dx) ? Math.sign(dy) * delta : 0
+        x: Math.sign(dx) * delta,
+        y: Math.sign(dy) * delta
       }
     }
 
@@ -114,7 +122,7 @@ module.exports = function(game, Phaser){
     }
 
     this.onHero = function(){
-
+      currentDir = directions.getOpposite(currentDir);
     }
   }
 
