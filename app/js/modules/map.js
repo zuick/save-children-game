@@ -16,16 +16,24 @@ module.exports = function(game, Phaser){
       }
     }
 
-    this.getTilesInLayer = function(layerName, indexes){
+    this.getTilesInLayer = function(layerName, indexes, reversed){
       var result = [];
       var layer = this.getLayer(layerName);
       if(layer){
         layer.data.forEach(function(row){
-          row.forEach(function(tile){
-            if(indexes.indexOf(tile.index) !== -1){
-              result.push(tile);
+          if(reversed !== 'reversed'){
+            row.forEach(function(tile){
+              if(typeof(indexes) === 'undefined' || indexes.indexOf(tile.index) !== -1){
+                result.push(tile);
+              }
+            })
+          }else{
+            for(var i = row.length - 1; i > 0; i--){
+              if(typeof(indexes) === 'undefined' || indexes.indexOf(row[i].index) !== -1){
+                result.push(row[i]);
+              }
             }
-          })
+          }
         })
       }
       return result;
