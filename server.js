@@ -26,4 +26,5 @@ function bundle() {
 
 app.use(express.static(staticFolder));
 app.listen(port);
+console.log("Listening post: " + port);
 bundle();

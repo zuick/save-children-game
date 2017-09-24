@@ -5,7 +5,7 @@ module.exports = function(game, Phaser){
   var Trap = require('../modules/trap')(game, Phaser);
   var Escape = require('../modules/escape')(game, Phaser);
   var Hero = require('../modules/hero')(game, Phaser);
-  var children, traps, escapes, lostChildren, savedChildren, hero, currentLevelIndex, initialChildrenCount, gameover;
+  var children, traps, escapes, lostChildren, savedChildren, hero, currentLevelIndex, initialChildrenCount, gameover, sortGroup;
 
   return {
     init: function(levelIndex){
@@ -21,12 +21,21 @@ module.exports = function(game, Phaser){
     loadMap: function(){
       map.create('level' + currentLevelIndex);
 
+      sortGroup = game.add.group();
+
+      map.getTilesInLayer(config.map.main.name, config.map.main.walls).forEach(function(tile){
+        var worldPosition = map.getTileWorldXY(tile);
+        sortGroup.create(worldPosition.x, worldPosition.y -16, 'tree');
+      });
+
       map.getTilesInLayer(config.map.children.name, config.map.children.children).forEach(function(tile){
         var worldPosition = map.getTileWorldXY(tile);
         var instance = new Stray();
         instance.create(worldPosition.x, worldPosition.y, map, config.levels[currentLevelIndex].childrenSpeed);
         children.push(instance);
+        sortGroup.add(instance.getCollider());
       });
+
       initialChildrenCount = children.length;
       traps = this.createGroupFromLayer(config.map.colliders.name, config.map.colliders.traps, Trap, false);
       escapes = this.createGroupFromLayer(config.map.colliders.name, config.map.colliders.escapes, Escape, false);
@@ -56,6 +65,7 @@ module.exports = function(game, Phaser){
         if(initialChildrenCount === savedChildren){
           this.nextLevel();
         }
+        sortGroup.sort('y', Phaser.Group.SORT_ASCENDING);
       }
     },
     nextLevel: function(){
@@ -101,6 +111,7 @@ module.exports = function(game, Phaser){
         var worldPosition = map.getTileWorldXY(tile);
         var instance = new Proto();
         instance.create(worldPosition.x, worldPosition.y);
+        sortGroup.add(instance.getCollider());
         group.push(instance);
       });
       return group;

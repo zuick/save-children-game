@@ -11,6 +11,7 @@ module.exports = function(game, Phaser){
       game.load.image('trap', 'assets/trap.png');
       game.load.image('escape', 'assets/escape.png');
       game.load.image('hero', 'assets/hero.png');
+      game.load.image('tree', 'assets/tree.png');
     },
     create: function(){
       game.state.start( 'start', true, false );
