@@ -1,10 +1,11 @@
 module.exports = {
-  width: 586,
-  height: 320,
+  width: 1920,
+  height: 1080,
   map: {
     main: {
       name: "main",
-      walls: [3]
+      walls: [3],
+      ground: [1]
     },
     children: {
       name: "children",

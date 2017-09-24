@@ -101,7 +101,7 @@ module.exports = function(game, Phaser){
         )
         .map(
           function(t){ return t.tile }
-        )[0];      
+        )[0];
     }
 
     this.getTileWays = function(tile){
