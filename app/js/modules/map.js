@@ -7,12 +7,13 @@ module.exports = function(game, Phaser){
     var mainLayer;
     var children;
 
-    this.create = function(tilemap){
+    this.create = function(tilemap, mainLayerName){
       map = game.add.tilemap(tilemap);
       map.addTilesetImage('tilemap', 'tilemap');
 
-      mainLayer = map.createLayer('main');
-      mainLayer.resizeWorld();
+      if(typeof(mainLayerName) !== 'undefined'){
+        mainLayer = map.createLayer(mainLayerName);
+      }
     }
 
     this.getTilesInLayer = function(layerName, indexes){
@@ -35,6 +36,10 @@ module.exports = function(game, Phaser){
       if(index >= 0){
         return map.layers[index];
       }
+    }
+
+    this.getSize = function(){
+      return { x: map.width * map.tileWidth, y: map.height* map.tileHeight };
     }
 
     this.getTileAt = function(worldX, worldY){
