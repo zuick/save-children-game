@@ -12,10 +12,10 @@ module.exports = function(game, Phaser){
     var preferForward = false;
     var floatX;
     var floatY;
-    this.create = function(x, y, _map, _speed, _preferForward){
+    this.create = function(x, y, _map, _speed, _preferForward, spriteOptions){
       map = _map;
       speed = _speed;
-      sprite = game.add.sprite(x, y, 'guy');
+      sprite = game.add.sprite(x, y, spriteOptions.key);
       game.physics.enable(sprite);
       sprite.body.setSize(sprite.texture.width, sprite.texture.height, 0, 0);
       preferForward = _preferForward;
@@ -24,6 +24,7 @@ module.exports = function(game, Phaser){
     }
 
     this.update = function(){
+      return;
       if(!currentDir){
         currentDir = directions.getRandomFrom(
           map.getTileWays(

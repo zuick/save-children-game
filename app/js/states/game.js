@@ -1,4 +1,6 @@
 var config = require('../config');
+var tileSprites = require('../tileSprites');
+
 module.exports = function(game, Phaser){
   var map = require('../modules/map')(game, Phaser);
   var Stray = require('../modules/stray')(game, Phaser);
@@ -20,25 +22,71 @@ module.exports = function(game, Phaser){
     },
     loadMap: function(){
       map.create('level' + currentLevelIndex);
-
       sortGroup = game.add.group();
 
-      map.getTilesInLayer(config.map.main.name, config.map.main.walls).forEach(function(tile){
+      // fill gorunds, empty space with last ground option
+      var lastSpriteOptions;
+      map.getTilesInLayer(config.map.main.name).forEach(function(tile, index){
         var worldPosition = map.getTileWorldXY(tile);
-        sortGroup.create(worldPosition.x, worldPosition.y -16, 'tree');
+        var spriteOptions = tileSprites[tile.index];
+
+        if(spriteOptions && config.map.main.ground.indexOf(tile.index) !== -1){
+          game.add.sprite(worldPosition.x + spriteOptions.offsetX, worldPosition.y + spriteOptions.offsetY, spriteOptions.key);
+          lastSpriteOptions = spriteOptions;
+        }
+
+        if(lastSpriteOptions && config.map.main.walls.indexOf(tile.index) !== -1){
+          game.add.sprite(worldPosition.x + lastSpriteOptions.offsetX, worldPosition.y + lastSpriteOptions.offsetY, lastSpriteOptions.key);
+        }
       });
 
+      // fill shadows
+      map.getTilesInLayer(config.map.main.name, config.map.main.walls).forEach(function(tile, index){
+        var worldPosition = map.getTileWorldXY(tile);
+        var spriteOptions = tileSprites[tile.index];
+
+        if(spriteOptions && spriteOptions.shadow){
+          game.add.sprite(worldPosition.x + spriteOptions.shadow.offsetX, worldPosition.y + spriteOptions.shadow.offsetY, spriteOptions.shadow.key);
+        }
+      });
+
+      // fill houses
+      map.getTilesInLayer(config.map.main.name, config.map.main.walls).forEach(function(tile, index){
+        var worldPosition = map.getTileWorldXY(tile);
+        var spriteOptions = tileSprites[tile.index];
+
+        if(spriteOptions){
+          game.add.sprite(worldPosition.x + spriteOptions.offsetX, worldPosition.y + spriteOptions.offsetY, spriteOptions.key);
+        }
+      });
+
+      // children
       map.getTilesInLayer(config.map.children.name, config.map.children.children).forEach(function(tile){
         var worldPosition = map.getTileWorldXY(tile);
-        var instance = new Stray();
-        instance.create(worldPosition.x, worldPosition.y, map, config.levels[currentLevelIndex].childrenSpeed);
-        children.push(instance);
-        sortGroup.add(instance.getCollider());
+        var spriteOptions = tileSprites[tile.index];
+        if(spriteOptions){
+          var instance = new Stray();
+          instance.create(
+            worldPosition.x + spriteOptions.offsetX,
+            worldPosition.y + spriteOptions.offsetY,
+            map,
+            config.levels[currentLevelIndex].childrenSpeed,
+            false,
+            spriteOptions
+          );
+          children.push(instance);
+          //sortGroup.add(instance.getCollider());
+        }
       });
 
       initialChildrenCount = children.length;
-      traps = this.createGroupFromLayer(config.map.colliders.name, config.map.colliders.traps, Trap, false);
+      //traps = this.createGroupFromLayer(config.map.colliders.name, config.map.colliders.traps, Trap, false);
       escapes = this.createGroupFromLayer(config.map.colliders.name, config.map.colliders.escapes, Escape, false);
+
+      var offsetX = (config.width - map.getSize().x) / 2;
+      var offsetY = (config.height - map.getSize().y) / 2;
+
+      game.world.setBounds(-offsetX, -offsetY, config.width - offsetX, config.height - offsetY);
     },
     create: function() {
       game.stage.backgroundColor = '#000';
@@ -49,6 +97,7 @@ module.exports = function(game, Phaser){
     },
     update: function(){
       if(!gameover){
+
         var _this = this;
         children.forEach(function(child){
           traps.forEach(function(trap){
@@ -65,7 +114,8 @@ module.exports = function(game, Phaser){
         if(initialChildrenCount === savedChildren){
           this.nextLevel();
         }
-        sortGroup.sort('y', Phaser.Group.SORT_ASCENDING);
+
+        //sortGroup.sort('y', Phaser.Group.SORT_ASCENDING);
       }
     },
     nextLevel: function(){
@@ -109,9 +159,12 @@ module.exports = function(game, Phaser){
       var group = [];
       map.getTilesInLayer(layerName, itemIndexes).forEach(function(tile){
         var worldPosition = map.getTileWorldXY(tile);
-        var instance = new Proto();
-        instance.create(worldPosition.x, worldPosition.y);
-        sortGroup.add(instance.getCollider());
+        var spriteOptions = tileSprites[tile.index];
+        if(spriteOptions){
+          var instance = new Proto();
+          instance.create(worldPosition.x + spriteOptions.offsetX, worldPosition.y + spriteOptions.offsetY, spriteOptions);
+        }
+        //sortGroup.add(instance.getCollider());
         group.push(instance);
       });
       return group;

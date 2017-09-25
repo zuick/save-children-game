@@ -7,7 +7,7 @@ module.exports = function(game, Phaser){
 
   return {
     create: function(){
-      map.create('level');
+      map.create('level0');
 
       // fill gorunds, empty space with last ground option
       var lastSpriteOptions;

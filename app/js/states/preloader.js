@@ -3,18 +3,17 @@ module.exports = function(game, Phaser){
   return{
     preload: function() {
       game.add.text( game.world.centerX, game.world.centerY, "Loading", { fill: "#4b692f" } ).anchor.setTo( 0.5, 0.5 );
-      /*game.load.image('tilemap', 'assets/tilemap.png');
       config.levels.forEach(function(level, index){
         game.load.tilemap('level' + index, level.src, null, Phaser.Tilemap.TILED_JSON);
       });
-      */
+
       game.load.image('tilemap', 'assets/tilemap_big.png');
-      game.load.tilemap('level', 'assets/levels/big_test.json', null, Phaser.Tilemap.TILED_JSON);
-      game.load.image('guy', 'assets/guy.png');
+      game.load.image('target', 'assets/target.png');
       game.load.image('trap', 'assets/trap.png');
-      game.load.image('escape', 'assets/escape.png');
       game.load.image('hero', 'assets/hero.png');
-      game.load.image('tree', 'assets/tree.png');
+
+      game.load.image('boy', 'assets/children/boy.png');
+      game.load.image('girl', 'assets/children/girl.png');
 
       game.load.image('ground01', 'assets/ground/01.png');
       game.load.image('ground02', 'assets/ground/02.png');
@@ -23,7 +22,8 @@ module.exports = function(game, Phaser){
       game.load.image('houseShadow', 'assets/houses/shadow.png');
     },
     create: function(){
-      game.state.start( 'test', true, false );
+      //game.state.start( 'start', true, false );
+      game.state.start('game', true, false, 0);
     }
   }
 }
