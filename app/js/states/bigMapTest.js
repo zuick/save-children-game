@@ -9,6 +9,7 @@ module.exports = function(game, Phaser){
     create: function(){
       map.create('level');
 
+      // fill gorunds, empty space with last ground option
       var lastSpriteOptions;
       map.getTilesInLayer(config.map.main.name).forEach(function(tile, index){
         var worldPosition = map.getTileWorldXY(tile);
@@ -23,8 +24,17 @@ module.exports = function(game, Phaser){
           game.add.sprite(worldPosition.x + lastSpriteOptions.offsetX, worldPosition.y + lastSpriteOptions.offsetY, lastSpriteOptions.key);
         }
       });
+      // fill shadows
+      map.getTilesInLayer(config.map.main.name, config.map.main.walls).forEach(function(tile, index){
+        var worldPosition = map.getTileWorldXY(tile);
+        var spriteOptions = tileSprites[tile.index];
 
-      map.getTilesInLayer(config.map.main.name, config.map.main.walls, 'reversed').forEach(function(tile, index){
+        if(spriteOptions && spriteOptions.shadow){
+          game.add.sprite(worldPosition.x + spriteOptions.shadow.offsetX, worldPosition.y + spriteOptions.shadow.offsetY, spriteOptions.shadow.key);
+        }
+      });
+      // fill houses
+      map.getTilesInLayer(config.map.main.name, config.map.main.walls).forEach(function(tile, index){
         var worldPosition = map.getTileWorldXY(tile);
         var spriteOptions = tileSprites[tile.index];
 
