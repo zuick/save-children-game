@@ -20,7 +20,7 @@ module.exports = {
   levels: [
     {
       src: 'assets/levels/test.json',
-      childrenSpeed: 40
+      childrenSpeed: 200
     }
   ]
 }

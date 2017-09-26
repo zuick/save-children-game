@@ -7,7 +7,7 @@ module.exports = function(game, Phaser){
   var Trap = require('../modules/trap')(game, Phaser);
   var Escape = require('../modules/escape')(game, Phaser);
   var Hero = require('../modules/hero')(game, Phaser);
-  var children, traps, escapes, lostChildren, savedChildren, hero, currentLevelIndex, initialChildrenCount, gameover, sortGroup;
+  var children, traps, escapes, lostChildren, savedChildren, hero, currentLevelIndex, initialChildrenCount, gameover, middleLayer, backLayer;
 
   return {
     init: function(levelIndex){
@@ -22,21 +22,22 @@ module.exports = function(game, Phaser){
     },
     loadMap: function(){
       map.create('level' + currentLevelIndex);
-      sortGroup = game.add.group();
-
+      backLayer = game.add.group();
+      middleLayer = game.add.group();
       // fill gorunds, empty space with last ground option
+
       var lastSpriteOptions;
       map.getTilesInLayer(config.map.main.name).forEach(function(tile, index){
         var worldPosition = map.getTileWorldXY(tile);
         var spriteOptions = tileSprites[tile.index];
 
         if(spriteOptions && config.map.main.ground.indexOf(tile.index) !== -1){
-          game.add.sprite(worldPosition.x + spriteOptions.offsetX, worldPosition.y + spriteOptions.offsetY, spriteOptions.key);
+          backLayer.create(worldPosition.x + spriteOptions.offsetX, worldPosition.y + spriteOptions.offsetY, spriteOptions.key);
           lastSpriteOptions = spriteOptions;
         }
 
         if(lastSpriteOptions && config.map.main.walls.indexOf(tile.index) !== -1){
-          game.add.sprite(worldPosition.x + lastSpriteOptions.offsetX, worldPosition.y + lastSpriteOptions.offsetY, lastSpriteOptions.key);
+          backLayer.create(worldPosition.x + lastSpriteOptions.offsetX, worldPosition.y + lastSpriteOptions.offsetY, lastSpriteOptions.key);
         }
       });
 
@@ -46,7 +47,7 @@ module.exports = function(game, Phaser){
         var spriteOptions = tileSprites[tile.index];
 
         if(spriteOptions && spriteOptions.shadow){
-          game.add.sprite(worldPosition.x + spriteOptions.shadow.offsetX, worldPosition.y + spriteOptions.shadow.offsetY, spriteOptions.shadow.key);
+          backLayer.create(worldPosition.x + spriteOptions.shadow.offsetX, worldPosition.y + spriteOptions.shadow.offsetY, spriteOptions.shadow.key);
         }
       });
 
@@ -56,7 +57,7 @@ module.exports = function(game, Phaser){
         var spriteOptions = tileSprites[tile.index];
 
         if(spriteOptions){
-          game.add.sprite(worldPosition.x + spriteOptions.offsetX, worldPosition.y + spriteOptions.offsetY, spriteOptions.key);
+          middleLayer.create(worldPosition.x + spriteOptions.offsetX, worldPosition.y + spriteOptions.offsetY, spriteOptions.key);
         }
       });
 
@@ -67,15 +68,15 @@ module.exports = function(game, Phaser){
         if(spriteOptions){
           var instance = new Stray();
           instance.create(
-            worldPosition.x + spriteOptions.offsetX,
-            worldPosition.y + spriteOptions.offsetY,
+            worldPosition.x,
+            worldPosition.y,
             map,
             config.levels[currentLevelIndex].childrenSpeed,
             false,
             spriteOptions
           );
           children.push(instance);
-          //sortGroup.add(instance.getCollider());
+          middleLayer.add(instance.getCollider());
         }
       });
 
@@ -97,15 +98,16 @@ module.exports = function(game, Phaser){
     },
     update: function(){
       if(!gameover){
-
         var _this = this;
         children.forEach(function(child){
           traps.forEach(function(trap){
             game.physics.arcade.collide(child.getCollider(), trap.getCollider(), _this.trapCollision, null, _this);
           });
+
           escapes.forEach(function(esc){
             game.physics.arcade.collide(child.getCollider(), esc.getCollider(), _this.escapeCollision, null, _this);
           });
+
           if(hero){
             game.physics.arcade.collide(child.getCollider(), hero.getCollider(), _this.heroCollision, null, _this);
           }
@@ -115,7 +117,7 @@ module.exports = function(game, Phaser){
           this.nextLevel();
         }
 
-        //sortGroup.sort('y', Phaser.Group.SORT_ASCENDING);
+        middleLayer.sort('y', Phaser.Group.SORT_ASCENDING);
       }
     },
     nextLevel: function(){
@@ -164,7 +166,7 @@ module.exports = function(game, Phaser){
           var instance = new Proto();
           instance.create(worldPosition.x + spriteOptions.offsetX, worldPosition.y + spriteOptions.offsetY, spriteOptions);
         }
-        //sortGroup.add(instance.getCollider());
+        backLayer.add(instance.getCollider());
         group.push(instance);
       });
       return group;
@@ -187,6 +189,10 @@ module.exports = function(game, Phaser){
     },
     render: function(){
       game.debug.text("Level " + (currentLevelIndex + 1), game.width / 2 - 40, 20);
+      return;
+      children.forEach(function(child){
+        child.render();
+      });
     }
   }
 }

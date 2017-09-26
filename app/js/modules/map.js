@@ -142,8 +142,8 @@ module.exports = function(game, Phaser){
     this.debugTile = function(tile){
       var worldPosition = this.getTileWorldXY(tile);
       game.debug.geom(
-        new Phaser.Point(worldPosition.x, worldPosition.y),
-        'rgba(0, 256, 255, 1)'
+        new Phaser.Rectangle(worldPosition.x, worldPosition.y, tile.width, tile.height),
+        'rgba(0, 256, 255, 0.3)'
       );
     }
   }
