@@ -12,12 +12,26 @@ module.exports = function(game, Phaser){
     var preferForward = false;
     var floatX;
     var floatY;
-    this.create = function(x, y, _map, _speed, _preferForward){
+    this.child;
+    this.create = function(x, y, _map, _speed, _preferForward, spriteOptions, _bodyscale){
       map = _map;
       speed = _speed;
-      sprite = game.add.sprite(x, y, 'guy');
+      var scale = (_bodyscale || 1);
+      var w = map.get().tileWidth;
+      var h = map.get().tileHeight;
+
+      sprite = game.add.sprite(x, y);
+      this.child = game.add.sprite(spriteOptions.offsetX + w/2, spriteOptions.offsetY + h/2, spriteOptions.key);
+      this.child.anchor.x = 0.5;
+      this.child.anchor.y = 0.5;
+      sprite.addChild(this.child);
+
+      sprite.texture.width = w;
+      sprite.texture.height = h;
+
       game.physics.enable(sprite);
-      sprite.body.setSize(sprite.texture.width, sprite.texture.height, 0, 0);
+      sprite.body.setSize(w * scale, h * scale, (w - w * scale) /2, (h - h * scale) /2);
+
       preferForward = _preferForward;
       floatX = x;
       floatY = y;
@@ -69,6 +83,16 @@ module.exports = function(game, Phaser){
           sprite.y = Math.round(floatY);
         }
       }
+
+      if(currentDir === 'left'){
+        sprite.children.forEach(function(innerSprite){
+          innerSprite.scale.x = -1;
+        })
+      }else if(currentDir === 'right'){
+        sprite.children.forEach(function(innerSprite){
+          innerSprite.scale.x = 1;
+        })
+      }
     }
 
     this.getDeltaTo = function(tile, isAccurate){
@@ -93,6 +117,7 @@ module.exports = function(game, Phaser){
     }
 
     this.render = function(){
+      game.debug.body(sprite);
       game.debug.text(currentDir, 100, game.height - 20);
       if(map && currentTile && nextTile){
         map.debugTile(currentTile);

@@ -7,24 +7,33 @@ module.exports = function(game, Phaser){
     var mainLayer;
     var children;
 
-    this.create = function(tilemap){
+    this.create = function(tilemap, mainLayerName){
       map = game.add.tilemap(tilemap);
       map.addTilesetImage('tilemap', 'tilemap');
 
-      mainLayer = map.createLayer('main');
-      mainLayer.resizeWorld();
+      if(typeof(mainLayerName) !== 'undefined'){
+        mainLayer = map.createLayer(mainLayerName);
+      }
     }
 
-    this.getTilesInLayer = function(layerName, indexes){
+    this.getTilesInLayer = function(layerName, indexes, reversed){
       var result = [];
       var layer = this.getLayer(layerName);
       if(layer){
         layer.data.forEach(function(row){
-          row.forEach(function(tile){
-            if(indexes.indexOf(tile.index) !== -1){
-              result.push(tile);
+          if(reversed !== 'reversed'){
+            row.forEach(function(tile){
+              if(typeof(indexes) === 'undefined' || indexes.indexOf(tile.index) !== -1){
+                result.push(tile);
+              }
+            })
+          }else{
+            for(var i = row.length - 1; i > 0; i--){
+              if(typeof(indexes) === 'undefined' || indexes.indexOf(row[i].index) !== -1){
+                result.push(row[i]);
+              }
             }
-          })
+          }
         })
       }
       return result;
@@ -35,6 +44,10 @@ module.exports = function(game, Phaser){
       if(index >= 0){
         return map.layers[index];
       }
+    }
+
+    this.getSize = function(){
+      return { x: map.width * map.tileWidth, y: map.height* map.tileHeight };
     }
 
     this.getTileAt = function(worldX, worldY){
@@ -101,7 +114,7 @@ module.exports = function(game, Phaser){
         )
         .map(
           function(t){ return t.tile }
-        )[0];      
+        )[0];
     }
 
     this.getTileWays = function(tile){
@@ -129,8 +142,8 @@ module.exports = function(game, Phaser){
     this.debugTile = function(tile){
       var worldPosition = this.getTileWorldXY(tile);
       game.debug.geom(
-        new Phaser.Point(worldPosition.x, worldPosition.y),
-        'rgba(0, 256, 255, 1)'
+        new Phaser.Rectangle(worldPosition.x, worldPosition.y, tile.width, tile.height),
+        'rgba(0, 32, 0, 0.2)'
       );
     }
   }
