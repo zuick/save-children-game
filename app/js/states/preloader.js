@@ -9,11 +9,10 @@ module.exports = function(game, Phaser){
 
       game.load.image('tilemap', 'assets/tilemap_big.png');
       game.load.image('target', 'assets/target.png');
-      game.load.image('trap', 'assets/trap.png');
-      game.load.image('hero', 'assets/hero.png');
 
-      game.load.image('boy', 'assets/children/boy.png');
-      game.load.image('girl', 'assets/children/girl.png');
+      game.load.image('boy', 'assets/characters/boy.png');
+      game.load.image('girl', 'assets/characters/girl.png');
+      game.load.image('hero', 'assets/characters/hero.png');
 
       game.load.image('ground01', 'assets/ground/01.png');
       game.load.image('ground02', 'assets/ground/02.png');

@@ -30,8 +30,8 @@ module.exports = function(game, Phaser){
       map.create('level' + currentLevelIndex);
       backLayer = game.add.group();
       middleLayer = game.add.group();
-      // fill gorunds, empty space with last ground option
 
+      // fill gorunds, empty space with last ground option
       var lastSpriteOptions;
       map.getTilesInLayer(config.map.main.name).forEach(function(tile, index){
         var worldPosition = map.getTileWorldXY(tile);
@@ -67,29 +67,32 @@ module.exports = function(game, Phaser){
         }
       });
 
-      // children
-      map.getTilesInLayer(config.map.objects.name, config.map.objects.children).forEach(function(tile){
+      // objects
+      map.getTilesInLayer(config.map.objects.name).forEach(function(tile){
         var worldPosition = map.getTileWorldXY(tile);
         var spriteOptions = tileSprites[tile.index];
         if(spriteOptions){
-          var instance = new Stray();
-          instance.create(
-            worldPosition.x,
-            worldPosition.y,
-            map,
-            config.levels[currentLevelIndex].childrenSpeed,
-            false,
-            spriteOptions,
-            config.children.bodyScale
-          );
-          children.push(instance);
-          middleLayer.add(instance.getCollider());
+          // children
+          if(config.map.objects.children.indexOf(tile.index) !== -1){
+            var instance = new Stray();
+            instance.create(worldPosition.x, worldPosition.y, map, config.levels[currentLevelIndex].childrenSpeed, false, spriteOptions, config.children.bodyScale);
+            children.push(instance);
+            middleLayer.add(instance.getCollider());
+          // escapes
+          }else if(config.map.objects.escapes.indexOf(tile.index) !== -1){
+            var instance = new Escape();
+            instance.create(worldPosition.x, worldPosition.y, spriteOptions);
+            backLayer.add(instance.getCollider());
+            escapes.push(instance);
+          }else if(config.map.objects.hero.indexOf(tile.index) !== -1){
+            hero = new Hero();
+            hero.create(worldPosition.x, worldPosition.y, map, spriteOptions, config.hero.bodyScale);
+            middleLayer.add(hero.getCollider());
+          }
         }
       });
 
       initialChildrenCount = children.length;
-      //traps = this.createGroupFromLayer(config.map.colliders.name, config.map.colliders.traps, Trap, false);
-      escapes = this.createGroupFromLayer(config.map.objects.name, config.map.objects.escapes, Escape, false);
 
       screenParams.offsetX = (config.width - map.getSize().x) / 2;
       screenParams.offsetY = (config.height - map.getSize().y) / 2;
@@ -157,30 +160,22 @@ module.exports = function(game, Phaser){
     removeChild: function(child, onRemove){
       var index = children.map(function(c){ return c.getCollider() }).indexOf(child);
       if(index !== -1){
+        this.destroyFromLayer(middleLayer, child);
+        children[index].destroy();
         children.splice(index, 1);
-        child.destroy();
         if(typeof onRemove === 'function'){
           onRemove(child);
         }
       }
     },
-    createGroupFromLayer: function(layerName, itemIndexes, Proto){
-      var group = [];
-      map.getTilesInLayer(layerName, itemIndexes).forEach(function(tile){
-        var worldPosition = map.getTileWorldXY(tile);
-        var spriteOptions = tileSprites[tile.index];
-        if(spriteOptions){
-          var instance = new Proto();
-          instance.create(worldPosition.x + spriteOptions.offsetX, worldPosition.y + spriteOptions.offsetY, spriteOptions);
-        }
-        backLayer.add(instance.getCollider());
-        group.push(instance);
-      });
-      return group;
+    destroyFromLayer(layer, object){
+      layer.remove(layer.getChildIndex(object));
     },
     moveHero: function(pointer){
       if(typeof hero !== 'undefined'){
+        this.destroyFromLayer(middleLayer, hero.getCollider());
         hero.destroy();
+        hero = void 0;
       }
       if(!screenParams.canvas){
         screenParams.canvas = document.getElementsByTagName('canvas')[0];
@@ -193,7 +188,8 @@ module.exports = function(game, Phaser){
         var childOverlap = children.some(function(child){ return child.isOverlap(tileBehind)});
         if(!childOverlap){
           hero = new Hero();
-          hero.create(x, y);
+          hero.create(x, y, map, tileSprites[config.map.objects.hero[0]], config.hero.bodyScale);
+          middleLayer.add(hero.getCollider());
         }
       }
     },
@@ -203,6 +199,9 @@ module.exports = function(game, Phaser){
         children.forEach(function(child){
           child.render();
         });
+        if(hero){
+          hero.render();
+        }
       }
     }
   }

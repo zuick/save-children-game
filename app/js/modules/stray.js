@@ -13,10 +13,10 @@ module.exports = function(game, Phaser){
     var floatX;
     var floatY;
     this.child;
-    this.create = function(x, y, _map, _speed, _preferForward, spriteOptions, _bodyscale){
+    this.create = function(x, y, _map, _speed, _preferForward, spriteOptions, bodyScale){
       map = _map;
       speed = _speed;
-      var scale = (_bodyscale || 1);
+      var scale = (bodyScale || 1);
       var w = map.get().tileWidth;
       var h = map.get().tileHeight;
 
@@ -118,7 +118,6 @@ module.exports = function(game, Phaser){
 
     this.render = function(){
       game.debug.body(sprite);
-      game.debug.text(currentDir, 100, game.height - 20);
       if(map && currentTile && nextTile){
         map.debugTile(currentTile);
         map.debugTile(nextTile);

@@ -12,11 +12,15 @@ module.exports = {
       name: "objects",
       children: [31, 32],
       traps: [25,26,27,28,29,30],
-      escapes: [33]
+      escapes: [34],
+      hero: [33]
     }
   },
   children: {
     bodyScale: 0.5 // 1 - full tile, 0 - no body
+  },
+  hero: {
+    bodyScale: 0.75 // 1 - full tile, 0 - no body
   },
   levels: [
     {
