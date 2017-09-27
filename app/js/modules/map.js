@@ -143,7 +143,7 @@ module.exports = function(game, Phaser){
       var worldPosition = this.getTileWorldXY(tile);
       game.debug.geom(
         new Phaser.Rectangle(worldPosition.x, worldPosition.y, tile.width, tile.height),
-        'rgba(0, 256, 255, 0.3)'
+        'rgba(0, 32, 0, 0.2)'
       );
     }
   }

@@ -62,7 +62,7 @@ module.exports = function(game, Phaser){
       });
 
       // children
-      map.getTilesInLayer(config.map.children.name, config.map.children.children).forEach(function(tile){
+      map.getTilesInLayer(config.map.objects.name, config.map.objects.children).forEach(function(tile){
         var worldPosition = map.getTileWorldXY(tile);
         var spriteOptions = tileSprites[tile.index];
         if(spriteOptions){
@@ -73,7 +73,8 @@ module.exports = function(game, Phaser){
             map,
             config.levels[currentLevelIndex].childrenSpeed,
             false,
-            spriteOptions
+            spriteOptions,
+            config.children.bodyScale
           );
           children.push(instance);
           middleLayer.add(instance.getCollider());
@@ -82,7 +83,7 @@ module.exports = function(game, Phaser){
 
       initialChildrenCount = children.length;
       //traps = this.createGroupFromLayer(config.map.colliders.name, config.map.colliders.traps, Trap, false);
-      escapes = this.createGroupFromLayer(config.map.colliders.name, config.map.colliders.escapes, Escape, false);
+      escapes = this.createGroupFromLayer(config.map.objects.name, config.map.objects.escapes, Escape, false);
 
       var offsetX = (config.width - map.getSize().x) / 2;
       var offsetY = (config.height - map.getSize().y) / 2;
@@ -189,10 +190,11 @@ module.exports = function(game, Phaser){
     },
     render: function(){
       game.debug.text("Level " + (currentLevelIndex + 1), game.width / 2 - 40, 20);
-      return;
-      children.forEach(function(child){
-        child.render();
-      });
+      if(config.debug){
+        children.forEach(function(child){
+          child.render();
+        });
+      }
     }
   }
 }

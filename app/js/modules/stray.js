@@ -17,20 +17,20 @@ module.exports = function(game, Phaser){
       map = _map;
       speed = _speed;
       var scale = (_bodyscale || 1);
-      var w = map.get().tileWidth * scale;
-      var h = map.get().tileHeight * scale;
+      var w = map.get().tileWidth;
+      var h = map.get().tileHeight;
 
       sprite = game.add.sprite(x, y);
       this.child = game.add.sprite(spriteOptions.offsetX + w/2, spriteOptions.offsetY + h/2, spriteOptions.key);
       this.child.anchor.x = 0.5;
       this.child.anchor.y = 0.5;
       sprite.addChild(this.child);
-      
+
       sprite.texture.width = w;
       sprite.texture.height = h;
 
       game.physics.enable(sprite);
-      sprite.body.setSize(w, h, 0, 0);
+      sprite.body.setSize(w * scale, h * scale, (w - w * scale) /2, (h - h * scale) /2);
 
       preferForward = _preferForward;
       floatX = x;
@@ -91,7 +91,6 @@ module.exports = function(game, Phaser){
       }else if(currentDir === 'right'){
         sprite.children.forEach(function(innerSprite){
           innerSprite.scale.x = 1;
-          //innerSprite.x +=
         })
       }
     }
