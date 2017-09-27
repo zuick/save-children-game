@@ -8,6 +8,12 @@ module.exports = function(game, Phaser){
   var Escape = require('../modules/escape')(game, Phaser);
   var Hero = require('../modules/hero')(game, Phaser);
   var children, traps, escapes, lostChildren, savedChildren, hero, currentLevelIndex, initialChildrenCount, gameover, middleLayer, backLayer;
+  var screenParams = {
+    scale: 1,
+    offsetX: 0,
+    offsetY: 0,
+    canvas: void 0
+  }
 
   return {
     init: function(levelIndex){
@@ -85,10 +91,10 @@ module.exports = function(game, Phaser){
       //traps = this.createGroupFromLayer(config.map.colliders.name, config.map.colliders.traps, Trap, false);
       escapes = this.createGroupFromLayer(config.map.objects.name, config.map.objects.escapes, Escape, false);
 
-      var offsetX = (config.width - map.getSize().x) / 2;
-      var offsetY = (config.height - map.getSize().y) / 2;
+      screenParams.offsetX = (config.width - map.getSize().x) / 2;
+      screenParams.offsetY = (config.height - map.getSize().y) / 2;
 
-      game.world.setBounds(-offsetX, -offsetY, config.width - offsetX, config.height - offsetY);
+      game.world.setBounds(-screenParams.offsetX, -screenParams.offsetY, config.width - screenParams.offsetX, config.height - screenParams.offsetY);
     },
     create: function() {
       game.stage.backgroundColor = '#000';
@@ -176,9 +182,12 @@ module.exports = function(game, Phaser){
       if(typeof hero !== 'undefined'){
         hero.destroy();
       }
-
-      var x = Math.floor(Math.round(pointer.x) / map.get().tileWidth) * map.get().tileWidth;
-      var y = Math.floor(Math.round(pointer.y) / map.get().tileHeight) * map.get().tileHeight;
+      if(!screenParams.canvas){
+        screenParams.canvas = document.getElementsByTagName('canvas')[0];
+      }
+      screenParams.scale = game.width / screenParams.canvas.clientWidth;
+      var x = Math.floor(Math.round(pointer.x * screenParams.scale - screenParams.offsetX) / map.get().tileWidth) * map.get().tileWidth;
+      var y = Math.floor(Math.round(pointer.y * screenParams.scale - screenParams.offsetY) / map.get().tileHeight) * map.get().tileHeight;
       var tileBehind = map.getTileAt(x, y);
       if(config.map.main.walls.indexOf(tileBehind.index) === -1){
         var childOverlap = children.some(function(child){ return child.isOverlap(tileBehind)});
