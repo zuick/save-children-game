@@ -171,12 +171,16 @@ module.exports = function(game, Phaser){
     destroyFromLayer(layer, object){
       layer.remove(layer.getChildIndex(object));
     },
-    moveHero: function(pointer){
+    destroyHero(){
       if(typeof hero !== 'undefined'){
         this.destroyFromLayer(middleLayer, hero.getCollider());
         hero.destroy();
         hero = void 0;
       }
+    },
+    moveHero: function(pointer){
+      this.destroyHero();
+
       if(!screenParams.canvas){
         screenParams.canvas = document.getElementsByTagName('canvas')[0];
       }
@@ -184,12 +188,13 @@ module.exports = function(game, Phaser){
       var x = Math.floor(Math.round(pointer.x * screenParams.scale - screenParams.offsetX) / map.get().tileWidth) * map.get().tileWidth;
       var y = Math.floor(Math.round(pointer.y * screenParams.scale - screenParams.offsetY) / map.get().tileHeight) * map.get().tileHeight;
       var tileBehind = map.getTileAt(x, y);
-      if(config.map.main.walls.indexOf(tileBehind.index) === -1){
-        var childOverlap = children.some(function(child){ return child.isOverlap(tileBehind)});
-        if(!childOverlap){
-          hero = new Hero();
-          hero.create(x, y, map, tileSprites[config.map.objects.hero[0]], config.hero.bodyScale);
-          middleLayer.add(hero.getCollider());
+      if(tileBehind && config.map.main.walls.indexOf(tileBehind.index) === -1 ){
+        hero = new Hero();
+        hero.create(x, y, map, tileSprites[config.map.objects.hero[0]], config.hero.bodyScale);
+        var childOverlap = children.some(function(child){ return child.isBodyOverlap(hero.getCollider())});
+        middleLayer.add(hero.getCollider());
+        if(childOverlap){
+          this.destroyHero();
         }
       }
     },

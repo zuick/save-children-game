@@ -20,7 +20,7 @@ module.exports = {
     bodyScale: 0.5 // 1 - full tile, 0 - no body
   },
   hero: {
-    bodyScale: 0.75 // 1 - full tile, 0 - no body
+    bodyScale: 0.35 // 1 - full tile, 0 - no body
   },
   levels: [
     {

@@ -132,19 +132,37 @@ module.exports = function(game, Phaser){
       this.destroy();
     }
 
-    this.isOverlap = function(tile){
-      var x = sprite.x;
-      var y = sprite.y;
-      var w = sprite.texture.width;
-      var h = sprite.texture.height;
-      var tiles = [];
-      tiles.push(map.getTileAt(x, y));
-      tiles.push(map.getTileAt(x + w - 1, y));
-      tiles.push(map.getTileAt(x, y + h - 1));
-      tiles.push(map.getTileAt(x + w - 1, y + h - 1));
-      return tiles.indexOf(tile) !== -1;
+    this.isBodyOverlap = function(other){
+      var rect = {
+        x: sprite.x + sprite.body.offset.x,
+        y: sprite.y + sprite.body.offset.y,
+        w: sprite.body.width,
+        h: sprite.body.height
+      }
+
+      var otherRect = {
+        x: other.x + other.body.offset.x,
+        y: other.y + other.body.offset.y,
+        w: other.body.width,
+        h: other.body.height
+      }
+      var res =  this.isPointInRect({ x: otherRect.x, y: otherRect.y }, rect) ||
+             this.isPointInRect({ x: otherRect.x + otherRect.w, y: otherRect.y }, rect) ||
+             this.isPointInRect({ x: otherRect.x, y: otherRect.y + otherRect.h }, rect) ||
+             this.isPointInRect({ x: otherRect.x + otherRect.w, y: otherRect.y + otherRect.h}, rect) ||
+             this.isPointInRect({ x: rect.x, y: rect.y }, otherRect) ||
+             this.isPointInRect({ x: rect.x + rect.w, y: rect.y }, otherRect) ||
+             this.isPointInRect({ x: rect.x, y: rect.y + rect.h }, otherRect) ||
+             this.isPointInRect({ x: rect.x + rect.w, y: rect.y + rect.h}, otherRect);
+             return res;
     }
 
+    this.isPointInRect = function(point, rect){
+      return point.x >= rect.x &&
+             point.y >= rect.y &&
+             point.x <= rect.x + rect.w &&
+             point.y <= rect.y + rect.h;
+    }
     this.onTrap = function(){
       sprite.tint = 0xFF0000;
     }
