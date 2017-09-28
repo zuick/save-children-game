@@ -12,6 +12,7 @@ module.exports = {
   2: tileSprite('ground02'),
   7: tileSprite('houseA1', -2, -137, tileSprite('houseShadow', -81, -137)),
   8: tileSprite('houseA2', 1, -137),
+  25: tileSprite('danger1', 0, 10, tileSprite('underground', 0, 5)),
   31: tileSprite('boy', 0, -60),
   32: tileSprite('girl', 0, -55),
   33: tileSprite('hero', 0, -100),

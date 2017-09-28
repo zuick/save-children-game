@@ -31,6 +31,16 @@ module.exports = function(game, Phaser){
       backLayer = game.add.group();
       middleLayer = game.add.group();
 
+      // underground
+      map.getTilesInLayer(config.map.main.name).forEach(function(tile, index){
+        var worldPosition = map.getTileWorldXY(tile);
+        var spriteOptions = tileSprites[tile.index];
+
+        if(spriteOptions && config.map.main.underground.indexOf(tile.index) !== -1){
+          backLayer.create(worldPosition.x + spriteOptions.offsetX, worldPosition.y + spriteOptions.offsetY, spriteOptions.shadow.key);
+        }
+      });
+
       // fill gorunds, empty space with last ground option
       var lastSpriteOptions;
       map.getTilesInLayer(config.map.main.name).forEach(function(tile, index){
@@ -40,6 +50,13 @@ module.exports = function(game, Phaser){
         if(spriteOptions && config.map.main.ground.indexOf(tile.index) !== -1){
           backLayer.create(worldPosition.x + spriteOptions.offsetX, worldPosition.y + spriteOptions.offsetY, spriteOptions.key);
           lastSpriteOptions = spriteOptions;
+        }
+
+        if(spriteOptions && config.map.main.groundDanger.indexOf(tile.index) !== -1){          
+          var instance = new Trap();
+          instance.create(worldPosition.x, worldPosition.y, spriteOptions);
+          backLayer.add(instance.getCollider());
+          traps.push(instance);
         }
 
         if(lastSpriteOptions && config.map.main.walls.indexOf(tile.index) !== -1){

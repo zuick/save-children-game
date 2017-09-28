@@ -16,8 +16,10 @@ module.exports = function(game, Phaser){
 
       game.load.image('ground01', 'assets/ground/01.png');
       game.load.image('ground02', 'assets/ground/02.png');
+      game.load.image('underground', 'assets/ground/03.png');
       game.load.image('houseA1', 'assets/houses/A1.png');
       game.load.image('houseA2', 'assets/houses/A2.png');
+      game.load.image('danger1', 'assets/danger/01.png');
       game.load.image('houseShadow', 'assets/houses/shadow.png');
     },
     create: function(){
