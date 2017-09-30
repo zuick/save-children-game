@@ -30,7 +30,7 @@ module.exports = function(game, Phaser){
       map.create('level' + currentLevelIndex);
       backLayer = game.add.group();
       middleLayer = game.add.group();
-
+      var childSpeed = config.levels[currentLevelIndex].childrenSpeed || config.children.defaultSpeed;
       // underground
       map.getTilesInLayer(config.map.main.name).forEach(function(tile, index){
         var worldPosition = map.getTileWorldXY(tile);
@@ -95,7 +95,7 @@ module.exports = function(game, Phaser){
               var instance = new Stray();
               var ceiled = map.ceilPosition(worldPosition.x, worldPosition.y);
 
-              instance.create(ceiled.x, ceiled.y, map, config.levels[currentLevelIndex].childrenSpeed, spriteOptions, config.children.bodyScale, obj.properties);
+              instance.create(ceiled.x, ceiled.y, map, childSpeed, spriteOptions, config.children.bodyScale, obj.properties);
               children.push(instance);
               middleLayer.add(instance.getCollider());
 
