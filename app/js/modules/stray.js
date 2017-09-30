@@ -12,8 +12,11 @@ module.exports = function(game, Phaser){
     var preferForward = false;
     var floatX;
     var floatY;
+    var preferedDir;
+
     this.child;
-    this.create = function(x, y, _map, _speed, _preferForward, spriteOptions, bodyScale){
+    this.create = function(x, y, _map, _speed, _preferForward, spriteOptions, bodyScale, properties){
+      preferedDir = typeof(properties) === 'object' ? properties.dir : '';
       map = _map;
       speed = _speed;
       var scale = (bodyScale || 1);
@@ -39,11 +42,12 @@ module.exports = function(game, Phaser){
 
     this.update = function(){
       if(!currentDir){
-        currentDir = directions.getRandomFrom(
-          map.getTileWays(
-            map.getTileAt(sprite.x, sprite.y)
-          )
-        );
+        var possibleWays = map.getTileWays(map.getTileAt(sprite.x, sprite.y));
+        if(preferedDir && possibleWays.indexOf(preferedDir) !== -1){
+          currentDir = preferedDir;
+        }else{
+          currentDir = directions.getRandomFrom(possibleWays);
+        }
       }else{
         var x = currentDir === 'right' || currentDir === 'down' ? floatX : floatX + sprite.texture.width - 1;
         var y = currentDir === 'right' || currentDir === 'down' ? floatY : floatY + sprite.texture.height - 1;

@@ -52,7 +52,7 @@ module.exports = function(game, Phaser){
           lastSpriteOptions = spriteOptions;
         }
 
-        if(spriteOptions && config.map.main.groundDanger.indexOf(tile.index) !== -1){          
+        if(spriteOptions && config.map.main.groundDanger.indexOf(tile.index) !== -1){
           var instance = new Trap();
           instance.create(worldPosition.x, worldPosition.y, spriteOptions);
           backLayer.add(instance.getCollider());
@@ -85,29 +85,36 @@ module.exports = function(game, Phaser){
       });
 
       // objects
-      map.getTilesInLayer(config.map.objects.name).forEach(function(tile){
-        var worldPosition = map.getTileWorldXY(tile);
-        var spriteOptions = tileSprites[tile.index];
-        if(spriteOptions){
-          // children
-          if(config.map.objects.children.indexOf(tile.index) !== -1){
-            var instance = new Stray();
-            instance.create(worldPosition.x, worldPosition.y, map, config.levels[currentLevelIndex].childrenSpeed, false, spriteOptions, config.children.bodyScale);
-            children.push(instance);
-            middleLayer.add(instance.getCollider());
-          // escapes
-          }else if(config.map.objects.escapes.indexOf(tile.index) !== -1){
-            var instance = new Escape();
-            instance.create(worldPosition.x, worldPosition.y, spriteOptions);
-            backLayer.add(instance.getCollider());
-            escapes.push(instance);
-          }else if(config.map.objects.hero.indexOf(tile.index) !== -1){
-            hero = new Hero();
-            hero.create(worldPosition.x, worldPosition.y, map, spriteOptions, config.hero.bodyScale);
-            middleLayer.add(hero.getCollider());
+      if(map.get().objects.objects){
+        map.get().objects.objects.forEach(function(obj){
+          var spriteOptions = tileSprites[obj.gid];
+          if(spriteOptions){
+            // children
+            if(config.map.objects.children.indexOf(obj.gid) !== -1){
+              var instance = new Stray();
+              var ceiled = map.ceilPosition(obj.x + map.get().tileWidth / 2, obj.y - map.get().tileHeight / 2);
+
+              instance.create(ceiled.x, ceiled.y, map, config.levels[currentLevelIndex].childrenSpeed, false, spriteOptions, config.children.bodyScale, obj.properties);
+              children.push(instance);
+              middleLayer.add(instance.getCollider());
+
+            }
+              // escapes
+              /*
+            }else if(config.map.objects.escapes.indexOf(tile.gid) !== -1){
+              var instance = new Escape();
+              instance.create(worldPosition.x, worldPosition.y, spriteOptions);
+              backLayer.add(instance.getCollider());
+              escapes.push(instance);
+            }else if(config.map.objects.hero.indexOf(tile.gid) !== -1){
+              hero = new Hero();
+              hero.create(worldPosition.x, worldPosition.y, map, spriteOptions, config.hero.bodyScale);
+              middleLayer.add(hero.getCollider());
+            }
+            */
           }
-        }
-      });
+        });
+      }
 
       initialChildrenCount = children.length;
 
@@ -140,7 +147,7 @@ module.exports = function(game, Phaser){
           }
           child.update();
         });
-        if(initialChildrenCount === savedChildren){
+        if(initialChildrenCount !== 0 && initialChildrenCount === savedChildren){
           this.nextLevel();
         }
 
@@ -202,12 +209,11 @@ module.exports = function(game, Phaser){
         screenParams.canvas = document.getElementsByTagName('canvas')[0];
       }
       screenParams.scale = game.width / screenParams.canvas.clientWidth;
-      var x = Math.floor(Math.round(pointer.x * screenParams.scale - screenParams.offsetX) / map.get().tileWidth) * map.get().tileWidth;
-      var y = Math.floor(Math.round(pointer.y * screenParams.scale - screenParams.offsetY) / map.get().tileHeight) * map.get().tileHeight;
-      var tileBehind = map.getTileAt(x, y);
+      var ceiled = map.ceilPosition(pointer.x * screenParams.scale - screenParams.offsetX, pointer.y * screenParams.scale - screenParams.offsetY)
+      var tileBehind = map.getTileAt(ceiled.x, ceiled.y);
       if(tileBehind && config.map.main.walls.indexOf(tileBehind.index) === -1 ){
         hero = new Hero();
-        hero.create(x, y, map, tileSprites[config.map.objects.hero[0]], config.hero.bodyScale);
+        hero.create(ceiled.x, ceiled.y, map, tileSprites[config.map.objects.hero[0]], config.hero.bodyScale);
         var childOverlap = children.some(function(child){ return child.isBodyOverlap(hero.getCollider())});
         middleLayer.add(hero.getCollider());
         if(childOverlap){

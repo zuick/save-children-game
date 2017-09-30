@@ -9,6 +9,7 @@ module.exports = function(game, Phaser){
 
     this.create = function(tilemap, mainLayerName){
       map = game.add.tilemap(tilemap);
+      console.log(map);
       map.addTilesetImage('tilemap', 'tilemap');
 
       if(typeof(mainLayerName) !== 'undefined'){
@@ -19,7 +20,7 @@ module.exports = function(game, Phaser){
     this.getTilesInLayer = function(layerName, indexes, reversed){
       var result = [];
       var layer = this.getLayer(layerName);
-      if(layer){
+      if(layer && layer.data){
         layer.data.forEach(function(row){
           if(reversed !== 'reversed'){
             row.forEach(function(tile){
@@ -36,6 +37,7 @@ module.exports = function(game, Phaser){
           }
         })
       }
+
       return result;
     }
 
@@ -137,6 +139,10 @@ module.exports = function(game, Phaser){
 
     this.get = function(){
       return map;
+    }
+
+    this.ceilPosition = function(x, y){
+      return { x: Math.floor(Math.round(x) / map.tileWidth) * map.tileWidth, y: Math.floor(Math.round(y) / map.tileHeight) * map.tileHeight };
     }
 
     this.debugTile = function(tile){
