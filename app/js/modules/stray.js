@@ -14,6 +14,7 @@ module.exports = function(game, Phaser){
     var floatY;
     this.child;
     this.create = function(x, y, _map, _speed, _preferForward, spriteOptions, bodyScale){
+      console.log(x,y);
       map = _map;
       speed = _speed;
       var scale = (bodyScale || 1);
