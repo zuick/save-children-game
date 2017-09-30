@@ -154,6 +154,7 @@ module.exports = function(game, Phaser){
       }
     },
     nextLevel: function(){
+      this.destroyHero();
       var nextLevelIndex = currentLevelIndex + 1;
       if(nextLevelIndex >= config.levels.length){
         game.state.restart(true, false, 0);
@@ -166,11 +167,13 @@ module.exports = function(game, Phaser){
     },
     trapCollision: function(child, trap){
       var index = children.map(function(c){ return c.getCollider() }).indexOf(child);
+      var _this = this;
       if(index !== -1){
         children[index].onTrap();
       }
       gameover = true;
       setTimeout(function(){
+        _this.destroyHero();
         game.state.restart(true, false, currentLevelIndex);
       }, 1000);
     },

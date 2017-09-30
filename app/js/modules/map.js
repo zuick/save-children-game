@@ -9,7 +9,6 @@ module.exports = function(game, Phaser){
 
     this.create = function(tilemap, mainLayerName){
       map = game.add.tilemap(tilemap);
-      console.log(map);
       map.addTilesetImage('tilemap', 'tilemap');
 
       if(typeof(mainLayerName) !== 'undefined'){
