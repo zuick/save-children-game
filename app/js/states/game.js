@@ -92,11 +92,9 @@ module.exports = function(game, Phaser){
             // children
             if(config.map.objects.children.indexOf(obj.gid) !== -1){
               var instance = new Stray();
-              var center = map.objectCenter(obj);
-              console.log(center);
-              var ceiled = map.ceilPosition(center.x, center.y);
-              
-              instance.create(ceiled.x, ceiled.y, map, config.levels[currentLevelIndex].childrenSpeed, false, spriteOptions, config.children.bodyScale);
+              var ceiled = map.ceilPosition(obj.x + map.get().tileWidth / 2, obj.y - map.get().tileHeight / 2);
+
+              instance.create(ceiled.x, ceiled.y, map, config.levels[currentLevelIndex].childrenSpeed, false, spriteOptions, config.children.bodyScale, obj.properties);
               children.push(instance);
               middleLayer.add(instance.getCollider());
 

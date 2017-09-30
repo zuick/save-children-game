@@ -145,27 +145,6 @@ module.exports = function(game, Phaser){
       return { x: Math.floor(Math.round(x) / map.tileWidth) * map.tileWidth, y: Math.floor(Math.round(y) / map.tileHeight) * map.tileHeight };
     }
 
-    this.objectRotation = function(obj){
-      console.log(obj);
-      var rotation = obj.rotation % 360;
-      if(rotation < 0) rotation += 360;
-      return rotation;
-    }
-
-    this.objectCenter = function(obj){
-      var w = map.tileWidth;
-      var h = map.tileHeight;
-      var rotation = this.objectRotation(obj);
-      console.log(rotation);
-      switch(rotation){
-        case 0: return {x: obj.x + w / 2, y: obj.y - h / 2};
-        case 90: return {x: obj.x + h / 2, y: obj.y + w /2};
-        case 180: return {x: obj.x - w / 2, y: obj.y + h / 2};
-        case 270: return {x: obj.x - h / 2, y: obj.y - w /2};
-        default: return {x: obj.x, y: obj.y};
-      }
-    }
-
     this.debugTile = function(tile){
       var worldPosition = this.getTileWorldXY(tile);
       game.debug.geom(
