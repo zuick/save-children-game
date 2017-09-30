@@ -88,30 +88,29 @@ module.exports = function(game, Phaser){
       if(map.get().objects.objects){
         map.get().objects.objects.forEach(function(obj){
           var spriteOptions = tileSprites[obj.gid];
+          var worldPosition = map.ceilPosition(obj.x + map.get().tileWidth / 2, obj.y - map.get().tileHeight / 2);
           if(spriteOptions){
             // children
             if(config.map.objects.children.indexOf(obj.gid) !== -1){
               var instance = new Stray();
-              var ceiled = map.ceilPosition(obj.x + map.get().tileWidth / 2, obj.y - map.get().tileHeight / 2);
+              var ceiled = map.ceilPosition(worldPosition.x, worldPosition.y);
 
               instance.create(ceiled.x, ceiled.y, map, config.levels[currentLevelIndex].childrenSpeed, false, spriteOptions, config.children.bodyScale, obj.properties);
               children.push(instance);
               middleLayer.add(instance.getCollider());
 
-            }
-              // escapes
-              /*
-            }else if(config.map.objects.escapes.indexOf(tile.gid) !== -1){
+            }else if(config.map.objects.escapes.indexOf(obj.gid) !== -1){
               var instance = new Escape();
               instance.create(worldPosition.x, worldPosition.y, spriteOptions);
               backLayer.add(instance.getCollider());
               escapes.push(instance);
-            }else if(config.map.objects.hero.indexOf(tile.gid) !== -1){
+
+            }else if(config.map.objects.hero.indexOf(obj.gid) !== -1){
               hero = new Hero();
               hero.create(worldPosition.x, worldPosition.y, map, spriteOptions, config.hero.bodyScale);
               middleLayer.add(hero.getCollider());
+
             }
-            */
           }
         });
       }
