@@ -95,7 +95,7 @@ module.exports = function(game, Phaser){
               var instance = new Stray();
               var ceiled = map.ceilPosition(worldPosition.x, worldPosition.y);
 
-              instance.create(ceiled.x, ceiled.y, map, config.levels[currentLevelIndex].childrenSpeed, false, spriteOptions, config.children.bodyScale, obj.properties);
+              instance.create(ceiled.x, ceiled.y, map, config.levels[currentLevelIndex].childrenSpeed, spriteOptions, config.children.bodyScale, obj.properties);
               children.push(instance);
               middleLayer.add(instance.getCollider());
 

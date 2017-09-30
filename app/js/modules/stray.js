@@ -10,13 +10,17 @@ module.exports = function(game, Phaser){
     var nextTile;
     var map;
     var preferForward = false;
+    var preferTurning = false;
     var floatX;
     var floatY;
     var preferedDir;
 
     this.child;
-    this.create = function(x, y, _map, _speed, _preferForward, spriteOptions, bodyScale, properties){
+    this.create = function(x, y, _map, _speed, spriteOptions, bodyScale, properties){
       preferedDir = typeof(properties) === 'object' ? properties.dir : '';
+      preferForward = typeof(properties) === 'object' ? properties.preferForward : false;
+      preferTurning = typeof(properties) === 'object' ? properties.preferTurning : false;
+
       map = _map;
       speed = _speed;
       var scale = (bodyScale || 1);
@@ -35,7 +39,6 @@ module.exports = function(game, Phaser){
       game.physics.enable(sprite);
       sprite.body.setSize(w * scale, h * scale, (w - w * scale) /2, (h - h * scale) /2);
 
-      preferForward = _preferForward;
       floatX = x;
       floatY = y;
     }
@@ -61,12 +64,15 @@ module.exports = function(game, Phaser){
             var backwardDir = directions.getOpposite(currentDir);
             var canMoveForward = ways.indexOf(currentDir) !== -1;
             var canMoveBackward = ways.indexOf(backwardDir) !== -1;
-            var turnWays = difference(ways, [backwardDir, currentDir]);
+            var exludeWays = [backwardDir];
+            if(preferTurning) exludeWays.push(currentDir);
+
+            var turnWays = difference(ways, exludeWays);
             if(preferForward){
               if(!canMoveForward){
                 if(turnWays.length > 0){
                   currentDir = directions.getRandomFrom(turnWays);
-                }else if(canMovebackward){
+                }else if(canMoveBackward){
                   currentDir = backwardDir;
                 }
                 delta = this.getDeltaTo(nextTile, true);
