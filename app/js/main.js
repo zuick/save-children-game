@@ -7,8 +7,10 @@
   var gameState = require('./states/game')(game, window.Phaser);
   var preloaderState = require('./states/preloader')(game, window.Phaser);
   var startState = require('./states/start')(game, window.Phaser);
+  var levelsState = require('./states/levels')(game, window.Phaser);
 
   game.state.add('preloader', preloaderState);
+  game.state.add('levels', levelsState);
   game.state.add('start', startState);
   game.state.add('game', gameState);
 

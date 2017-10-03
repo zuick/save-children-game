@@ -3,8 +3,11 @@ module.exports = function(game, Phaser){
   return{
     preload: function() {
       game.add.text( game.world.centerX, game.world.centerY, "Loading", { fill: "#4b692f" } ).anchor.setTo( 0.5, 0.5 );
-      config.levels.forEach(function(level, index){
-        game.load.tilemap('level' + index, level.src, null, Phaser.Tilemap.TILED_JSON);
+      config.levels.forEach(function(levelsBlock, blockIndex){
+        levelsBlock.forEach(function(level, index){
+          console.log(blockIndex * levelsBlock.length + index);
+          game.load.tilemap('level' + (blockIndex * levelsBlock.length + index), level.src, null, Phaser.Tilemap.TILED_JSON);
+        })
       });
 
       game.load.image('tilemap', 'assets/tilemap_big.png');
@@ -21,10 +24,14 @@ module.exports = function(game, Phaser){
       game.load.image('houseA2', 'assets/houses/A2.png');
       game.load.image('danger1', 'assets/danger/01.png');
       game.load.image('houseShadow', 'assets/houses/shadow.png');
+
+      game.load.image('levelItemCity', 'assets/UI/level_item_city.png');
+      game.load.image('levelItemCountrySide', 'assets/UI/level_item_countryside.png');
+      game.load.image('levelItemHouse', 'assets/UI/level_item_house.png');
     },
     create: function(){
       //game.state.start( 'start', true, false );
-      game.state.start('game', true, false, 0);
+      game.state.start('levels', true, false, 0);
     }
   }
 }
