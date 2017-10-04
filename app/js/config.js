@@ -2,7 +2,7 @@ module.exports = {
   debug: false,
   width: 1920,
   height: 1080,
-  defaultBlockIndex: 1,
+  defaultBlockIndex: 0,
   UI: {
     levels: {
       levelItem: { width: 150, height: 150 },

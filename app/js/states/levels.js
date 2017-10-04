@@ -17,7 +17,7 @@ module.exports = function(game, Phaser){
   return {
     init: function(index){
       if(typeof(index) !== 'undefined'){
-        currentBlockIndex = index;        
+        currentBlockIndex = index;
       }
     },
 
@@ -51,7 +51,7 @@ module.exports = function(game, Phaser){
         ));
       }.bind(this))
 
-      header = game.add.text(config.width / 2, config.UI.levels.blockMarginTop / 2, 'Block: ' + currentBlockIndex, headerTextStyle);
+      header = game.add.text(config.width / 2, config.UI.levels.blockMarginTop / 2, 'Level block: ' + (currentBlockIndex + 1), headerTextStyle);
       header.anchor.x = 0.5;
       header.anchor.y = 0.5;
     },
@@ -98,6 +98,7 @@ module.exports = function(game, Phaser){
     },
 
     create: function(){
+      game.world.setBounds(0, 0, config.width, config.height);
       this.redraw();
     }
   }
