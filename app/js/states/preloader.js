@@ -1,9 +1,10 @@
-var config = require('../config');
+var config = require('../configs/config');
+var levelsConfig = require('../configs/levels');
 module.exports = function(game, Phaser){
   return{
     preload: function() {
       game.add.text( game.world.centerX, game.world.centerY, "Loading", { fill: "#4b692f" } ).anchor.setTo( 0.5, 0.5 );
-      config.levels.forEach(function(levelsBlock, blockIndex){
+      levelsConfig.forEach(function(levelsBlock, blockIndex){
         levelsBlock.forEach(function(level, index){
           game.load.tilemap('level' + blockIndex + '-' + index, level.src, null, Phaser.Tilemap.TILED_JSON);
         })

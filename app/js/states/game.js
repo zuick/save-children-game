@@ -1,4 +1,5 @@
-var config = require('../config');
+var config = require('../configs/config');
+var levelsConfig = require('../configs/levels');
 var tileSprites = require('../tileSprites');
 
 module.exports = function(game, Phaser){
@@ -31,7 +32,7 @@ module.exports = function(game, Phaser){
       map.create('level' + currentBlockIndex + '-' + currentLevelIndex);
       backLayer = game.add.group();
       middleLayer = game.add.group();
-      var childSpeed = config.levels[currentBlockIndex][currentLevelIndex].childrenSpeed || config.children.defaultSpeed;
+      var childSpeed = levelsConfig[currentBlockIndex][currentLevelIndex].childrenSpeed || config.children.defaultSpeed;
       // underground
       map.getTilesInLayer(config.map.main.name).forEach(function(tile, index){
         var worldPosition = map.getTileWorldXY(tile);
@@ -160,9 +161,9 @@ module.exports = function(game, Phaser){
     },
     nextLevel: function(){
       this.destroyHero();
-      var nextBlockIndex = currentLevelIndex + 1 >= config.levels[currentBlockIndex].length ? currentBlockIndex + 1 : currentBlockIndex;
-      nextBlockIndex = nextBlockIndex >= config.levels.length ? 0 : nextBlockIndex;
-      var nextLevelIndex = currentLevelIndex + 1 >= config.levels[nextBlockIndex].length || nextBlockIndex !== currentBlockIndex ? 0 : currentLevelIndex + 1;
+      var nextBlockIndex = currentLevelIndex + 1 >= levelsConfig[currentBlockIndex].length ? currentBlockIndex + 1 : currentBlockIndex;
+      nextBlockIndex = nextBlockIndex >= levelsConfig.length ? 0 : nextBlockIndex;
+      var nextLevelIndex = currentLevelIndex + 1 >= levelsConfig[nextBlockIndex].length || nextBlockIndex !== currentBlockIndex ? 0 : currentLevelIndex + 1;
 
       game.state.restart(true, false, nextBlockIndex, nextLevelIndex);
     },

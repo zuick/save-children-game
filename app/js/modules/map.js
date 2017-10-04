@@ -1,4 +1,4 @@
-var config = require('../config');
+var config = require('../configs/config');
 var directions = require('./directions');
 
 module.exports = function(game, Phaser){

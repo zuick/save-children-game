@@ -1,4 +1,5 @@
-var config = require('../config');
+var config = require('../configs/config');
+var levelsConfig = require('../configs/levels');
 
 module.exports = function(game, Phaser){
   var blockWidth = config.width * config.UI.levels.blockWidthScale;
@@ -35,7 +36,7 @@ module.exports = function(game, Phaser){
       levelItems.forEach(function(item){ item.destroy(); });
       if(header) header.destroy();
 
-      var levels = config.levels[currentBlockIndex];
+      var levels = levelsConfig[currentBlockIndex];
       var marginLeft = (blockWidth - maxLevelItems * levelItemFullWidth) / 2;
       levels.forEach(function(level, index){
         var type = level.type || 0;
@@ -62,9 +63,9 @@ module.exports = function(game, Phaser){
       if(nextArrow) nextArrow.destroy();
 
       // draw next
-      var maxLevelsRows = Math.ceil(config.levels[currentBlockIndex].length / maxLevelItems);
+      var maxLevelsRows = Math.ceil(levelsConfig[currentBlockIndex].length / maxLevelItems);
       var y = blockY + (maxLevelsRows * levelItemFullHeight) / 2
-      if(currentBlockIndex < config.levels.length - 1){
+      if(currentBlockIndex < levelsConfig.length - 1){
         nextArrow = game.add.button(blockX + blockWidth + config.UI.levels.blockArrowMarginLeft, y, 'levelsBlockArrow', this.onNextBlock, this);
         nextArrow.anchor.x = 0.5;
         nextArrow.anchor.y = 0.5;
@@ -79,7 +80,7 @@ module.exports = function(game, Phaser){
     },
 
     onNextBlock: function(){
-      if(currentBlockIndex + 1 < config.levels.length){
+      if(currentBlockIndex + 1 < levelsConfig.length){
         currentBlockIndex++;
         this.redraw();
       }

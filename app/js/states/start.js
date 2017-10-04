@@ -1,4 +1,4 @@
-var config = require('../config');
+var config = require('../configs/config');
 module.exports = function(game, Phaser){
   return {
     preload: function(){
