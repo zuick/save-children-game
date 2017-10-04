@@ -7,7 +7,7 @@ module.exports = function(game, Phaser){
   var Trap = require('../modules/trap')(game, Phaser);
   var Escape = require('../modules/escape')(game, Phaser);
   var Hero = require('../modules/hero')(game, Phaser);
-  var children, traps, escapes, lostChildren, savedChildren, hero, currentLevelIndex, initialChildrenCount, gameover, middleLayer, backLayer;
+  var children, traps, escapes, lostChildren, savedChildren, hero, currentLevelIndex, currentBlockIndex, initialChildrenCount, gameover, middleLayer, backLayer;
   var screenParams = {
     scale: 1,
     offsetX: 0,
@@ -16,21 +16,22 @@ module.exports = function(game, Phaser){
   }
 
   return {
-    init: function(levelIndex){
+    init: function(blockIndex, levelIndex){
       children = [];
       traps = [];
       escapes = [];
       lostChildren = 0;
       savedChildren = 0;
+      currentBlockIndex = blockIndex;
       currentLevelIndex = levelIndex;
       gameover = false;
       this.loadMap();
     },
     loadMap: function(){
-      map.create('level' + currentLevelIndex);
+      map.create('level' + currentBlockIndex + '-' + currentLevelIndex);
       backLayer = game.add.group();
       middleLayer = game.add.group();
-      var childSpeed = config.levels[currentLevelIndex].childrenSpeed || config.children.defaultSpeed;
+      var childSpeed = config.levels[currentBlockIndex][currentLevelIndex].childrenSpeed || config.children.defaultSpeed;
       // underground
       map.getTilesInLayer(config.map.main.name).forEach(function(tile, index){
         var worldPosition = map.getTileWorldXY(tile);
@@ -155,12 +156,11 @@ module.exports = function(game, Phaser){
     },
     nextLevel: function(){
       this.destroyHero();
-      var nextLevelIndex = currentLevelIndex + 1;
-      if(nextLevelIndex >= config.levels.length){
-        game.state.restart(true, false, 0);
-      }else{
-        game.state.restart(true, false, nextLevelIndex);
-      }
+      var nextBlockIndex = currentLevelIndex + 1 >= config.levels[currentBlockIndex].length ? currentBlockIndex + 1 : currentBlockIndex;
+      nextBlockIndex = nextBlockIndex >= config.levels.length ? 0 : nextBlockIndex;
+      var nextLevelIndex = currentLevelIndex + 1 >= config.levels[nextBlockIndex].length || nextBlockIndex !== currentBlockIndex ? 0 : currentLevelIndex + 1;
+
+      game.state.restart(true, false, nextBlockIndex, nextLevelIndex);
     },
     escapeCollision: function(child, esc){
       this.removeChild(child, function(){ savedChildren++; });
@@ -174,7 +174,7 @@ module.exports = function(game, Phaser){
       gameover = true;
       setTimeout(function(){
         _this.destroyHero();
-        game.state.restart(true, false, currentLevelIndex);
+        game.state.restart(true, false, currentBlockIndex, currentLevelIndex);
       }, 1000);
     },
     heroCollision: function(child, hero){
@@ -224,7 +224,7 @@ module.exports = function(game, Phaser){
       }
     },
     render: function(){
-      game.debug.text("Level " + (currentLevelIndex + 1), game.width / 2 - 40, 20);
+      game.debug.text("Level " + (currentBlockIndex + 1) + "-" + (currentLevelIndex + 1), game.width / 2 - 40, 20);
       if(config.debug){
         children.forEach(function(child){
           child.render();

@@ -13,7 +13,7 @@ module.exports = function(game, Phaser){
 
   return {
     drawLevelItem: function(x, y, index, key){
-      var item = game.add.button(x, y, key, function(){ game.state.start('game', true, false, index); console.log(index);});
+      var item = game.add.button(x, y, key, function(){ game.state.start('game', true, false, currentBlockIndex, index);});
       var text = game.add.text(item.width / 2, item.height / 2, index + 1, levelItemTextStyle);
       text.anchor.x = 0.5;
       text.anchor.y = 0.5;

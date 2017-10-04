@@ -84,8 +84,6 @@ module.exports = {
         src: 'assets/levels/Level_2.json',
         type: 2
       }
-    ],
-    [],
-    []
+    ]
   ]
 }

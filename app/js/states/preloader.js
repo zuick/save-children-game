@@ -5,8 +5,7 @@ module.exports = function(game, Phaser){
       game.add.text( game.world.centerX, game.world.centerY, "Loading", { fill: "#4b692f" } ).anchor.setTo( 0.5, 0.5 );
       config.levels.forEach(function(levelsBlock, blockIndex){
         levelsBlock.forEach(function(level, index){
-          console.log(blockIndex * levelsBlock.length + index);
-          game.load.tilemap('level' + (blockIndex * levelsBlock.length + index), level.src, null, Phaser.Tilemap.TILED_JSON);
+          game.load.tilemap('level' + blockIndex + '-' + index, level.src, null, Phaser.Tilemap.TILED_JSON);
         })
       });
 
