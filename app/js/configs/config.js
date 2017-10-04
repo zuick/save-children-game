@@ -2,6 +2,7 @@ module.exports = {
   debug: false,
   width: 1920,
   height: 1080,
+  defaultLanguage: 'ba',
   defaultBlockIndex: 0,
   UI: {
     levels: {

@@ -1,6 +1,7 @@
 var config = require('../configs/config');
 var levelsConfig = require('../configs/levels');
 var tileSprites = require('../tileSprites');
+var l10n = require('../modules/l10n');
 
 module.exports = function(game, Phaser){
   var map = require('../modules/map')(game, Phaser);
@@ -229,7 +230,7 @@ module.exports = function(game, Phaser){
       }
     },
     render: function(){
-      game.debug.text("Level " + (currentBlockIndex + 1) + "-" + (currentLevelIndex + 1), game.width / 2 - 40, 20);
+      game.debug.text(l10n.get('LEVEL_NUMBER', [currentBlockIndex + 1, currentLevelIndex + 1]), game.width / 2 - 40, 20);
       if(config.debug){
         children.forEach(function(child){
           child.render();
