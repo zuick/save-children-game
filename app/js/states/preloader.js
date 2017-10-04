@@ -27,10 +27,11 @@ module.exports = function(game, Phaser){
       game.load.image('levelItemCity', 'assets/UI/level_item_city.png');
       game.load.image('levelItemCountrySide', 'assets/UI/level_item_countryside.png');
       game.load.image('levelItemHouse', 'assets/UI/level_item_house.png');
+      game.load.image('levelsBlockArrow', 'assets/UI/levels_block_arrow.png');
     },
     create: function(){
       //game.state.start( 'start', true, false );
-      game.state.start('levels', true, false, 0);
+      game.state.start('levels', true, false, config.defaultBlockIndex || 0);
     }
   }
 }

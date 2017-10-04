@@ -2,12 +2,14 @@ module.exports = {
   debug: false,
   width: 1920,
   height: 1080,
+  defaultBlockIndex: 1,
   UI: {
     levels: {
       levelItem: { width: 150, height: 150 },
       levelItemsPadding: 20,
       blockWidthScale: 0.5,
-      blockMarginTop: 100,
+      blockMarginTop: 120,
+      blockArrowMarginLeft: 50,
       types: {
         0: 'levelItemCity',
         1: 'levelItemCountrySide',
@@ -42,23 +44,12 @@ module.exports = {
   levels: [
     [
       {
-        src: 'assets/levels/test.json',
-        type: 12
+        src: 'assets/levels/Level_1.json',
+        type: 0
       },
       {
-        src: 'assets/levels/test.json'
-      },
-      {
-        src: 'assets/levels/test.json'
-      },
-      {
-        src: 'assets/levels/test.json'
-      },
-      {
-        src: 'assets/levels/test.json'
-      },
-      {
-        src: 'assets/levels/test.json'
+        src: 'assets/levels/Level_2.json',
+        type: 0
       },
       {
         src: 'assets/levels/test.json',
@@ -76,13 +67,105 @@ module.exports = {
         src: 'assets/levels/test.json',
         type: 2
       },
+      {
+        src: 'assets/levels/test.json',
+        type: 2
+      },
+      {
+        src: 'assets/levels/test.json',
+        type: 2
+      },
+      {
+        src: 'assets/levels/test.json',
+        type: 2
+      },
+      {
+        src: 'assets/levels/test.json',
+        type: 2
+      }
+    ],
+    [
       {
         src: 'assets/levels/Level_1.json',
         type: 2
       },
       {
         src: 'assets/levels/Level_2.json',
+        type: 0
+      },
+      {
+        src: 'assets/levels/test.json',
         type: 2
+      },
+      {
+        src: 'assets/levels/test.json',
+        type: 0
+      },
+      {
+        src: 'assets/levels/test.json',
+        type: 2
+      },
+      {
+        src: 'assets/levels/test.json',
+        type: 0
+      },
+      {
+        src: 'assets/levels/test.json',
+        type: 2
+      },
+      {
+        src: 'assets/levels/test.json',
+        type: 0
+      },
+      {
+        src: 'assets/levels/test.json',
+        type: 2
+      },
+      {
+        src: 'assets/levels/test.json',
+        type: 0
+      }
+    ],
+    [
+      {
+        src: 'assets/levels/Level_1.json',
+        type: 1
+      },
+      {
+        src: 'assets/levels/Level_2.json',
+        type: 0
+      },
+      {
+        src: 'assets/levels/test.json',
+        type: 1
+      },
+      {
+        src: 'assets/levels/test.json',
+        type: 0
+      },
+      {
+        src: 'assets/levels/test.json',
+        type: 1
+      },
+      {
+        src: 'assets/levels/test.json',
+        type: 0
+      },
+      {
+        src: 'assets/levels/test.json',
+        type: 1
+      },
+      {
+        src: 'assets/levels/test.json',
+        type: 0
+      },
+      {
+        src: 'assets/levels/test.json',
+        type: 1
+      },
+      {
+        src: 'assets/levels/test.json',
+        type: 0
       }
     ]
   ]

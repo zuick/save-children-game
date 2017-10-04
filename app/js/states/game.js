@@ -152,6 +152,10 @@ module.exports = function(game, Phaser){
         }
 
         middleLayer.sort('y', Phaser.Group.SORT_ASCENDING);
+
+        if (game.input.keyboard.isDown(Phaser.Keyboard.ESC)){
+          game.state.start('levels', true, false, void 0);
+        }
       }
     },
     nextLevel: function(){
