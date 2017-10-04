@@ -51,7 +51,7 @@ module.exports = function(game, Phaser){
         ));
       }.bind(this))
 
-      header = game.add.text(config.width / 2, config.UI.levels.blockMarginTop / 2, 'Level block: ' + (currentBlockIndex + 1), headerTextStyle);
+      header = game.add.text(config.width / 2, config.UI.levels.blockMarginTop / 2, 'ҠАТМАРЛЫЛЫҠ КИМӘЛЕ: ' + (currentBlockIndex + 1), headerTextStyle);
       header.anchor.x = 0.5;
       header.anchor.y = 0.5;
     },
