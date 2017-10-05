@@ -21,6 +21,9 @@ module.exports = {
     },
     game: {
       timerMarginTop: 50,
+      timerOffsetX: -50,
+      pauseButtonMarginTop: 50,
+      pauseButtonOffsetX: 50,
       timerTextStyle: { font: "48px Arial", fill: "#fff", align: "center" }
     }
   },

@@ -19,6 +19,7 @@ module.exports = function(game, Phaser){
   }
   var time = 0;
   var timer;
+  var paused;
 
   return {
     init: function(blockIndex, levelIndex){
@@ -31,6 +32,8 @@ module.exports = function(game, Phaser){
       currentLevelIndex = levelIndex;
       gameover = false;
       time = 0;
+      paused = false;
+      timer = void 0;
       this.loadMap();
     },
     loadMap: function(){
@@ -132,21 +135,49 @@ module.exports = function(game, Phaser){
     create: function() {
       game.stage.backgroundColor = '#000';
       game.physics.startSystem(Phaser.Physics.ARCADE);
-      game.input.onDown.add(this.moveHero, this);
+      game.input.onDown.add(this.onPointerDown, this);
 
       game.input.keyboard.addKey(Phaser.Keyboard.N).onUp.add(this.nextLevel, this);
       game.time.events.loop(Phaser.Timer.SECOND, this.updateTime, this);
 
-      timer = game.add.text(config.width / 2 - screenParams.offsetX, config.UI.game.timerMarginTop - screenParams.offsetY, utils.formatTime(time), config.UI.game.timerTextStyle);
+      timer = game.add.text(
+        config.width / 2 - screenParams.offsetX + config.UI.game.timerOffsetX,
+        config.UI.game.timerMarginTop - screenParams.offsetY,
+        utils.formatTime(time),
+        config.UI.game.timerTextStyle
+      );
+
       timer.anchor.x = 0.5;
       timer.anchor.y = 0.5;
+
+      var pause = game.add.button(
+        config.width / 2 - screenParams.offsetX + config.UI.game.pauseButtonOffsetX,
+        config.UI.game.pauseButtonMarginTop - screenParams.offsetY,
+        'pauseButton',
+        this.onPauseClicked,
+        this
+      );
+
+      pause.anchor.x = 0.5;
+      pause.anchor.y = 0.5;
+
+    },
+    onPauseClicked: function(){
+      paused = true;
+
+    },
+    onContinueClicked: function(){
+      paused = false;
+
     },
     updateTime: function(){
-      time++;
-      timer.text = utils.formatTime(time);
+      if(!paused){
+        time++;
+        timer.text = utils.formatTime(time);        
+      }
     },
     update: function(){
-      if(!gameover){
+      if(!gameover && !paused){
         var _this = this;
         children.forEach(function(child){
           traps.forEach(function(trap){
@@ -223,22 +254,26 @@ module.exports = function(game, Phaser){
         hero = void 0;
       }
     },
-    moveHero: function(pointer){
-      this.destroyHero();
+    onPointerDown: function(pointer){
+      if(paused){
+        this.onContinueClicked();
+      }else{
+        this.destroyHero();
 
-      if(!screenParams.canvas){
-        screenParams.canvas = document.getElementsByTagName('canvas')[0];
-      }
-      screenParams.scale = game.width / screenParams.canvas.clientWidth;
-      var ceiled = map.ceilPosition(pointer.x * screenParams.scale - screenParams.offsetX, pointer.y * screenParams.scale - screenParams.offsetY)
-      var tileBehind = map.getTileAt(ceiled.x, ceiled.y);
-      if(tileBehind && config.map.main.walls.indexOf(tileBehind.index) === -1 ){
-        hero = new Hero();
-        hero.create(ceiled.x, ceiled.y, map, tileSprites[config.map.objects.hero[0]], config.hero.bodyScale);
-        var childOverlap = children.some(function(child){ return child.isBodyOverlap(hero.getCollider())});
-        middleLayer.add(hero.getCollider());
-        if(childOverlap){
-          this.destroyHero();
+        if(!screenParams.canvas){
+          screenParams.canvas = document.getElementsByTagName('canvas')[0];
+        }
+        screenParams.scale = game.width / screenParams.canvas.clientWidth;
+        var ceiled = map.ceilPosition(pointer.x * screenParams.scale - screenParams.offsetX, pointer.y * screenParams.scale - screenParams.offsetY)
+        var tileBehind = map.getTileAt(ceiled.x, ceiled.y);
+        if(tileBehind && config.map.main.walls.indexOf(tileBehind.index) === -1 ){
+          hero = new Hero();
+          hero.create(ceiled.x, ceiled.y, map, tileSprites[config.map.objects.hero[0]], config.hero.bodyScale);
+          var childOverlap = children.some(function(child){ return child.isBodyOverlap(hero.getCollider())});
+          middleLayer.add(hero.getCollider());
+          if(childOverlap){
+            this.destroyHero();
+          }
         }
       }
     },
