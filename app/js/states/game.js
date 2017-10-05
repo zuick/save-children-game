@@ -289,8 +289,8 @@ module.exports = function(game, Phaser){
         if(!screenParams.canvas){
           screenParams.canvas = document.getElementsByTagName('canvas')[0];
         }
-        screenParams.scale = game.width / screenParams.canvas.clientWidth;
-        var ceiled = map.ceilPosition(pointer.x * screenParams.scale - screenParams.offsetX, pointer.y * screenParams.scale - screenParams.offsetY)
+        
+        var ceiled = map.ceilPosition(pointer.x - screenParams.offsetX, pointer.y - screenParams.offsetY)
         var tileBehind = map.getTileAt(ceiled.x, ceiled.y);
         if(tileBehind && config.map.main.walls.indexOf(tileBehind.index) === -1 ){
           hero = new Hero();
