@@ -10,7 +10,11 @@ module.exports = function(game, Phaser){
   var Trap = require('../modules/trap')(game, Phaser);
   var Escape = require('../modules/escape')(game, Phaser);
   var Hero = require('../modules/hero')(game, Phaser);
-  var children, traps, escapes, lostChildren, savedChildren, hero, currentLevelIndex, currentBlockIndex, initialChildrenCount, gameover, middleLayer, backLayer;
+  var children, traps, escapes, lostChildren, savedChildren, hero,
+    currentLevelIndex, currentBlockIndex, initialChildrenCount, gameover,
+    middleLayer, backLayer, popupLayer, UILayer,
+    timer, paused, tint, pauseButton;
+
   var screenParams = {
     scale: 1,
     offsetX: 0,
@@ -18,9 +22,6 @@ module.exports = function(game, Phaser){
     canvas: void 0
   }
   var time = 0;
-  var timer;
-  var paused;
-
   return {
     init: function(blockIndex, levelIndex){
       children = [];
@@ -34,12 +35,16 @@ module.exports = function(game, Phaser){
       time = 0;
       paused = false;
       timer = void 0;
+      tint = void 0;
+      pauseButton = void 0;
       this.loadMap();
     },
     loadMap: function(){
       map.create('level' + currentBlockIndex + '-' + currentLevelIndex);
       backLayer = game.add.group();
       middleLayer = game.add.group();
+      UILayer = game.add.group();
+      popupLayer = game.add.group();
       var childSpeed = levelsConfig[currentBlockIndex][currentLevelIndex].childrenSpeed || config.children.defaultSpeed;
       // underground
       map.getTilesInLayer(config.map.main.name).forEach(function(tile, index){
@@ -147,34 +152,55 @@ module.exports = function(game, Phaser){
         config.UI.game.timerTextStyle
       );
 
-      timer.anchor.x = 0.5;
-      timer.anchor.y = 0.5;
+      timer.anchor.set(0.5);
+      UILayer.add(timer);
 
-      var pause = game.add.button(
+      pauseButton = game.add.button(
         config.width / 2 - screenParams.offsetX + config.UI.game.pauseButtonOffsetX,
         config.UI.game.pauseButtonMarginTop - screenParams.offsetY,
         'pauseButton',
         this.onPauseClicked,
-        this
+        this,
+        0
       );
 
-      pause.anchor.x = 0.5;
-      pause.anchor.y = 0.5;
-
+      pauseButton.anchor.set(0.5);
+      UILayer.add(pauseButton);
     },
     onPauseClicked: function(){
-      paused = true;
-
+      if(!paused){
+        paused = true;
+        if(pauseButton){
+          pauseButton.input.enabled = false;
+          pauseButton.setFrames(1, 1, 1);
+        }
+        this.createTint();
+      }
     },
     onContinueClicked: function(){
-      paused = false;
-
+      if(paused){
+        paused = false;
+        if(pauseButton){
+          pauseButton.input.enabled = true;
+          pauseButton.setFrames(0, 0, 0);
+        }
+        if(tint) tint.destroy();
+      }
     },
     updateTime: function(){
       if(!paused){
         time++;
-        timer.text = utils.formatTime(time);        
+        timer.text = utils.formatTime(time);
       }
+    },
+    createTint: function(){
+      tint = game.add.sprite(config.width / 2 - screenParams.offsetX, config.height / 2 - screenParams.offsetY, 'pixel');
+      tint.width = config.width;
+      tint.height = config.height;
+      tint.anchor.set(0.5);
+      tint.tint = 0x000000;
+      tint.alpha = 0.3;
+      popupLayer.add(tint);
     },
     update: function(){
       if(!gameover && !paused){

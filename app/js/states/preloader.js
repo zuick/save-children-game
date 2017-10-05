@@ -30,8 +30,8 @@ module.exports = function(game, Phaser){
       game.load.image('levelItemHouse', 'assets/UI/level_item_house.png');
       game.load.image('levelsBlockArrow', 'assets/UI/levels_block_arrow.png');
 
-      game.load.image('continueButton', 'assets/UI/game_continue.png');
-      game.load.image('pauseButton', 'assets/UI/game_pause.png');
+      game.load.spritesheet('pauseButton', 'assets/UI/game_pause.png', 32, 32, 2);
+      game.load.image('pixel', 'assets/UI/pixel.png');
     },
     create: function(){
       //game.state.start( 'start', true, false );
