@@ -11,11 +11,17 @@ module.exports = {
       blockWidthScale: 0.5,
       blockMarginTop: 120,
       blockArrowMarginLeft: 50,
+      levelItemTextStyle: { font: "64px Arial", fill: "#fff", align: "center" },
+      headerTextStyle: { font: "32px Arial", fill: "#fff", align: "center" },
       types: {
         0: 'levelItemCity',
         1: 'levelItemCountrySide',
         2: 'levelItemHouse'
       }
+    },
+    game: {
+      timerMarginTop: 50,
+      timerTextStyle: { font: "48px Arial", fill: "#fff", align: "center" }
     }
   },
   map: {

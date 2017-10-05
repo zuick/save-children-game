@@ -2,6 +2,7 @@ var config = require('../configs/config');
 var levelsConfig = require('../configs/levels');
 var tileSprites = require('../tileSprites');
 var l10n = require('../modules/l10n');
+var utils = require('../modules/utils');
 
 module.exports = function(game, Phaser){
   var map = require('../modules/map')(game, Phaser);
@@ -17,6 +18,7 @@ module.exports = function(game, Phaser){
     canvas: void 0
   }
   var time = 0;
+  var timer;
 
   return {
     init: function(blockIndex, levelIndex){
@@ -134,9 +136,14 @@ module.exports = function(game, Phaser){
 
       game.input.keyboard.addKey(Phaser.Keyboard.N).onUp.add(this.nextLevel, this);
       game.time.events.loop(Phaser.Timer.SECOND, this.updateTime, this);
+
+      timer = game.add.text(config.width / 2 - screenParams.offsetX, config.UI.game.timerMarginTop - screenParams.offsetY, utils.formatTime(time), config.UI.game.timerTextStyle);
+      timer.anchor.x = 0.5;
+      timer.anchor.y = 0.5;
     },
     updateTime: function(){
       time++;
+      timer.text = utils.formatTime(time);
     },
     update: function(){
       if(!gameover){
@@ -236,8 +243,6 @@ module.exports = function(game, Phaser){
       }
     },
     render: function(){
-      game.debug.text(l10n.get('LEVEL_NUMBER', [currentBlockIndex + 1, currentLevelIndex + 1]), game.width / 2 - 40, 20);
-      game.debug.text("Seconds: " + time, 40, 20);
       if(config.debug){
         children.forEach(function(child){
           child.render();
