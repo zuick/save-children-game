@@ -16,6 +16,7 @@ module.exports = function(game, Phaser){
     offsetY: 0,
     canvas: void 0
   }
+  var time = 0;
 
   return {
     init: function(blockIndex, levelIndex){
@@ -27,6 +28,7 @@ module.exports = function(game, Phaser){
       currentBlockIndex = blockIndex;
       currentLevelIndex = levelIndex;
       gameover = false;
+      time = 0;
       this.loadMap();
     },
     loadMap: function(){
@@ -131,6 +133,10 @@ module.exports = function(game, Phaser){
       game.input.onDown.add(this.moveHero, this);
 
       game.input.keyboard.addKey(Phaser.Keyboard.N).onUp.add(this.nextLevel, this);
+      game.time.events.loop(Phaser.Timer.SECOND, this.updateTime, this);
+    },
+    updateTime: function(){
+      time++;
     },
     update: function(){
       if(!gameover){
@@ -231,6 +237,7 @@ module.exports = function(game, Phaser){
     },
     render: function(){
       game.debug.text(l10n.get('LEVEL_NUMBER', [currentBlockIndex + 1, currentLevelIndex + 1]), game.width / 2 - 40, 20);
+      game.debug.text("Seconds: " + time, 40, 20);
       if(config.debug){
         children.forEach(function(child){
           child.render();
