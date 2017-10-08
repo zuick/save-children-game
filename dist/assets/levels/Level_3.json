@@ -1,7 +1,7 @@
 { "height":3,
  "layers":[
         {
-         "data":[8, 2, 7, 8, 2, 2, 2, 25, 0, 2, 0, 0],
+         "data":[8, 2, 7, 8, 2, 2, 2, 25, 19, 2, 19, 19],
          "height":3,
          "name":"main",
          "opacity":1,
@@ -13,6 +13,7 @@
         }, 
         {
          "draworder":"topdown",
+         "height":0,
          "name":"objects",
          "objects":[
                 {
@@ -42,13 +43,13 @@
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
+         "width":0,
          "x":0,
          "y":0
         }],
  "nextobjectid":29,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.0.3",
  "tileheight":135,
  "tilesets":[
         {
@@ -65,7 +66,6 @@
          "tilewidth":157
         }],
  "tilewidth":157,
- "type":"map",
  "version":1,
  "width":4
 }
