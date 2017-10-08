@@ -1,13 +1,13 @@
 { "height":3,
  "layers":[
         {
-         "data":[1, 1, 1, 2, 2, 12, 12, 1, 12, 12, 7, 8, 25, 7, 8],
+         "data":[8, 2, 7, 8, 2, 2, 2, 25, 0, 2, 0, 0],
          "height":3,
          "name":"main",
          "opacity":1,
          "type":"tilelayer",
          "visible":true,
-         "width":5,
+         "width":4,
          "x":0,
          "y":0
         }, 
@@ -16,28 +16,28 @@
          "name":"objects",
          "objects":[
                 {
-                 "gid":31,
+                 "gid":32,
                  "height":135,
-                 "id":30,
+                 "id":27,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":157,
                  "x":0,
-                 "y":135
+                 "y":270
                 }, 
                 {
                  "gid":34,
                  "height":135,
-                 "id":31,
+                 "id":28,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":157,
-                 "x":628,
-                 "y":135
+                 "x":157,
+                 "y":405
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -45,7 +45,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":32,
+ "nextobjectid":29,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.0.3",
@@ -67,5 +67,5 @@
  "tilewidth":157,
  "type":"map",
  "version":1,
- "width":5
+ "width":4
 }

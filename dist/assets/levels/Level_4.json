@@ -1,8 +1,8 @@
-{ "height":3,
+{ "height":4,
  "layers":[
         {
-         "data":[1, 1, 1, 2, 2, 12, 12, 1, 12, 12, 7, 8, 25, 7, 8],
-         "height":3,
+         "data":[1, 7, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 7, 0, 0, 0],
+         "height":4,
          "name":"main",
          "opacity":1,
          "type":"tilelayer",
@@ -18,25 +18,13 @@
                 {
                  "gid":31,
                  "height":135,
-                 "id":30,
+                 "id":36,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":157,
                  "x":0,
-                 "y":135
-                }, 
-                {
-                 "gid":34,
-                 "height":135,
-                 "id":31,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":157,
-                 "x":628,
                  "y":135
                 }],
          "opacity":1,
@@ -45,7 +33,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":32,
+ "nextobjectid":41,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.0.3",
