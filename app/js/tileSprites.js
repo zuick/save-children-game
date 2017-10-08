@@ -10,8 +10,9 @@ function tileSprite(key, offsetX, offsetY, shadow){
 module.exports = {
   1: tileSprite('ground01'),
   2: tileSprite('ground02'),
-  7: tileSprite('houseA1', -2, -137, tileSprite('houseShadow', -81, -137)),
-  8: tileSprite('houseA2', 1, -137),
+  7: tileSprite('houseA1', 0, -136, tileSprite('houseShadow', -81, -137)),
+  8: tileSprite('houseA2', 0, -136),
+  9: tileSprite('houseA3', 0, -136),
   19: tileSprite('bush'),
   25: tileSprite('danger1', 0, 10, tileSprite('underground', 0, 5)),
   31: tileSprite('boy', 0, -60),

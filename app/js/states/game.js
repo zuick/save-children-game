@@ -57,7 +57,7 @@ module.exports = function(game, Phaser){
       });
 
       // fill gorunds, empty space with last ground option
-      var lastSpriteOptions;
+      var lastSpriteOptions = { key: 'ground01', offsetX: 0, offsetY: 0 };
       map.getTilesInLayer(config.map.main.name).forEach(function(tile, index){
         var worldPosition = map.getTileWorldXY(tile);
         var spriteOptions = tileSprites[tile.index];
@@ -289,7 +289,7 @@ module.exports = function(game, Phaser){
         if(!screenParams.canvas){
           screenParams.canvas = document.getElementsByTagName('canvas')[0];
         }
-        
+
         var ceiled = map.ceilPosition(pointer.x - screenParams.offsetX, pointer.y - screenParams.offsetY)
         var tileBehind = map.getTileAt(ceiled.x, ceiled.y);
         if(tileBehind && config.map.main.walls.indexOf(tileBehind.index) === -1 ){
