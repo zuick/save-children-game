@@ -10,10 +10,10 @@ module.exports = function(game, Phaser){
   var Trap = require('../modules/trap')(game, Phaser);
   var Escape = require('../modules/escape')(game, Phaser);
   var Hero = require('../modules/hero')(game, Phaser);
-  var children, traps, escapes, lostChildren, savedChildren, hero,
+  var children, traps, escapes, savedChildren, hero,
     currentLevelIndex, currentBlockIndex, initialChildrenCount, gameover,
     middleLayer, backLayer, popupLayer, UILayer,
-    timer, paused, tint, pauseButton;
+    timerText, paused, tint, pauseButton, statusText, levelNumberText;
 
   var screenParams = {
     scale: 1,
@@ -27,14 +27,16 @@ module.exports = function(game, Phaser){
       children = [];
       traps = [];
       escapes = [];
-      lostChildren = 0;
       savedChildren = 0;
+      initialChildrenCount = 0;
       currentBlockIndex = blockIndex;
       currentLevelIndex = levelIndex;
       gameover = false;
       time = 0;
       paused = false;
-      timer = void 0;
+      timerText = void 0;
+      statusText = void 0;
+      levelNumberText = void 0;
       tint = void 0;
       pauseButton = void 0;
       this.loadMap();
@@ -137,6 +139,16 @@ module.exports = function(game, Phaser){
 
       game.world.setBounds(-screenParams.offsetX, -screenParams.offsetY, config.width - screenParams.offsetX, config.height - screenParams.offsetY);
     },
+    createText: function(options, text, anchor){
+      var t = game.add.text(
+        config.width / 2 - screenParams.offsetX + options.offsetX,
+        options.marginTop - screenParams.offsetY,
+        text,
+        options.style
+      );
+      t.anchor.set(anchor);
+      return t;
+    },
     create: function() {
       game.stage.backgroundColor = '#000';
       game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -145,19 +157,17 @@ module.exports = function(game, Phaser){
       game.input.keyboard.addKey(Phaser.Keyboard.N).onUp.add(this.nextLevel, this);
       game.time.events.loop(Phaser.Timer.SECOND, this.updateTime, this);
 
-      timer = game.add.text(
-        config.width / 2 - screenParams.offsetX + config.UI.game.timerOffsetX,
-        config.UI.game.timerMarginTop - screenParams.offsetY,
-        utils.formatTime(time),
-        config.UI.game.timerTextStyle
-      );
+      timerText = this.createText(config.UI.game.timerText, utils.formatTime(time), 0.5);
+      levelNumberText = this.createText(config.UI.game.levelNumberText, currentLevelIndex + 1, 0.5);
+      statusText = this.createText(config.UI.game.statusText, "", 0.5);
 
-      timer.anchor.set(0.5);
-      UILayer.add(timer);
+      UILayer.add(timerText);
+      UILayer.add(levelNumberText);
+      UILayer.add(statusText);
 
       pauseButton = game.add.button(
-        config.width / 2 - screenParams.offsetX + config.UI.game.pauseButtonOffsetX,
-        config.UI.game.pauseButtonMarginTop - screenParams.offsetY,
+        config.width / 2 - screenParams.offsetX + config.UI.game.pauseButton.offsetX,
+        config.UI.game.pauseButton.marginTop - screenParams.offsetY,
         'pauseButton',
         this.onPauseClicked,
         this,
@@ -166,6 +176,8 @@ module.exports = function(game, Phaser){
 
       pauseButton.anchor.set(0.5);
       UILayer.add(pauseButton);
+
+      this.updateStatusText();savedChildren + " / " + children.length
     },
     onPauseClicked: function(){
       if(!paused){
@@ -190,7 +202,7 @@ module.exports = function(game, Phaser){
     updateTime: function(){
       if(!paused){
         time++;
-        timer.text = utils.formatTime(time);
+        timerText.text = utils.formatTime(time);
       }
     },
     createTint: function(){
@@ -239,7 +251,12 @@ module.exports = function(game, Phaser){
       game.state.restart(true, false, nextBlockIndex, nextLevelIndex);
     },
     escapeCollision: function(child, esc){
-      this.removeChild(child, function(){ savedChildren++; });
+      this.removeChild(child, function(){ savedChildren++; this.updateStatusText() }.bind(this));
+    },
+    updateStatusText: function(){
+      if(statusText){
+        statusText.text = savedChildren + " / " + initialChildrenCount;
+      }
     },
     trapCollision: function(child, trap){
       var index = children.map(function(c){ return c.getCollider() }).indexOf(child);

@@ -20,11 +20,25 @@ module.exports = {
       }
     },
     game: {
-      timerMarginTop: 50,
-      timerOffsetX: -50,
-      pauseButtonMarginTop: 50,
-      pauseButtonOffsetX: 50,
-      timerTextStyle: { font: "48px Arial", fill: "#fff", align: "center" }
+      timerText: {
+        marginTop: 50,
+        offsetX: -50, // from center
+        style: { font: "48px Arial", fill: "#fff", align: "center" }
+      },
+      levelNumberText: {
+        marginTop: 50,
+        offsetX: 500, // from center
+        style: { font: "48px Arial", fill: "#dd0", align: "center" }
+      },
+      statusText: {
+        marginTop: 50,
+        offsetX: 400, // from center
+        style: { font: "42px Arial", fill: "#fff", align: "center" }
+      },
+      pauseButton: {
+        marginTop: 50,
+        offsetX: 50, // from center
+      }
     }
   },
   map: {
