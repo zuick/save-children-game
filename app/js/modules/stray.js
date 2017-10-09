@@ -107,7 +107,7 @@ module.exports = function(game, Phaser){
 
     this.getDeltaTo = function(tile, isAccurate){
       var dwp = map.getTileWorldXY(tile);
-      var delta = speed * game.time.physicsElapsed;
+      var delta = speed * game.time.elapsed / 1000;
       var dx = dwp.x - sprite.x;
       var dy = dwp.y - sprite.y;
       if(isAccurate){
