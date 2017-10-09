@@ -40,7 +40,7 @@ module.exports = function(game, Phaser){
       this.loadMap();
     },
     loadMap: function(){
-      map.create('level' + currentBlockIndex + '-' + currentLevelIndex);
+      map.create('level' + currentBlockIndex + '-' + currentLevelIndex, void 0, this.isHeroOnTile.bind(this));
       backLayer = game.add.group();
       middleLayer = game.add.group();
       UILayer = game.add.group();
@@ -279,6 +279,13 @@ module.exports = function(game, Phaser){
         hero.destroy();
         hero = void 0;
       }
+    },
+    isHeroOnTile: function(tile){
+      if(hero){
+        var heroTile = map.getTileAt(hero.getCollider().x, hero.getCollider().y);
+        return tile === heroTile;
+      }
+      return false;
     },
     onPointerDown: function(pointer){
       if(paused){

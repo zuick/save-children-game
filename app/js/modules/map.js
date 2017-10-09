@@ -6,8 +6,9 @@ module.exports = function(game, Phaser){
     var map;
     var mainLayer;
     var children;
-
-    this.create = function(tilemap, mainLayerName){
+    var _isHeroOnTile;
+    this.create = function(tilemap, mainLayerName, isHeroOnTile){
+      _isHeroOnTile = isHeroOnTile;
       map = game.add.tilemap(tilemap);
       map.addTilesetImage('tilemap', 'tilemap');
 
@@ -133,7 +134,7 @@ module.exports = function(game, Phaser){
     }
 
     this.isWall = function(tile){
-      return config.map.main.walls.indexOf(tile.index) !== -1;
+      return config.map.main.walls.indexOf(tile.index) !== -1 || typeof(_isHeroOnTile) !== 'undefined' && _isHeroOnTile(tile);
     }
 
     this.get = function(){
