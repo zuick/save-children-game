@@ -720,6 +720,13 @@ module.exports = function(game, Phaser){
           floatY += delta.y;
           sprite.x = Math.round(floatX);
           sprite.y = Math.round(floatY);
+        }else{
+          currentDir = void 0;
+          var pos = map.getTileWorldXY(currentTile);
+          sprite.x = pos.x;
+          sprite.y = pos.y;
+          floatX = sprite.x;
+          floatY = sprite.y;
         }
       }
 
@@ -1203,7 +1210,10 @@ module.exports = function(game, Phaser){
 
         var ceiled = map.ceilPosition(pointer.x - screenParams.offsetX, pointer.y - screenParams.offsetY)
         var tileBehind = map.getTileAt(ceiled.x, ceiled.y);
-        if(tileBehind && config.map.main.walls.indexOf(tileBehind.index) === -1 ){
+        if(tileBehind &&
+          config.map.main.walls.indexOf(tileBehind.index) === -1 &&
+          traps.map(t => map.ceilPosition(t.getCollider().x, t.getCollider().y)).filter(p => ceiled.x === p.x && ceiled.y === p.y).length === 0 // no traps on this tile
+        ){
           hero = new Hero();
           hero.create(ceiled.x, ceiled.y, map, tileSprites[config.map.objects.hero[0]], config.hero.bodyScale);
           var childOverlap = children.some(function(child){ return child.isBodyOverlap(hero.getCollider())});
