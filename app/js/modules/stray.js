@@ -91,6 +91,13 @@ module.exports = function(game, Phaser){
           floatY += delta.y;
           sprite.x = Math.round(floatX);
           sprite.y = Math.round(floatY);
+        }else{
+          currentDir = void 0;
+          var pos = map.getTileWorldXY(currentTile);
+          sprite.x = pos.x;
+          sprite.y = pos.y;
+          floatX = sprite.x;
+          floatY = sprite.y;
         }
       }
 
