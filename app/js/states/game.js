@@ -4,6 +4,13 @@ var tileSprites = require('../tileSprites');
 var l10n = require('../modules/l10n');
 var utils = require('../modules/utils');
 
+var states = {
+  normal: 0,
+  paused: 1,
+  success: 2,
+  gameover: 3
+}
+
 module.exports = function(game, Phaser){
   var map = require('../modules/map')(game, Phaser);
   var Stray = require('../modules/stray')(game, Phaser);
@@ -11,11 +18,12 @@ module.exports = function(game, Phaser){
   var Escape = require('../modules/escape')(game, Phaser);
   var Hero = require('../modules/hero')(game, Phaser);
   var pausePopupCreator = require('../modules/popups/pause')(game, Phaser);
-
+  var successPopupCreator = require('../modules/popups/success')(game, Phaser);
   var children, traps, escapes, savedChildren, hero,
-    currentLevelIndex, currentBlockIndex, initialChildrenCount, gameover,
+    currentLevelIndex, currentBlockIndex, initialChildrenCount,
     middleLayer, backLayer, UILayer,
-    timerText, paused, pausePopup, pauseButton, statusText, levelNumberText;
+    timerText, state, pauseButton, statusText, levelNumberText,
+    pausePopup, successPopup, gameoverPopup;
 
   var screenParams = {
     scale: 1,
@@ -33,14 +41,21 @@ module.exports = function(game, Phaser){
       initialChildrenCount = 0;
       currentBlockIndex = blockIndex;
       currentLevelIndex = levelIndex;
-      gameover = false;
       time = 0;
-      paused = false;
+      state = states.normal;
       timerText = void 0;
       statusText = void 0;
       levelNumberText = void 0;
-      pausePopup = void 0;
       pauseButton = void 0;
+
+      if(pausePopup) pausePopup.destroy();
+      pausePopup = void 0;
+
+      if(successPopup) successPopup.destroy();
+      successPopup = void 0;
+
+      if(gameoverPopup) gameoverPopup.destroy();
+      gameoverPopup = void 0;
       this.loadMap();
     },
     loadMap: function(){
@@ -181,8 +196,8 @@ module.exports = function(game, Phaser){
       this.updateStatusText();savedChildren + " / " + children.length
     },
     onPauseClicked: function(){
-      if(!paused){
-        paused = true;
+      if(state === states.normal){
+        state = states.paused;
         if(pauseButton){
           pauseButton.input.enabled = false;
           pauseButton.setFrames(1, 1, 1);
@@ -191,8 +206,8 @@ module.exports = function(game, Phaser){
       }
     },
     onContinueClicked: function(){
-      if(paused){
-        paused = false;
+      if(state === states.paused){
+        state = states.normal;
         if(pauseButton){
           pauseButton.input.enabled = true;
           pauseButton.setFrames(0, 0, 0);
@@ -201,13 +216,13 @@ module.exports = function(game, Phaser){
       }
     },
     updateTime: function(){
-      if(!paused){
+      if(state === states.normal){
         time++;
         timerText.text = utils.formatTime(time);
       }
     },
     update: function(){
-      if(!gameover && !paused){
+      if(state === states.normal){
         var _this = this;
         children.forEach(function(child){
           traps.forEach(function(trap){
@@ -223,8 +238,15 @@ module.exports = function(game, Phaser){
           }
           child.update();
         });
+
         if(initialChildrenCount !== 0 && initialChildrenCount === savedChildren){
-          this.nextLevel();
+          successPopup = successPopupCreator.create(
+            config.width / 2 - screenParams.offsetX,
+            config.height / 2 - screenParams.offsetY,
+            time, savedChildren, initialChildrenCount,
+            this.nextLevel, this
+          );
+          state = states.success;
         }
 
         middleLayer.sort('y', Phaser.Group.SORT_ASCENDING);
@@ -256,7 +278,7 @@ module.exports = function(game, Phaser){
       if(index !== -1){
         children[index].onTrap();
       }
-      gameover = true;
+      state = states.gameover;
       setTimeout(function(){
         _this.destroyHero();
         game.state.restart(true, false, currentBlockIndex, currentLevelIndex);
@@ -297,9 +319,9 @@ module.exports = function(game, Phaser){
       return false;
     },
     onPointerDown: function(pointer){
-      if(paused){
+      if(state === states.paused){
         this.onContinueClicked();
-      }else{
+      }else if(state === states.normal){
         this.destroyHero();
 
         if(!screenParams.canvas){
