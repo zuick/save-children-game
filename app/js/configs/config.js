@@ -39,6 +39,12 @@ module.exports = {
         marginTop: 50,
         offsetX: 50, // from center
       }
+    },
+    popups: {
+      pause: {
+        textStyle: { font: "64px Arial", fill: "#dd0", align: "center" },
+        opacity: 0.5
+      }
     }
   },
   map: {
