@@ -1,13 +1,13 @@
-{ "height":6,
+{ "height":5,
  "layers":[
         {
-         "data":[1, 1, 1, 25, 1, 1, 19, 1, 1, 19, 1, 1, 1, 1, 25, 1, 1, 1, 1, 1, 25, 25, 19, 1, 1, 1, 1, 1, 1, 1],
-         "height":6,
+         "data":[25, 25, 1, 1, 1, 1, 7, 12, 19, 1, 1, 1, 1, 1, 8, 1, 1, 1, 25, 19, 1, 1, 1, 1, 19, 25, 1, 1, 1, 1, 25, 1, 1, 19, 1],
+         "height":5,
          "name":"main",
          "opacity":1,
          "type":"tilelayer",
          "visible":true,
-         "width":5,
+         "width":7,
          "x":0,
          "y":0
         }, 
@@ -16,7 +16,7 @@
          "name":"objects",
          "objects":[
                 {
-                 "gid":34,
+                 "gid":31,
                  "height":135,
                  "id":48,
                  "name":"",
@@ -24,33 +24,13 @@
                  "type":"",
                  "visible":true,
                  "width":157,
-                 "x":471,
-                 "y":540
-                }, 
-                {
-                 "gid":31,
-                 "height":135,
-                 "id":49,
-                 "name":"",
-                 "properties":
-                    {
-                     "dir":"right"
-                    },
-                 "propertytypes":
-                    {
-                     "dir":"string"
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":157,
-                 "x":0,
-                 "y":135
+                 "x":942,
+                 "y":675
                 }, 
                 {
                  "gid":32,
                  "height":135,
-                 "id":50,
+                 "id":49,
                  "name":"",
                  "properties":
                     {
@@ -64,8 +44,20 @@
                  "type":"",
                  "visible":true,
                  "width":157,
-                 "x":471,
-                 "y":810
+                 "x":942,
+                 "y":270
+                }, 
+                {
+                 "gid":34,
+                 "height":135,
+                 "id":50,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":157,
+                 "x":0,
+                 "y":675
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -95,5 +87,5 @@
  "tilewidth":157,
  "type":"map",
  "version":1,
- "width":5
+ "width":7
 }
