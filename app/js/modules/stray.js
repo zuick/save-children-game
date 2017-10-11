@@ -145,10 +145,6 @@ module.exports = function(game, Phaser){
       sprite.destroy();
     }
 
-    this.onTrap = function(){
-      this.destroy();
-    }
-
     this.isBodyOverlap = function(other){
       var rect = {
         x: sprite.x + sprite.body.offset.x,
@@ -181,7 +177,7 @@ module.exports = function(game, Phaser){
              point.y <= rect.y + rect.h;
     }
     this.onTrap = function(){
-      sprite.tint = 0xFF0000;
+      game.add.tween(sprite).to( { alpha: 0.2 }, 150, "Linear", true, 0, 3, true);
     }
 
     this.onHero = function(){

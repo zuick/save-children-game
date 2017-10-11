@@ -8,6 +8,8 @@ module.exports = function(game, Phaser){
       var base = basic.create(x, y, config.UI.popups.pause.opacity);
       var text = game.add.text(x, y, l10n.get('PAUSE'), config.UI.popups.pause.textStyle);
       text.anchor.set(0.5);
+      text.alpha = 0.1;
+      var tween = game.add.tween(text).to( { alpha: 1 }, 500, "Linear", true, 0, -1, true);
 
       base.add(text);
       return base;
