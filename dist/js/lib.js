@@ -3,7 +3,7 @@ module.exports = {
   debug: false,
   width: 1920,
   height: 1080,
-  defaultLanguage: 'ba',
+  defaultLanguage: 'ru',
   defaultBlockIndex: 0,
   UI: {
     levels: {
@@ -40,6 +40,31 @@ module.exports = {
         marginTop: 50,
         offsetX: 50, // from center
       }
+    },
+    popups: {
+      pause: {
+        textStyle: { font: "64px Arial", fill: "#dd0", align: "center" },
+        opacity: 0.5
+      },
+      success: {
+        opacity: 0.5,
+        header: {
+          style: { font: "48px Arial", fill: "#fff", align: "center" },
+          offsetY: -100
+        },
+        stat: {
+          style: { font: "48px Arial", fill: "#fff", align: "center" },
+          offsetY: 50
+        },
+        time: {
+          style: { font: "48px Arial", fill: "#fff", align: "center" },
+          offsetY: 120
+        },
+        nextButton: {
+          offsetX: 0,
+          offsetY: 220
+        }
+      }
     }
   },
   map: {
@@ -71,13 +96,18 @@ module.exports = {
 },{}],2:[function(require,module,exports){
 module.exports = {
   "DIFFICULTY_LEVEL": "ҠАТМАРЛЫЛЫҠ КИМӘЛЕ: {0}",
-  "LEVEL_NUMBER": "КИМӘЛ {0}-{1}"
+  "LEVEL_NUMBER": "КИМӘЛ {0}-{1}",
+  "PAUSE": "Тынлыҡ"
 }
 
 },{}],3:[function(require,module,exports){
 module.exports = {
   "DIFFICULTY_LEVEL": "Уровень сложности: {0}",
-  "LEVEL_NUMBER": "Уровень {0}-{1}"
+  "LEVEL_NUMBER": "Уровень {0}-{1}",
+  "PAUSE": "Пауза",
+  "CONGRATULATIONS": "Поздравляем!",
+  "TIME": "Время: {0}",
+  "STAT": "Спасено детей: {0}/{1}"
 }
 
 },{}],4:[function(require,module,exports){
@@ -350,7 +380,7 @@ module.exports = [
   game.state.start('preloader');
 })();
 
-},{"./configs/config":1,"./states/game":15,"./states/levels":16,"./states/preloader":17,"./states/start":18,"phaser/build/custom/p2":21,"phaser/build/custom/phaser-split":22,"phaser/build/custom/pixi":23}],6:[function(require,module,exports){
+},{"./configs/config":1,"./states/game":18,"./states/levels":19,"./states/preloader":20,"./states/start":21,"phaser/build/custom/p2":24,"phaser/build/custom/phaser-split":25,"phaser/build/custom/pixi":26}],6:[function(require,module,exports){
 var difference = require('lodash.difference');
 
 module.exports = {
@@ -386,7 +416,7 @@ module.exports = {
   }
 }
 
-},{"lodash.difference":20}],7:[function(require,module,exports){
+},{"lodash.difference":23}],7:[function(require,module,exports){
 module.exports = function(game, Phaser){
   function Escape(){
     var sprite;
@@ -467,7 +497,7 @@ module.exports = {
   }
 }
 
-},{"../configs/config":1,"../configs/languages/ba":2,"../configs/languages/ru":3,"../modules/stringFormat":12}],10:[function(require,module,exports){
+},{"../configs/config":1,"../configs/languages/ba":2,"../configs/languages/ru":3,"../modules/stringFormat":15}],10:[function(require,module,exports){
 var config = require('../configs/config');
 var directions = require('./directions');
 
@@ -627,6 +657,79 @@ module.exports = function(game, Phaser){
 }
 
 },{"../configs/config":1,"./directions":6}],11:[function(require,module,exports){
+var config = require('../../configs/config');
+
+module.exports = function(game, Phaser){
+  return {
+    create: function(x, y, opacity){
+      var popup = game.add.group();
+      var tint = game.add.sprite(x || config.width / 2, y || config.height / 2, 'pixel');
+      tint.width = config.width;
+      tint.height = config.height;
+      tint.anchor.set(0.5);
+      tint.tint = 0x000000;
+      tint.alpha = opacity || 0.3;
+      popup.add(tint);
+      return popup;
+    }
+  }
+}
+
+},{"../../configs/config":1}],12:[function(require,module,exports){
+var config = require('../../configs/config');
+var l10n = require('../l10n');
+
+module.exports = function(game, Phaser){
+  var basic = require('../popups/basic')(game, Phaser);
+  return {
+    create: function(x, y){
+      var base = basic.create(x, y, config.UI.popups.pause.opacity);
+      var text = game.add.text(x, y, l10n.get('PAUSE'), config.UI.popups.pause.textStyle);
+      text.anchor.set(0.5);
+      text.alpha = 0.1;
+      var tween = game.add.tween(text).to( { alpha: 1 }, 500, "Linear", true, 0, -1, true);
+
+      base.add(text);
+      return base;
+    }
+  }
+}
+
+},{"../../configs/config":1,"../l10n":9,"../popups/basic":11}],13:[function(require,module,exports){
+var config = require('../../configs/config');
+var l10n = require('../l10n');
+var utils = require('../utils');
+
+module.exports = function(game, Phaser){
+  var basic = require('../popups/basic')(game, Phaser);
+  return {
+    create: function(x, y, time, children, childrenTotal, onNextButton, context){
+      var options = config.UI.popups.success;
+      var base = basic.create(x, y, options.opacity);
+      var text = game.add.text(x, y + options.header.offsetY, l10n.get('CONGRATULATIONS'), options.header.style);
+      text.anchor.set(0.5);
+
+      var time = game.add.text(x, y + options.time.offsetY, l10n.get('TIME', [utils.formatTime(time)]), options.time.style);
+      time.anchor.set(0.5);
+
+      var stat = game.add.text(x, y + options.stat.offsetY, l10n.get('STAT', [children, childrenTotal]), options.stat.style);
+      stat.anchor.set(0.5);
+
+      var next = game.add.button(x + options.nextButton.offsetX, y + options.nextButton.offsetY, 'pauseButton', onNextButton, context, 1 );
+      next.setFrames(1, 1, 1);
+      next.anchor.set(0.5);
+      next.scale.set(2);
+
+      base.add(text);
+      base.add(next);
+      base.add(time);
+      base.add(stat);
+      return base;
+    }
+  }
+}
+
+},{"../../configs/config":1,"../l10n":9,"../popups/basic":11,"../utils":17}],14:[function(require,module,exports){
 var directions = require('./directions');
 var difference = require('lodash.difference');
 
@@ -741,6 +844,10 @@ module.exports = function(game, Phaser){
       }
     }
 
+    this.sign = function(x){
+      return x === 0 ? 0 : (x > 0 ? 1 : -1);
+    }
+
     this.getDeltaTo = function(tile, isAccurate){
       var dwp = map.getTileWorldXY(tile);
       var delta = speed * game.time.elapsed / 1000;
@@ -748,13 +855,13 @@ module.exports = function(game, Phaser){
       var dy = dwp.y - sprite.y;
       if(isAccurate){
         return {
-          x: Math.sign(dx) * Math.min(Math.abs(dx), delta),
-          y: Math.sign(dy) * Math.min(Math.abs(dy), delta)
+          x: this.sign(dx) * Math.min(Math.abs(dx), delta),
+          y: this.sign(dy) * Math.min(Math.abs(dy), delta)
         }
       }
       return {
-        x: Math.sign(dx) * delta,
-        y: Math.sign(dy) * delta
+        x: this.sign(dx) * delta,
+        y: this.sign(dy) * delta
       }
     }
 
@@ -772,10 +879,6 @@ module.exports = function(game, Phaser){
 
     this.destroy = function(){
       sprite.destroy();
-    }
-
-    this.onTrap = function(){
-      this.destroy();
     }
 
     this.isBodyOverlap = function(other){
@@ -810,7 +913,7 @@ module.exports = function(game, Phaser){
              point.y <= rect.y + rect.h;
     }
     this.onTrap = function(){
-      sprite.tint = 0xFF0000;
+      game.add.tween(sprite).to( { alpha: 0.2 }, 150, "Linear", true, 0, 3, true);
     }
 
     this.onHero = function(){
@@ -821,7 +924,7 @@ module.exports = function(game, Phaser){
   return Stray;
 }
 
-},{"./directions":6,"lodash.difference":20}],12:[function(require,module,exports){
+},{"./directions":6,"lodash.difference":23}],15:[function(require,module,exports){
 module.exports = function (string, params){
   var replaced = string;
   replaced = replaced.replace(/\·\{(.*?)\}\·/gmi,function(match,capture,index,all){
@@ -861,7 +964,7 @@ function contextEval($__context,$__evaluation){
   return eval($__evaluation);
 }
 
-},{}],13:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 module.exports = function(game, Phaser){
   function Trap(){
     var sprite;
@@ -880,7 +983,7 @@ module.exports = function(game, Phaser){
   return Trap;
 }
 
-},{}],14:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 module.exports = {
   formatTime: function(timeInSeconds){
     var minutes = (Math.floor(timeInSeconds / 60)).toString();
@@ -891,12 +994,19 @@ module.exports = {
   }
 }
 
-},{}],15:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 var config = require('../configs/config');
 var levelsConfig = require('../configs/levels');
 var tileSprites = require('../tileSprites');
 var l10n = require('../modules/l10n');
 var utils = require('../modules/utils');
+
+var states = {
+  normal: 0,
+  paused: 1,
+  success: 2,
+  gameover: 3
+}
 
 module.exports = function(game, Phaser){
   var map = require('../modules/map')(game, Phaser);
@@ -904,10 +1014,13 @@ module.exports = function(game, Phaser){
   var Trap = require('../modules/trap')(game, Phaser);
   var Escape = require('../modules/escape')(game, Phaser);
   var Hero = require('../modules/hero')(game, Phaser);
+  var pausePopupCreator = require('../modules/popups/pause')(game, Phaser);
+  var successPopupCreator = require('../modules/popups/success')(game, Phaser);
   var children, traps, escapes, savedChildren, hero,
-    currentLevelIndex, currentBlockIndex, initialChildrenCount, gameover,
-    middleLayer, backLayer, popupLayer, UILayer,
-    timerText, paused, tint, pauseButton, statusText, levelNumberText;
+    currentLevelIndex, currentBlockIndex, initialChildrenCount,
+    middleLayer, backLayer, UILayer,
+    timerText, state, pauseButton, statusText, levelNumberText,
+    pausePopup, successPopup, gameoverPopup;
 
   var screenParams = {
     scale: 1,
@@ -925,14 +1038,21 @@ module.exports = function(game, Phaser){
       initialChildrenCount = 0;
       currentBlockIndex = blockIndex;
       currentLevelIndex = levelIndex;
-      gameover = false;
       time = 0;
-      paused = false;
+      state = states.normal;
       timerText = void 0;
       statusText = void 0;
       levelNumberText = void 0;
-      tint = void 0;
       pauseButton = void 0;
+
+      if(pausePopup) pausePopup.destroy();
+      pausePopup = void 0;
+
+      if(successPopup) successPopup.destroy();
+      successPopup = void 0;
+
+      if(gameoverPopup) gameoverPopup.destroy();
+      gameoverPopup = void 0;
       this.loadMap();
     },
     loadMap: function(){
@@ -940,7 +1060,6 @@ module.exports = function(game, Phaser){
       backLayer = game.add.group();
       middleLayer = game.add.group();
       UILayer = game.add.group();
-      popupLayer = game.add.group();
       var childSpeed = levelsConfig[currentBlockIndex][currentLevelIndex].childrenSpeed || config.children.defaultSpeed;
       // underground
       map.getTilesInLayer(config.map.main.name).forEach(function(tile, index){
@@ -1074,42 +1193,33 @@ module.exports = function(game, Phaser){
       this.updateStatusText();savedChildren + " / " + children.length
     },
     onPauseClicked: function(){
-      if(!paused){
-        paused = true;
+      if(state === states.normal){
+        state = states.paused;
         if(pauseButton){
           pauseButton.input.enabled = false;
           pauseButton.setFrames(1, 1, 1);
         }
-        this.createTint();
+        pausePopup = pausePopupCreator.create(config.width / 2 - screenParams.offsetX, config.height / 2 - screenParams.offsetY);
       }
     },
     onContinueClicked: function(){
-      if(paused){
-        paused = false;
+      if(state === states.paused){
+        state = states.normal;
         if(pauseButton){
           pauseButton.input.enabled = true;
           pauseButton.setFrames(0, 0, 0);
         }
-        if(tint) tint.destroy();
+        if(pausePopup) pausePopup.destroy();
       }
     },
     updateTime: function(){
-      if(!paused){
+      if(state === states.normal){
         time++;
         timerText.text = utils.formatTime(time);
       }
     },
-    createTint: function(){
-      tint = game.add.sprite(config.width / 2 - screenParams.offsetX, config.height / 2 - screenParams.offsetY, 'pixel');
-      tint.width = config.width;
-      tint.height = config.height;
-      tint.anchor.set(0.5);
-      tint.tint = 0x000000;
-      tint.alpha = 0.3;
-      popupLayer.add(tint);
-    },
     update: function(){
-      if(!gameover && !paused){
+      if(state === states.normal){
         var _this = this;
         children.forEach(function(child){
           traps.forEach(function(trap){
@@ -1125,8 +1235,15 @@ module.exports = function(game, Phaser){
           }
           child.update();
         });
+
         if(initialChildrenCount !== 0 && initialChildrenCount === savedChildren){
-          this.nextLevel();
+          successPopup = successPopupCreator.create(
+            config.width / 2 - screenParams.offsetX,
+            config.height / 2 - screenParams.offsetY,
+            time, savedChildren, initialChildrenCount,
+            this.nextLevel, this
+          );
+          state = states.success;
         }
 
         middleLayer.sort('y', Phaser.Group.SORT_ASCENDING);
@@ -1158,7 +1275,7 @@ module.exports = function(game, Phaser){
       if(index !== -1){
         children[index].onTrap();
       }
-      gameover = true;
+      state = states.gameover;
       setTimeout(function(){
         _this.destroyHero();
         game.state.restart(true, false, currentBlockIndex, currentLevelIndex);
@@ -1181,10 +1298,10 @@ module.exports = function(game, Phaser){
         }
       }
     },
-    destroyFromLayer(layer, object){
+    destroyFromLayer: function(layer, object){
       layer.remove(layer.getChildIndex(object));
     },
-    destroyHero(){
+    destroyHero: function(){
       if(typeof hero !== 'undefined'){
         this.destroyFromLayer(middleLayer, hero.getCollider());
         hero.destroy();
@@ -1199,9 +1316,9 @@ module.exports = function(game, Phaser){
       return false;
     },
     onPointerDown: function(pointer){
-      if(paused){
+      if(state === states.paused){
         this.onContinueClicked();
-      }else{
+      }else if(state === states.normal){
         this.destroyHero();
 
         if(!screenParams.canvas){
@@ -1212,7 +1329,7 @@ module.exports = function(game, Phaser){
         var tileBehind = map.getTileAt(ceiled.x, ceiled.y);
         if(tileBehind &&
           config.map.main.walls.indexOf(tileBehind.index) === -1 &&
-          traps.map(t => map.ceilPosition(t.getCollider().x, t.getCollider().y)).filter(p => ceiled.x === p.x && ceiled.y === p.y).length === 0 // no traps on this tile
+          traps.map(function(t){ return map.ceilPosition(t.getCollider().x, t.getCollider().y) }).filter(function(p){ return ceiled.x === p.x && ceiled.y === p.y }).length === 0 // no traps on this tile
         ){
           hero = new Hero();
           hero.create(ceiled.x, ceiled.y, map, tileSprites[config.map.objects.hero[0]], config.hero.bodyScale);
@@ -1237,7 +1354,7 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../configs/config":1,"../configs/levels":4,"../modules/escape":7,"../modules/hero":8,"../modules/l10n":9,"../modules/map":10,"../modules/stray":11,"../modules/trap":13,"../modules/utils":14,"../tileSprites":19}],16:[function(require,module,exports){
+},{"../configs/config":1,"../configs/levels":4,"../modules/escape":7,"../modules/hero":8,"../modules/l10n":9,"../modules/map":10,"../modules/popups/pause":12,"../modules/popups/success":13,"../modules/stray":14,"../modules/trap":16,"../modules/utils":17,"../tileSprites":22}],19:[function(require,module,exports){
 var config = require('../configs/config');
 var levelsConfig = require('../configs/levels');
 var l10n = require('../modules/l10n');
@@ -1344,7 +1461,7 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../configs/config":1,"../configs/levels":4,"../modules/l10n":9}],17:[function(require,module,exports){
+},{"../configs/config":1,"../configs/levels":4,"../modules/l10n":9}],20:[function(require,module,exports){
 var config = require('../configs/config');
 var levelsConfig = require('../configs/levels');
 module.exports = function(game, Phaser){
@@ -1396,7 +1513,7 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../configs/config":1,"../configs/levels":4}],18:[function(require,module,exports){
+},{"../configs/config":1,"../configs/levels":4}],21:[function(require,module,exports){
 var config = require('../configs/config');
 module.exports = function(game, Phaser){
   return {
@@ -1414,7 +1531,7 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../configs/config":1}],19:[function(require,module,exports){
+},{"../configs/config":1}],22:[function(require,module,exports){
 function tileSprite(key, offsetX, offsetY, shadow){
   return {
     key: key,
@@ -1438,7 +1555,7 @@ module.exports = {
   34: tileSprite('target', 12, 5)
 }
 
-},{}],20:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 (function (global){
 /**
  * lodash (Custom Build) <https://lodash.com/>
@@ -2612,7 +2729,7 @@ function isObjectLike(value) {
 module.exports = difference;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],21:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 (function (global){
 /**
  * The MIT License (MIT)
@@ -16228,7 +16345,7 @@ World.prototype.raycast = function(result, ray){
 (36)
 });
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],22:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 (function (process){
 /**
 * @author       Richard Davey <rich@photonstorm.com>
@@ -96592,7 +96709,7 @@ PIXI.TextureSilentFail = true;
 */
 
 }).call(this,require('_process'))
-},{"_process":24}],23:[function(require,module,exports){
+},{"_process":27}],26:[function(require,module,exports){
 /**
 * @author       Richard Davey <rich@photonstorm.com>
 * @copyright    2016 Photon Storm Ltd.
@@ -105714,7 +105831,7 @@ Object.defineProperty(PIXI.TilingSprite.prototype, 'height', {
 
     return PIXI;
 }).call(this);
-},{}],24:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
