@@ -2,16 +2,20 @@ var config = require('../configs/config');
 var levelsConfig = require('../configs/levels');
 module.exports = function(game, Phaser){
   return {
+    text: void 0,
     doScale: function(){
       var w = document.body.clientWidth / config.width;
       var h = document.body.clientHeight / config.height;
       game.scale.setUserScale(Math.min(w,h), Math.min(w,h));
       game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
     },
+    loadUpdate: function(){      
+      text.text = "Loading: " + this.load.progress + "%";
+    },
     preload: function() {
       this.doScale();
       game.scale.setResizeCallback(this.doScale, this);
-      game.add.text( game.world.centerX, game.world.centerY, "Loading", { fill: "#4b692f" } ).anchor.setTo( 0.5, 0.5 );
+      text = game.add.text( game.world.centerX, game.world.centerY, "Loading: 0%", { fill: "#ccc", align: "center" } ).anchor.setTo( 0.5, 0.5 );
       levelsConfig.forEach(function(levelsBlock, blockIndex){
         levelsBlock.forEach(function(level, index){
           game.load.tilemap('level' + blockIndex + '-' + index, level.src, null, Phaser.Tilemap.TILED_JSON);
