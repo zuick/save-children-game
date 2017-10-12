@@ -39,7 +39,7 @@ module.exports = {
         style: { font: "42px Arial", fill: "#fff", align: "center" }
       },
       pauseButton: {
-        marginTop: 50,
+        marginTop: 48,
         offsetX: 50, // from center
       }
     },
