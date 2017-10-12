@@ -45,7 +45,6 @@ module.exports = function(game, Phaser){
 
       game.load.spritesheet('pauseButton', 'assets/UI/game_pause.png', 32, 32, 2);
       game.load.image('pixel', 'assets/UI/pixel.png');
-      game.load.image('pixel_brown', 'assets/UI/pixel_brown.png');
     },
     create: function(){
       //game.state.start( 'start', true, false );

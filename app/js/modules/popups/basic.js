@@ -8,11 +8,12 @@ module.exports = function(game, Phaser){
       popup.add(tint);
       return popup;
     },
-    tint: function(x, y, w, h, opacity, key){
+    tint: function(x, y, w, h, opacity, color, key){
       var tint = game.add.sprite(x || config.width / 2, y || config.height / 2, key || 'pixel');
       tint.width = w;
       tint.height = h;
       tint.anchor.set(0.5);
+      tint.tint = color || 0x000000;
       tint.alpha = opacity || 0.5;
       return tint;
     },
@@ -23,7 +24,7 @@ module.exports = function(game, Phaser){
       tint.width = w;
       tint.height = h;
       tint.anchor.set(0.5);
-      tint.tint = color;
+      tint.tint = 0x000000;
       tint.alpha = 0.5;
 
       var text = game.add.text(x, y, text, config.UI.popups.textButtonStyle);
