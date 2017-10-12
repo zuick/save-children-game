@@ -301,10 +301,10 @@ module.exports = function(game, Phaser){
         }
       }
     },
-    destroyFromLayer(layer, object){
+    destroyFromLayer: function(layer, object){
       layer.remove(layer.getChildIndex(object));
     },
-    destroyHero(){
+    destroyHero: function(){
       if(typeof hero !== 'undefined'){
         this.destroyFromLayer(middleLayer, hero.getCollider());
         hero.destroy();
@@ -332,7 +332,7 @@ module.exports = function(game, Phaser){
         var tileBehind = map.getTileAt(ceiled.x, ceiled.y);
         if(tileBehind &&
           config.map.main.walls.indexOf(tileBehind.index) === -1 &&
-          traps.map(t => map.ceilPosition(t.getCollider().x, t.getCollider().y)).filter(p => ceiled.x === p.x && ceiled.y === p.y).length === 0 // no traps on this tile
+          traps.map(function(t){ return map.ceilPosition(t.getCollider().x, t.getCollider().y) }).filter(function(p){ return ceiled.x === p.x && ceiled.y === p.y }).length === 0 // no traps on this tile
         ){
           hero = new Hero();
           hero.create(ceiled.x, ceiled.y, map, tileSprites[config.map.objects.hero[0]], config.hero.bodyScale);
