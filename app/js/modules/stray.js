@@ -183,7 +183,7 @@ module.exports = function(game, Phaser){
              point.y <= rect.y + rect.h;
     }
     this.onTrap = function(){
-      game.add.tween(sprite).to( { alpha: 0.2 }, 150, "Linear", true, 0, 3, true);
+      game.add.tween(sprite).to( { alpha: 0.2 }, 100, "Linear", true, 0, 3, true);
     }
 
     this.onHero = function(){

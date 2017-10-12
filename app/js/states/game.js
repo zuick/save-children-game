@@ -20,6 +20,8 @@ module.exports = function(game, Phaser){
   var Hero = require('../modules/hero')(game, Phaser);
   var pausePopupCreator = require('../modules/popups/pause')(game, Phaser);
   var successPopupCreator = require('../modules/popups/success')(game, Phaser);
+  var gameoverPopupCreator = require('../modules/popups/gameover')(game, Phaser);
+
   var children, traps, escapes, savedChildren, hero,
     currentLevelIndex, currentBlockIndex, initialChildrenCount,
     middleLayer, backLayer, UILayer,
@@ -218,6 +220,18 @@ module.exports = function(game, Phaser){
       );
       state = states.success;
     },
+    onFail: function(){
+      gameoverPopup = gameoverPopupCreator.create(
+        config.width / 2 - screenParams.offsetX,
+        config.height / 2 - screenParams.offsetY,
+        time, savedChildren, initialChildrenCount,
+        this.returnToLevels,
+        this.returnToLevels,
+        this.restartLevel,
+        this
+      );
+      state = states.gameover;
+    },
     onPauseClicked: function(){
       if(state === states.normal){
         state = states.paused;
@@ -304,7 +318,7 @@ module.exports = function(game, Phaser){
         children[index].onTrap();
       }
       state = states.gameover;
-      setTimeout(this.restartLevel.bind(this), 1000);
+      setTimeout(this.onFail.bind(this), config.failDelay);
     },
     heroCollision: function(child, hero){
       var index = children.map(function(c){ return c.getCollider() }).indexOf(child);

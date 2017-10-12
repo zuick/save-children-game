@@ -4,6 +4,7 @@ module.exports = {
   height: 1080,
   defaultLanguage: 'ru',
   defaultBlockIndex: 0,
+  failDelay: 800,
   UI: {
     levels: {
       backgroundColor: '#000',
@@ -70,6 +71,29 @@ module.exports = {
           toLevelsOffsetX: -100,
           replayOffsetX: 110,
           nextOffsetX: 320
+        }
+      },
+      gameover: {
+        width: 900,
+        height: 500,
+        opacity: 0.5,
+        header: {
+          style: { font: "48px Arial", fill: "#fff", align: "center" },
+          offsetY: -180
+        },
+        stat: {
+          style: { font: "48px Arial", fill: "#fff", align: "center" },
+          offsetY: -50
+        },
+        time: {
+          style: { font: "48px Arial", fill: "#fff", align: "center" },
+          offsetY: 50
+        },
+        buttons: {
+          offsetY: 200,
+          toMenuOffsetX: -210,
+          replayOffsetX: 0,
+          toLevelsOffsetX: 210
         }
       }
     }
