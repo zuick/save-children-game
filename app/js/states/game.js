@@ -3,6 +3,7 @@ var levelsConfig = require('../configs/levels');
 var tileSprites = require('../tileSprites');
 var l10n = require('../modules/l10n');
 var utils = require('../modules/utils');
+var vis = require('../modules/vis');
 
 var states = {
   normal: 0,
@@ -57,6 +58,14 @@ module.exports = function(game, Phaser){
       if(gameoverPopup) gameoverPopup.destroy();
       gameoverPopup = void 0;
       this.loadMap();
+
+      vis.unsubscribe(this.onWindowVisibleChanged.bind(this));
+      vis.subsribe(this.onWindowVisibleChanged.bind(this));
+    },
+    onWindowVisibleChanged: function(){
+      if(!vis.state()){
+        this.onPauseClicked();
+      }
     },
     loadMap: function(){
       map.create('level' + currentBlockIndex + '-' + currentLevelIndex, void 0, this.isHeroOnTile.bind(this));
