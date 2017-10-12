@@ -252,6 +252,7 @@ module.exports = function(game, Phaser){
         middleLayer.sort('y', Phaser.Group.SORT_ASCENDING);
 
         if (game.input.keyboard.isDown(Phaser.Keyboard.ESC)){
+          this.destroyHero();
           game.state.start('levels', true, false, void 0);
         }
       }
