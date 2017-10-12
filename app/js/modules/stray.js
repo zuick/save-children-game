@@ -84,6 +84,8 @@ module.exports = function(game, Phaser){
               }else if(!canMoveForward && canMoveBackward){
                 currentDir = backwardDir;
                 delta = this.getDeltaTo(nextTile, true);
+              }else{
+                currentDir = void 0;
               }
             }
           }
