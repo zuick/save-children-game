@@ -9,7 +9,7 @@ module.exports = function(game, Phaser){
       game.scale.setUserScale(Math.min(w,h), Math.min(w,h));
       game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
     },
-    loadUpdate: function(){      
+    loadUpdate: function(){
       text.text = "Loading: " + this.load.progress + "%";
     },
     preload: function() {
@@ -45,6 +45,7 @@ module.exports = function(game, Phaser){
 
       game.load.spritesheet('pauseButton', 'assets/UI/game_pause.png', 32, 32, 2);
       game.load.image('pixel', 'assets/UI/pixel.png');
+      game.load.image('pixel_brown', 'assets/UI/pixel_brown.png');
     },
     create: function(){
       //game.state.start( 'start', true, false );

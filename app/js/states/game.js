@@ -175,11 +175,12 @@ module.exports = function(game, Phaser){
       return t;
     },
     create: function() {
-      game.stage.backgroundColor = '#000';
+      game.stage.backgroundColor = config.UI.game.backgroundColor;
       game.physics.startSystem(Phaser.Physics.ARCADE);
       game.input.onDown.add(this.onPointerDown, this);
 
       game.input.keyboard.addKey(Phaser.Keyboard.N).onUp.add(this.nextLevel, this);
+      game.input.keyboard.addKey(Phaser.Keyboard.S).onUp.add(this.onSuccess, this);
       game.time.events.loop(Phaser.Timer.SECOND, this.updateTime, this);
 
       timerText = this.createText(config.UI.game.timerText, utils.formatTime(time), 0.5);
@@ -203,6 +204,19 @@ module.exports = function(game, Phaser){
       UILayer.add(pauseButton);
 
       this.updateStatusText();savedChildren + " / " + children.length
+    },
+    onSuccess: function(){
+      successPopup = successPopupCreator.create(
+        config.width / 2 - screenParams.offsetX,
+        config.height / 2 - screenParams.offsetY,
+        time, savedChildren, initialChildrenCount,
+        this.returnToLevels,
+        this.returnToLevels,
+        this.restartLevel,
+        this.nextLevel,
+        this
+      );
+      state = states.success;
     },
     onPauseClicked: function(){
       if(state === states.normal){
@@ -249,22 +263,19 @@ module.exports = function(game, Phaser){
         });
 
         if(initialChildrenCount !== 0 && initialChildrenCount === savedChildren){
-          successPopup = successPopupCreator.create(
-            config.width / 2 - screenParams.offsetX,
-            config.height / 2 - screenParams.offsetY,
-            time, savedChildren, initialChildrenCount,
-            this.nextLevel, this
-          );
-          state = states.success;
+          this.onSuccess();
         }
 
         middleLayer.sort('y', Phaser.Group.SORT_ASCENDING);
 
         if (game.input.keyboard.isDown(Phaser.Keyboard.ESC)){
-          this.destroyHero();
-          game.state.start('levels', true, false, void 0);
+          this.returnToLevels();
         }
       }
+    },
+    returnToLevels: function(){
+      this.destroyHero();
+      game.state.start('levels', true, false, void 0);
     },
     nextLevel: function(){
       this.destroyHero();
@@ -273,6 +284,10 @@ module.exports = function(game, Phaser){
       var nextLevelIndex = currentLevelIndex + 1 >= levelsConfig[nextBlockIndex].length || nextBlockIndex !== currentBlockIndex ? 0 : currentLevelIndex + 1;
 
       game.state.restart(true, false, nextBlockIndex, nextLevelIndex);
+    },
+    restartLevel: function(){
+      this.destroyHero();
+      game.state.restart(true, false, currentBlockIndex, currentLevelIndex);
     },
     escapeCollision: function(child, esc){
       this.removeChild(child, function(){ savedChildren++; this.updateStatusText() }.bind(this));
@@ -289,10 +304,7 @@ module.exports = function(game, Phaser){
         children[index].onTrap();
       }
       state = states.gameover;
-      setTimeout(function(){
-        _this.destroyHero();
-        game.state.restart(true, false, currentBlockIndex, currentLevelIndex);
-      }, 1000);
+      setTimeout(this.restartLevel.bind(this), 1000);
     },
     heroCollision: function(child, hero){
       var index = children.map(function(c){ return c.getCollider() }).indexOf(child);

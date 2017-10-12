@@ -98,6 +98,7 @@ module.exports = function(game, Phaser){
     },
 
     create: function(){
+      game.stage.backgroundColor = config.UI.levels.backgroundColor;
       game.world.setBounds(0, 0, config.width, config.height);
       this.redraw();
     }
