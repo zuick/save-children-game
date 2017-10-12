@@ -1,13 +1,13 @@
-{ "height":6,
+{ "height":7,
  "layers":[
         {
-         "data":[1, 1, 1, 25, 1, 1, 19, 1, 1, 19, 1, 1, 1, 1, 25, 1, 1, 1, 1, 1, 25, 25, 19, 1, 1, 1, 1, 1, 1, 1],
-         "height":6,
+         "data":[12, 25, 9, 1, 1, 25, 19, 25, 8, 8, 7, 1, 9, 1, 1, 1, 1, 1, 1, 1, 1, 25, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 25, 1, 1, 12, 12, 1, 1, 19, 19, 1, 1, 1, 1, 1, 1, 8, 7, 1, 1, 1, 1, 1, 1, 1, 1, 12, 12, 1, 1, 1, 19, 1, 1, 1, 12, 1, 1, 9, 7, 1, 1, 1, 1, 1, 19, 25, 8, 1, 1],
+         "height":7,
          "name":"main",
          "opacity":1,
          "type":"tilelayer",
          "visible":true,
-         "width":5,
+         "width":12,
          "x":0,
          "y":0
         }, 
@@ -18,19 +18,71 @@
                 {
                  "gid":34,
                  "height":135,
-                 "id":48,
+                 "id":49,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":157,
-                 "x":471,
-                 "y":540
+                 "x":1570,
+                 "y":945
+                }, 
+                {
+                 "gid":34,
+                 "height":135,
+                 "id":50,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":157,
+                 "x":1727,
+                 "y":810
                 }, 
                 {
                  "gid":31,
                  "height":135,
-                 "id":49,
+                 "id":51,
+                 "name":"",
+                 "properties":
+                    {
+                     "dir":"up"
+                    },
+                 "propertytypes":
+                    {
+                     "dir":"string"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":157,
+                 "x":0,
+                 "y":675
+                }, 
+                {
+                 "gid":31,
+                 "height":135,
+                 "id":52,
+                 "name":"",
+                 "properties":
+                    {
+                     "dir":"up"
+                    },
+                 "propertytypes":
+                    {
+                     "dir":"string"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":157,
+                 "x":157,
+                 "y":675
+                }, 
+                {
+                 "gid":32,
+                 "height":135,
+                 "id":53,
                  "name":"",
                  "properties":
                     {
@@ -44,36 +96,36 @@
                  "type":"",
                  "visible":true,
                  "width":157,
-                 "x":0,
-                 "y":135
+                 "x":314,
+                 "y":810
                 }, 
                 {
                  "gid":32,
                  "height":135,
-                 "id":50,
+                 "id":54,
                  "name":"",
-                 "properties":
-                    {
-                     "dir":"left"
-                    },
-                 "propertytypes":
-                    {
-                     "dir":"string"
-                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":157,
-                 "x":471,
-                 "y":810
+                 "x":314,
+                 "y":945
                 }],
          "opacity":1,
+         "properties":
+            {
+             "dir":"right"
+            },
+         "propertytypes":
+            {
+             "dir":"string"
+            },
          "type":"objectgroup",
          "visible":true,
          "x":0,
          "y":0
         }],
- "nextobjectid":51,
+ "nextobjectid":55,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.0.3",
@@ -95,5 +147,5 @@
  "tilewidth":157,
  "type":"map",
  "version":1,
- "width":5
+ "width":12
 }

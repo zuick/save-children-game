@@ -2,7 +2,7 @@ module.exports = {
   debug: false,
   width: 1920,
   height: 1080,
-  defaultLanguage: 'ba',
+  defaultLanguage: 'ru',
   defaultBlockIndex: 0,
   UI: {
     levels: {
@@ -38,6 +38,31 @@ module.exports = {
       pauseButton: {
         marginTop: 50,
         offsetX: 50, // from center
+      }
+    },
+    popups: {
+      pause: {
+        textStyle: { font: "64px Arial", fill: "#dd0", align: "center" },
+        opacity: 0.5
+      },
+      success: {
+        opacity: 0.5,
+        header: {
+          style: { font: "48px Arial", fill: "#fff", align: "center" },
+          offsetY: -100
+        },
+        stat: {
+          style: { font: "48px Arial", fill: "#fff", align: "center" },
+          offsetY: 50
+        },
+        time: {
+          style: { font: "48px Arial", fill: "#fff", align: "center" },
+          offsetY: 120
+        },
+        nextButton: {
+          offsetX: 0,
+          offsetY: 220
+        }
       }
     }
   },

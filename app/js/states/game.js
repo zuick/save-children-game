@@ -4,16 +4,26 @@ var tileSprites = require('../tileSprites');
 var l10n = require('../modules/l10n');
 var utils = require('../modules/utils');
 
+var states = {
+  normal: 0,
+  paused: 1,
+  success: 2,
+  gameover: 3
+}
+
 module.exports = function(game, Phaser){
   var map = require('../modules/map')(game, Phaser);
   var Stray = require('../modules/stray')(game, Phaser);
   var Trap = require('../modules/trap')(game, Phaser);
   var Escape = require('../modules/escape')(game, Phaser);
   var Hero = require('../modules/hero')(game, Phaser);
+  var pausePopupCreator = require('../modules/popups/pause')(game, Phaser);
+  var successPopupCreator = require('../modules/popups/success')(game, Phaser);
   var children, traps, escapes, savedChildren, hero,
-    currentLevelIndex, currentBlockIndex, initialChildrenCount, gameover,
-    middleLayer, backLayer, popupLayer, UILayer,
-    timerText, paused, tint, pauseButton, statusText, levelNumberText;
+    currentLevelIndex, currentBlockIndex, initialChildrenCount,
+    middleLayer, backLayer, UILayer,
+    timerText, state, pauseButton, statusText, levelNumberText,
+    pausePopup, successPopup, gameoverPopup;
 
   var screenParams = {
     scale: 1,
@@ -31,14 +41,21 @@ module.exports = function(game, Phaser){
       initialChildrenCount = 0;
       currentBlockIndex = blockIndex;
       currentLevelIndex = levelIndex;
-      gameover = false;
       time = 0;
-      paused = false;
+      state = states.normal;
       timerText = void 0;
       statusText = void 0;
       levelNumberText = void 0;
-      tint = void 0;
       pauseButton = void 0;
+
+      if(pausePopup) pausePopup.destroy();
+      pausePopup = void 0;
+
+      if(successPopup) successPopup.destroy();
+      successPopup = void 0;
+
+      if(gameoverPopup) gameoverPopup.destroy();
+      gameoverPopup = void 0;
       this.loadMap();
     },
     loadMap: function(){
@@ -46,7 +63,6 @@ module.exports = function(game, Phaser){
       backLayer = game.add.group();
       middleLayer = game.add.group();
       UILayer = game.add.group();
-      popupLayer = game.add.group();
       var childSpeed = levelsConfig[currentBlockIndex][currentLevelIndex].childrenSpeed || config.children.defaultSpeed;
       // underground
       map.getTilesInLayer(config.map.main.name).forEach(function(tile, index){
@@ -180,42 +196,33 @@ module.exports = function(game, Phaser){
       this.updateStatusText();savedChildren + " / " + children.length
     },
     onPauseClicked: function(){
-      if(!paused){
-        paused = true;
+      if(state === states.normal){
+        state = states.paused;
         if(pauseButton){
           pauseButton.input.enabled = false;
           pauseButton.setFrames(1, 1, 1);
         }
-        this.createTint();
+        pausePopup = pausePopupCreator.create(config.width / 2 - screenParams.offsetX, config.height / 2 - screenParams.offsetY);
       }
     },
     onContinueClicked: function(){
-      if(paused){
-        paused = false;
+      if(state === states.paused){
+        state = states.normal;
         if(pauseButton){
           pauseButton.input.enabled = true;
           pauseButton.setFrames(0, 0, 0);
         }
-        if(tint) tint.destroy();
+        if(pausePopup) pausePopup.destroy();
       }
     },
     updateTime: function(){
-      if(!paused){
+      if(state === states.normal){
         time++;
         timerText.text = utils.formatTime(time);
       }
     },
-    createTint: function(){
-      tint = game.add.sprite(config.width / 2 - screenParams.offsetX, config.height / 2 - screenParams.offsetY, 'pixel');
-      tint.width = config.width;
-      tint.height = config.height;
-      tint.anchor.set(0.5);
-      tint.tint = 0x000000;
-      tint.alpha = 0.3;
-      popupLayer.add(tint);
-    },
     update: function(){
-      if(!gameover && !paused){
+      if(state === states.normal){
         var _this = this;
         children.forEach(function(child){
           traps.forEach(function(trap){
@@ -231,8 +238,15 @@ module.exports = function(game, Phaser){
           }
           child.update();
         });
+
         if(initialChildrenCount !== 0 && initialChildrenCount === savedChildren){
-          this.nextLevel();
+          successPopup = successPopupCreator.create(
+            config.width / 2 - screenParams.offsetX,
+            config.height / 2 - screenParams.offsetY,
+            time, savedChildren, initialChildrenCount,
+            this.nextLevel, this
+          );
+          state = states.success;
         }
 
         middleLayer.sort('y', Phaser.Group.SORT_ASCENDING);
@@ -264,7 +278,7 @@ module.exports = function(game, Phaser){
       if(index !== -1){
         children[index].onTrap();
       }
-      gameover = true;
+      state = states.gameover;
       setTimeout(function(){
         _this.destroyHero();
         game.state.restart(true, false, currentBlockIndex, currentLevelIndex);
@@ -287,10 +301,10 @@ module.exports = function(game, Phaser){
         }
       }
     },
-    destroyFromLayer(layer, object){
+    destroyFromLayer: function(layer, object){
       layer.remove(layer.getChildIndex(object));
     },
-    destroyHero(){
+    destroyHero: function(){
       if(typeof hero !== 'undefined'){
         this.destroyFromLayer(middleLayer, hero.getCollider());
         hero.destroy();
@@ -305,9 +319,9 @@ module.exports = function(game, Phaser){
       return false;
     },
     onPointerDown: function(pointer){
-      if(paused){
+      if(state === states.paused){
         this.onContinueClicked();
-      }else{
+      }else if(state === states.normal){
         this.destroyHero();
 
         if(!screenParams.canvas){
@@ -318,7 +332,7 @@ module.exports = function(game, Phaser){
         var tileBehind = map.getTileAt(ceiled.x, ceiled.y);
         if(tileBehind &&
           config.map.main.walls.indexOf(tileBehind.index) === -1 &&
-          traps.map(t => map.ceilPosition(t.getCollider().x, t.getCollider().y)).filter(p => ceiled.x === p.x && ceiled.y === p.y).length === 0 // no traps on this tile
+          traps.map(function(t){ return map.ceilPosition(t.getCollider().x, t.getCollider().y) }).filter(function(p){ return ceiled.x === p.x && ceiled.y === p.y }).length === 0 // no traps on this tile
         ){
           hero = new Hero();
           hero.create(ceiled.x, ceiled.y, map, tileSprites[config.map.objects.hero[0]], config.hero.bodyScale);

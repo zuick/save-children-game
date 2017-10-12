@@ -112,6 +112,10 @@ module.exports = function(game, Phaser){
       }
     }
 
+    this.sign = function(x){
+      return x === 0 ? 0 : (x > 0 ? 1 : -1);
+    }
+
     this.getDeltaTo = function(tile, isAccurate){
       var dwp = map.getTileWorldXY(tile);
       var delta = speed * game.time.elapsed / 1000;
@@ -119,13 +123,13 @@ module.exports = function(game, Phaser){
       var dy = dwp.y - sprite.y;
       if(isAccurate){
         return {
-          x: Math.sign(dx) * Math.min(Math.abs(dx), delta),
-          y: Math.sign(dy) * Math.min(Math.abs(dy), delta)
+          x: this.sign(dx) * Math.min(Math.abs(dx), delta),
+          y: this.sign(dy) * Math.min(Math.abs(dy), delta)
         }
       }
       return {
-        x: Math.sign(dx) * delta,
-        y: Math.sign(dy) * delta
+        x: this.sign(dx) * delta,
+        y: this.sign(dy) * delta
       }
     }
 
@@ -143,10 +147,6 @@ module.exports = function(game, Phaser){
 
     this.destroy = function(){
       sprite.destroy();
-    }
-
-    this.onTrap = function(){
-      this.destroy();
     }
 
     this.isBodyOverlap = function(other){
@@ -181,7 +181,7 @@ module.exports = function(game, Phaser){
              point.y <= rect.y + rect.h;
     }
     this.onTrap = function(){
-      sprite.tint = 0xFF0000;
+      game.add.tween(sprite).to( { alpha: 0.2 }, 150, "Linear", true, 0, 3, true);
     }
 
     this.onHero = function(){
