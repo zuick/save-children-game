@@ -32,11 +32,19 @@
                  "height":135,
                  "id":46,
                  "name":"",
+                 "properties":
+                    {
+                     "dir":"right"
+                    },
+                 "propertytypes":
+                    {
+                     "dir":"string"
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":157,
-                 "x":0,
+                 "x":157,
                  "y":135
                 }, 
                 {
