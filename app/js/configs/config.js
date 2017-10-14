@@ -4,6 +4,7 @@ module.exports = {
   height: 1080,
   defaultLanguage: 'ru',
   defaultBlockIndex: 0,
+  defaultBonusDelay: 3,
   failDelay: 800,
   map: {
     main: {
@@ -17,8 +18,9 @@ module.exports = {
       name: "objects",
       children: [31, 32],
       traps: [25,26,27,28,29,30],
+      hero: [33],
       escapes: [34],
-      hero: [33]
+      bonus: [35]
     },
     defaultGroundByLevelType: {
       0: 1,

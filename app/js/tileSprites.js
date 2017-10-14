@@ -38,5 +38,6 @@ module.exports = {
   31: tileSprite('boy', 0, -60),
   32: tileSprite('girl', 0, -55),
   33: tileSprite('hero', 0, -100),
-  34: tileSprite('target', 12, 5)
+  34: tileSprite('target', 12, 5),
+  35: tileSprite('bonus')
 }

@@ -19,6 +19,7 @@ module.exports = function(game, Phaser){
   var Trap = require('../modules/trap')(game, Phaser);
   var Escape = require('../modules/escape')(game, Phaser);
   var Hero = require('../modules/hero')(game, Phaser);
+  var Bonus = require('../modules/bonus')(game, Phaser);
   var pausePopupCreator = require('../modules/popups/pause')(game, Phaser);
   var successPopupCreator = require('../modules/popups/success')(game, Phaser);
   var gameoverPopupCreator = require('../modules/popups/gameover')(game, Phaser);
@@ -27,13 +28,13 @@ module.exports = function(game, Phaser){
     currentLevelIndex, currentBlockIndex, initialChildrenCount,
     middleLayer, backLayer, UILayer,
     timerText, state, pauseButton, statusText, levelNumberText,
-    pausePopup, successPopup, gameoverPopup;
+    pausePopup, successPopup, gameoverPopup,
+    bonusDelay, bonusPlaces, bonuses;
 
   var screenParams = {
     scale: 1,
     offsetX: 0,
-    offsetY: 0,
-    canvas: void 0
+    offsetY: 0
   }
   var time = 0;
   return {
@@ -45,6 +46,9 @@ module.exports = function(game, Phaser){
       initialChildrenCount = 0;
       currentBlockIndex = blockIndex;
       currentLevelIndex = levelIndex;
+      bonusDelay = config.defaultBonusDelay;
+      bonusPlaces = [];
+      bonuses = [];
       time = 0;
       state = states.normal;
       timerText = void 0;
@@ -75,8 +79,12 @@ module.exports = function(game, Phaser){
       backLayer = game.add.group();
       middleLayer = game.add.group();
       UILayer = game.add.group();
+
       var childSpeed = (levelsConfig[currentBlockIndex][currentLevelIndex].childrenSpeed || config.children.defaultSpeed ) - Math.round(Math.random() * config.children.speedAccuracy);
       var type = levelsConfig[currentBlockIndex][currentLevelIndex].type || 0;
+
+      bonusDelay = levelsConfig[currentBlockIndex][currentLevelIndex].bonusDelay || config.defaultBonusDelay;
+      bonusPlaces = map.getTilesInLayer(config.map.main.name, config.map.main.ground);
 
       // fill gorunds, empty space with last ground option
       map.getTilesInLayer(config.map.main.name).forEach(function(tile, index){
@@ -254,7 +262,28 @@ module.exports = function(game, Phaser){
       if(state === states.normal){
         time++;
         timerText.text = utils.formatTime(time);
+        if(time !== 0 && time % bonusDelay === 0 && bonuses.length === 0){
+          this.createBonuses();
+        }
+
       }
+    },
+    createBonuses: function(){
+      var tile = bonusPlaces[Math.floor(Math.random() * bonusPlaces.length)];
+      var worldPosition = map.getTileWorldXY(tile);
+      var spriteOptions = tileSprites[config.map.objects.bonus[0]];
+      var instance = new Bonus();
+
+      instance.create(worldPosition.x, worldPosition.y, map, spriteOptions, this.onBonusClicked, this);
+      bonuses.push(instance);
+      middleLayer.add(instance.sprite);
+    },
+    onBonusClicked: function(){
+      bonuses.forEach(function(b){
+        this.destroyFromLayer(middleLayer, b.sprite);
+        b.destroy();
+      }.bind(this));
+      bonuses = [];
     },
     update: function(){
       if(state === states.normal){
@@ -356,24 +385,22 @@ module.exports = function(game, Phaser){
       if(state === states.paused){
         this.onContinueClicked();
       }else if(state === states.normal){
-        this.destroyHero();
+        var ceiled = map.ceilPosition(pointer.x - screenParams.offsetX, pointer.y - screenParams.offsetY);
+        if(bonuses.map(function(b){ return map.ceilPosition(b.sprite.x, b.sprite.y) }).filter(function(b){ return ceiled.x === b.x && ceiled.y === b.y }).length === 0){
+          this.destroyHero();
 
-        if(!screenParams.canvas){
-          screenParams.canvas = document.getElementsByTagName('canvas')[0];
-        }
-
-        var ceiled = map.ceilPosition(pointer.x - screenParams.offsetX, pointer.y - screenParams.offsetY)
-        var tileBehind = map.getTileAt(ceiled.x, ceiled.y);
-        if(tileBehind &&
-          config.map.main.walls.indexOf(tileBehind.index) === -1 &&
-          traps.map(function(t){ return map.ceilPosition(t.getCollider().x, t.getCollider().y) }).filter(function(p){ return ceiled.x === p.x && ceiled.y === p.y }).length === 0 // no traps on this tile
-        ){
-          hero = new Hero();
-          hero.create(ceiled.x, ceiled.y, map, tileSprites[config.map.objects.hero[0]], config.hero.bodyScale);
-          var childOverlap = children.some(function(child){ return child.isBodyOverlap(hero.getCollider())});
-          middleLayer.add(hero.getCollider());
-          if(childOverlap){
-            this.destroyHero();
+          var tileBehind = map.getTileAt(ceiled.x, ceiled.y);
+          if(tileBehind &&
+            config.map.main.walls.indexOf(tileBehind.index) === -1 &&
+            traps.map(function(t){ return map.ceilPosition(t.getCollider().x, t.getCollider().y) }).filter(function(p){ return ceiled.x === p.x && ceiled.y === p.y }).length === 0 // no traps on this tile
+          ){
+            hero = new Hero();
+            hero.create(ceiled.x, ceiled.y, map, tileSprites[config.map.objects.hero[0]], config.hero.bodyScale);
+            var childOverlap = children.some(function(child){ return child.isBodyOverlap(hero.getCollider())});
+            middleLayer.add(hero.getCollider());
+            if(childOverlap){
+              this.destroyHero();
+            }
           }
         }
       }

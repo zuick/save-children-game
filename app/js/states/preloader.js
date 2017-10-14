@@ -10,12 +10,12 @@ module.exports = function(game, Phaser){
       game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
     },
     loadUpdate: function(){
-      text.text = "Loading: " + this.load.progress + "%";
+      this.text.text = "Loading: " + this.load.progress + "%";
     },
     preload: function() {
       this.doScale();
       game.scale.setResizeCallback(this.doScale, this);
-      text = game.add.text( game.world.centerX, game.world.centerY, "Loading: 0%", { fill: "#ccc", align: "center" } ).anchor.setTo( 0.5, 0.5 );
+      this.text = game.add.text( game.world.centerX, game.world.centerY, "Loading: 0%", { fill: "#ccc", align: "center" } ).anchor.setTo( 0.5, 0.5 );
       levelsConfig.forEach(function(levelsBlock, blockIndex){
         levelsBlock.forEach(function(level, index){
           game.load.tilemap('level' + blockIndex + '-' + index, level.src, null, Phaser.Tilemap.TILED_JSON);
@@ -23,6 +23,7 @@ module.exports = function(game, Phaser){
       });
       game.load.image('tilemap', 'assets/tilemap_big.png');
       game.load.image('target', 'assets/target.png');
+      game.load.image('bonus', 'assets/bonus.png');
 
       game.load.image('boy', 'assets/characters/boy.png');
       game.load.image('girl', 'assets/characters/girl.png');
@@ -66,8 +67,8 @@ module.exports = function(game, Phaser){
       game.load.image('pixel', 'assets/UI/pixel.png');
     },
     create: function(){
-      game.state.start('game', true, false, 0, 0);
-      //game.state.start('levels', true, false, config.defaultBlockIndex || 0);
+      //game.state.start('game', true, false, 0, 0);
+      game.state.start('levels', true, false, config.defaultBlockIndex || 0);
     }
   }
 }
