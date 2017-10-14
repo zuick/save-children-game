@@ -24,7 +24,8 @@ module.exports = {
   },
   children: {
     bodyScale: 0.5, // 1 - full tile, 0 - no body
-    defaultSpeed: 120
+    defaultSpeed: 120,
+    speedAccuracy: 10
   },
   hero: {
     bodyScale: 0.35 // 1 - full tile, 0 - no body
