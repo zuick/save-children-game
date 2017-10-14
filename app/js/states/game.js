@@ -19,6 +19,7 @@ module.exports = function(game, Phaser){
   var Trap = require('../modules/trap')(game, Phaser);
   var Escape = require('../modules/escape')(game, Phaser);
   var Hero = require('../modules/hero')(game, Phaser);
+  var Bonus = require('../modules/bonus')(game, Phaser);
   var pausePopupCreator = require('../modules/popups/pause')(game, Phaser);
   var successPopupCreator = require('../modules/popups/success')(game, Phaser);
   var gameoverPopupCreator = require('../modules/popups/gameover')(game, Phaser);
@@ -27,13 +28,13 @@ module.exports = function(game, Phaser){
     currentLevelIndex, currentBlockIndex, initialChildrenCount,
     middleLayer, backLayer, UILayer,
     timerText, state, pauseButton, statusText, levelNumberText,
-    pausePopup, successPopup, gameoverPopup;
+    pausePopup, successPopup, gameoverPopup,
+    bonusDelay, bonusPlaces, bonuses, trapsActive, bonusesMarks;
 
   var screenParams = {
     scale: 1,
     offsetX: 0,
-    offsetY: 0,
-    canvas: void 0
+    offsetY: 0
   }
   var time = 0;
   return {
@@ -45,6 +46,11 @@ module.exports = function(game, Phaser){
       initialChildrenCount = 0;
       currentBlockIndex = blockIndex;
       currentLevelIndex = levelIndex;
+      bonusDelay = config.defaultBonusDelay;
+      bonusPlaces = [];
+      bonuses = [];
+      bonusesMarks = [];
+      trapsActive = true;
       time = 0;
       state = states.normal;
       timerText = void 0;
@@ -71,41 +77,29 @@ module.exports = function(game, Phaser){
       }
     },
     loadMap: function(){
-      map.create('level' + currentBlockIndex + '-' + currentLevelIndex, void 0, this.isHeroOnTile.bind(this));
+      map.create('level' + currentBlockIndex + '-' + currentLevelIndex, void 0, this.isTileOccupied.bind(this));
       backLayer = game.add.group();
       middleLayer = game.add.group();
       UILayer = game.add.group();
-      var childSpeed = (levelsConfig[currentBlockIndex][currentLevelIndex].childrenSpeed || config.children.defaultSpeed ) - Math.round(Math.random() * config.children.speedAccuracy);
-      // underground
-      map.getTilesInLayer(config.map.main.name).forEach(function(tile, index){
-        var worldPosition = map.getTileWorldXY(tile);
-        var spriteOptions = tileSprites[tile.index];
 
-        if(spriteOptions && config.map.main.underground.indexOf(tile.index) !== -1){
-          backLayer.create(worldPosition.x + spriteOptions.offsetX, worldPosition.y + spriteOptions.offsetY, spriteOptions.shadow.key);
-        }
-      });
+      var childSpeed = (levelsConfig[currentBlockIndex][currentLevelIndex].childrenSpeed || config.children.defaultSpeed ) - Math.round(Math.random() * config.children.speedAccuracy);
+      var type = levelsConfig[currentBlockIndex][currentLevelIndex].type || 0;
+
+      bonusDelay = levelsConfig[currentBlockIndex][currentLevelIndex].bonusDelay || config.defaultBonusDelay;
+      bonusPlaces = map.getTilesInLayer(config.map.main.name, config.map.main.ground);
 
       // fill gorunds, empty space with last ground option
-      var lastSpriteOptions = { key: 'ground01', offsetX: 0, offsetY: 0 };
       map.getTilesInLayer(config.map.main.name).forEach(function(tile, index){
         var worldPosition = map.getTileWorldXY(tile);
         var spriteOptions = tileSprites[tile.index];
 
         if(spriteOptions && config.map.main.ground.indexOf(tile.index) !== -1){
           backLayer.create(worldPosition.x + spriteOptions.offsetX, worldPosition.y + spriteOptions.offsetY, spriteOptions.key);
-          lastSpriteOptions = spriteOptions;
         }
 
-        if(spriteOptions && config.map.main.groundDanger.indexOf(tile.index) !== -1){
-          var instance = new Trap();
-          instance.create(worldPosition.x, worldPosition.y, map, spriteOptions);
-          backLayer.add(instance.getCollider());
-          traps.push(instance);
-        }
-
-        if(lastSpriteOptions && (config.map.main.walls.indexOf(tile.index) !== -1 || config.map.main.danger.indexOf(tile.index) !== -1)){
-          backLayer.create(worldPosition.x + lastSpriteOptions.offsetX, worldPosition.y + lastSpriteOptions.offsetY, lastSpriteOptions.key);
+        if(spriteOptions && (config.map.main.walls.indexOf(tile.index) !== -1 || config.map.main.danger.indexOf(tile.index) !== -1)){
+          var groundSpriteOptions = tileSprites[config.map.defaultGroundByLevelType[type]];
+          backLayer.create(worldPosition.x + groundSpriteOptions.offsetX, worldPosition.y + groundSpriteOptions.offsetY, groundSpriteOptions.key);
         }
       });
 
@@ -130,7 +124,7 @@ module.exports = function(game, Phaser){
       });
 
       // fill dangers
-      map.getTilesInLayer(config.map.main.name, config.map.main.danger).forEach(function(tile, index){
+      map.getTilesInLayer(config.map.main.name, config.map.main.danger.concat(config.map.main.groundDanger)).forEach(function(tile, index){
         var worldPosition = map.getTileWorldXY(tile);
         var spriteOptions = tileSprites[tile.index];
 
@@ -198,6 +192,7 @@ module.exports = function(game, Phaser){
       game.input.keyboard.addKey(Phaser.Keyboard.N).onUp.add(this.nextLevel, this);
       game.input.keyboard.addKey(Phaser.Keyboard.S).onUp.add(this.onSuccess, this);
       game.time.events.loop(Phaser.Timer.SECOND, this.updateTime, this);
+      this.activateTraps();
 
       timerText = this.createText(UI.game.timerText, utils.formatTime(time), 0.5);
       levelNumberText = this.createText(UI.game.levelNumberText, currentLevelIndex + 1, 0.5);
@@ -271,6 +266,51 @@ module.exports = function(game, Phaser){
         time++;
         timerText.text = utils.formatTime(time);
       }
+    },
+    createBonuses: function(){
+      if(bonuses.length === 0){
+        var tile = bonusPlaces[Math.floor(Math.random() * bonusPlaces.length)];
+        var worldPosition = map.getTileWorldXY(tile);
+        var spriteOptions = tileSprites[config.map.objects.bonus[0]];
+        var instance = new Bonus();
+
+        instance.create(worldPosition.x, worldPosition.y, map, spriteOptions, this.onBonusClicked, this);
+        bonuses.push(instance);
+        middleLayer.add(instance.sprite);
+      }
+    },
+    onBonusClicked: function(){
+      if(trapsActive){
+        this.deactivateTraps();
+
+        game.time.events.add(Phaser.Timer.SECOND * config.bonusActiveTime, this.activateTraps, this);
+        bonuses.forEach(function(b){
+          this.destroyFromLayer(middleLayer, b.sprite);
+          b.destroy();
+        }.bind(this));
+        bonuses = [];
+      }
+    },
+    deactivateTraps: function(){
+      trapsActive = false;
+      map.getTilesInLayer(config.map.main.name, config.map.main.danger.concat(config.map.main.groundDanger)).forEach(function(tile, index){
+        var worldPosition = map.getTileWorldXY(tile);
+        var w = map.get().tileWidth;
+        var h = map.get().tileHeight;
+        var mark = game.add.sprite(worldPosition.x + w/2, worldPosition.y + h/2 + 5, 'bonus');
+        mark.scale.x = config.bonusMarkScale;
+        mark.scale.y = config.bonusMarkScale;
+        mark.anchor.set(0.5);
+        game.add.tween(mark).to( { y: mark.y - 5 }, 1400, "Linear", true, 0, -1, true);
+        bonusesMarks.push(mark);
+      });
+    },
+    activateTraps: function(){
+      trapsActive = true;
+      game.time.events.add(Phaser.Timer.SECOND * bonusDelay, this.createBonuses, this);
+      bonusesMarks.forEach(function(m){m.destroy()});
+      console.log(trapsActive);
+
     },
     update: function(){
       if(state === states.normal){
@@ -361,35 +401,38 @@ module.exports = function(game, Phaser){
         hero = void 0;
       }
     },
-    isHeroOnTile: function(tile){
+    isTileOccupied: function(tile){
+      if(!trapsActive && config.map.main.danger.concat(config.map.main.groundDanger).indexOf(tile.index) !== -1){
+        return true;
+      }
+
       if(hero){
         var heroTile = map.getTileAt(hero.getCollider().x, hero.getCollider().y);
         return tile === heroTile;
       }
+
       return false;
     },
     onPointerDown: function(pointer){
       if(state === states.paused){
         this.onContinueClicked();
       }else if(state === states.normal){
-        this.destroyHero();
+        var ceiled = map.ceilPosition(pointer.x - screenParams.offsetX, pointer.y - screenParams.offsetY);
+        if(bonuses.map(function(b){ return map.ceilPosition(b.sprite.x, b.sprite.y) }).filter(function(b){ return ceiled.x === b.x && ceiled.y === b.y }).length === 0){
+          this.destroyHero();
 
-        if(!screenParams.canvas){
-          screenParams.canvas = document.getElementsByTagName('canvas')[0];
-        }
-
-        var ceiled = map.ceilPosition(pointer.x - screenParams.offsetX, pointer.y - screenParams.offsetY)
-        var tileBehind = map.getTileAt(ceiled.x, ceiled.y);
-        if(tileBehind &&
-          config.map.main.walls.indexOf(tileBehind.index) === -1 &&
-          traps.map(function(t){ return map.ceilPosition(t.getCollider().x, t.getCollider().y) }).filter(function(p){ return ceiled.x === p.x && ceiled.y === p.y }).length === 0 // no traps on this tile
-        ){
-          hero = new Hero();
-          hero.create(ceiled.x, ceiled.y, map, tileSprites[config.map.objects.hero[0]], config.hero.bodyScale);
-          var childOverlap = children.some(function(child){ return child.isBodyOverlap(hero.getCollider())});
-          middleLayer.add(hero.getCollider());
-          if(childOverlap){
-            this.destroyHero();
+          var tileBehind = map.getTileAt(ceiled.x, ceiled.y);
+          if(tileBehind &&
+            config.map.main.walls.indexOf(tileBehind.index) === -1 &&
+            traps.map(function(t){ return map.ceilPosition(t.getCollider().x, t.getCollider().y) }).filter(function(p){ return ceiled.x === p.x && ceiled.y === p.y }).length === 0 // no traps on this tile
+          ){
+            hero = new Hero();
+            hero.create(ceiled.x, ceiled.y, map, tileSprites[config.map.objects.hero[0]], config.hero.bodyScale);
+            var childOverlap = children.filter(function(child){ return child.isBodyOverlap(hero.getCollider())}).length > 0;
+            middleLayer.add(hero.getCollider());
+            if(childOverlap){
+              this.destroyHero();
+            }
           }
         }
       }
