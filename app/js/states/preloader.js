@@ -30,13 +30,22 @@ module.exports = function(game, Phaser){
 
       game.load.image('ground01', 'assets/ground/01.png');
       game.load.image('ground02', 'assets/ground/02.png');
-      game.load.image('underground', 'assets/ground/03.png');
-      game.load.image('houseA1', 'assets/houses/A1.png');
-      game.load.image('houseA2', 'assets/houses/A2.png');
-      game.load.image('houseA3', 'assets/houses/A3.png');
-      game.load.image('bush', 'assets/houses/bush.png');
-      game.load.image('danger1', 'assets/danger/01.png');
-      game.load.image('houseShadow', 'assets/houses/shadow.png');
+      game.load.image('ground03', 'assets/ground/03.png');
+      game.load.image('ground04', 'assets/ground/04.png');
+      game.load.image('underground', 'assets/ground/underground.png');
+      game.load.image('houseA1', 'assets/walls/A1.png');
+      game.load.image('houseA2', 'assets/walls/A2.png');
+      game.load.image('houseA3', 'assets/walls/A3.png');
+      game.load.image('houseB1', 'assets/walls/B1.png');
+      game.load.image('houseB2', 'assets/walls/B2.png');
+      game.load.image('houseB3', 'assets/walls/B3.png');
+      game.load.image('wall01', 'assets/walls/01.png');
+      game.load.image('wall02', 'assets/walls/02.png');
+      game.load.image('wall03', 'assets/walls/03.png');
+      game.load.image('danger01', 'assets/danger/01.png');
+      game.load.image('danger02', 'assets/danger/02.png');
+      game.load.image('danger03', 'assets/danger/03.png');
+      game.load.image('houseShadow', 'assets/walls/shadow.png');
 
       game.load.image('levelItemCity', 'assets/UI/level_item_city.png');
       game.load.image('levelItemCountrySide', 'assets/UI/level_item_countryside.png');
@@ -47,7 +56,7 @@ module.exports = function(game, Phaser){
       game.load.image('pixel', 'assets/UI/pixel.png');
     },
     create: function(){
-      //game.state.start( 'start', true, false );
+      //game.state.start('game', true, false, 0, 0);
       game.state.start('levels', true, false, config.defaultBlockIndex || 0);
     }
   }

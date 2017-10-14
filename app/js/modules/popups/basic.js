@@ -1,4 +1,5 @@
 var config = require('../../configs/config');
+var UI = require('../../configs/ui');
 
 module.exports = function(game, Phaser){
   return {
@@ -27,7 +28,7 @@ module.exports = function(game, Phaser){
       tint.tint = 0x000000;
       tint.alpha = 0.5;
 
-      var text = game.add.text(x, y, text, config.UI.popups.textButtonStyle);
+      var text = game.add.text(x, y, text, UI.popups.textButtonStyle);
       text.fill = color || '#fff';
       text.anchor.set(0.5);
 

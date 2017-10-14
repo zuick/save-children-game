@@ -1,4 +1,5 @@
 var config = require('../configs/config');
+var UI = require('../configs/ui');
 var levelsConfig = require('../configs/levels');
 var tileSprites = require('../tileSprites');
 var l10n = require('../modules/l10n');
@@ -98,12 +99,12 @@ module.exports = function(game, Phaser){
 
         if(spriteOptions && config.map.main.groundDanger.indexOf(tile.index) !== -1){
           var instance = new Trap();
-          instance.create(worldPosition.x, worldPosition.y, spriteOptions);
+          instance.create(worldPosition.x, worldPosition.y, map, spriteOptions);
           backLayer.add(instance.getCollider());
           traps.push(instance);
         }
 
-        if(lastSpriteOptions && config.map.main.walls.indexOf(tile.index) !== -1){
+        if(lastSpriteOptions && (config.map.main.walls.indexOf(tile.index) !== -1 || config.map.main.danger.indexOf(tile.index) !== -1)){
           backLayer.create(worldPosition.x + lastSpriteOptions.offsetX, worldPosition.y + lastSpriteOptions.offsetY, lastSpriteOptions.key);
         }
       });
@@ -125,6 +126,19 @@ module.exports = function(game, Phaser){
 
         if(spriteOptions){
           middleLayer.create(worldPosition.x + spriteOptions.offsetX, worldPosition.y + spriteOptions.offsetY, spriteOptions.key);
+        }
+      });
+
+      // fill dangers
+      map.getTilesInLayer(config.map.main.name, config.map.main.danger).forEach(function(tile, index){
+        var worldPosition = map.getTileWorldXY(tile);
+        var spriteOptions = tileSprites[tile.index];
+
+        if(spriteOptions){
+          var instance = new Trap();
+          instance.create(worldPosition.x, worldPosition.y, map, spriteOptions);
+          middleLayer.add(instance.getCollider());
+          traps.push(instance);
         }
       });
 
@@ -177,7 +191,7 @@ module.exports = function(game, Phaser){
       return t;
     },
     create: function() {
-      game.stage.backgroundColor = config.UI.game.backgroundColor;
+      game.stage.backgroundColor = UI.game.backgroundColor;
       game.physics.startSystem(Phaser.Physics.ARCADE);
       game.input.onDown.add(this.onPointerDown, this);
 
@@ -185,17 +199,17 @@ module.exports = function(game, Phaser){
       game.input.keyboard.addKey(Phaser.Keyboard.S).onUp.add(this.onSuccess, this);
       game.time.events.loop(Phaser.Timer.SECOND, this.updateTime, this);
 
-      timerText = this.createText(config.UI.game.timerText, utils.formatTime(time), 0.5);
-      levelNumberText = this.createText(config.UI.game.levelNumberText, currentLevelIndex + 1, 0.5);
-      statusText = this.createText(config.UI.game.statusText, "", 0.5);
+      timerText = this.createText(UI.game.timerText, utils.formatTime(time), 0.5);
+      levelNumberText = this.createText(UI.game.levelNumberText, currentLevelIndex + 1, 0.5);
+      statusText = this.createText(UI.game.statusText, "", 0.5);
 
       UILayer.add(timerText);
       UILayer.add(levelNumberText);
       UILayer.add(statusText);
 
       pauseButton = game.add.button(
-        config.width / 2 - screenParams.offsetX + config.UI.game.pauseButton.offsetX,
-        config.UI.game.pauseButton.marginTop - screenParams.offsetY,
+        config.width / 2 - screenParams.offsetX + UI.game.pauseButton.offsetX,
+        UI.game.pauseButton.marginTop - screenParams.offsetY,
         'pauseButton',
         this.onPauseClicked,
         this,
