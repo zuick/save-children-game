@@ -76,36 +76,20 @@ module.exports = function(game, Phaser){
       middleLayer = game.add.group();
       UILayer = game.add.group();
       var childSpeed = (levelsConfig[currentBlockIndex][currentLevelIndex].childrenSpeed || config.children.defaultSpeed ) - Math.round(Math.random() * config.children.speedAccuracy);
-      // underground
-      map.getTilesInLayer(config.map.main.name).forEach(function(tile, index){
-        var worldPosition = map.getTileWorldXY(tile);
-        var spriteOptions = tileSprites[tile.index];
-
-        if(spriteOptions && config.map.main.underground.indexOf(tile.index) !== -1){
-          backLayer.create(worldPosition.x + spriteOptions.offsetX, worldPosition.y + spriteOptions.offsetY, spriteOptions.shadow.key);
-        }
-      });
+      var type = levelsConfig[currentBlockIndex][currentLevelIndex].type || 0;
 
       // fill gorunds, empty space with last ground option
-      var lastSpriteOptions = { key: 'ground01', offsetX: 0, offsetY: 0 };
       map.getTilesInLayer(config.map.main.name).forEach(function(tile, index){
         var worldPosition = map.getTileWorldXY(tile);
         var spriteOptions = tileSprites[tile.index];
 
         if(spriteOptions && config.map.main.ground.indexOf(tile.index) !== -1){
           backLayer.create(worldPosition.x + spriteOptions.offsetX, worldPosition.y + spriteOptions.offsetY, spriteOptions.key);
-          lastSpriteOptions = spriteOptions;
         }
 
-        if(spriteOptions && config.map.main.groundDanger.indexOf(tile.index) !== -1){
-          var instance = new Trap();
-          instance.create(worldPosition.x, worldPosition.y, map, spriteOptions);
-          backLayer.add(instance.getCollider());
-          traps.push(instance);
-        }
-
-        if(lastSpriteOptions && (config.map.main.walls.indexOf(tile.index) !== -1 || config.map.main.danger.indexOf(tile.index) !== -1)){
-          backLayer.create(worldPosition.x + lastSpriteOptions.offsetX, worldPosition.y + lastSpriteOptions.offsetY, lastSpriteOptions.key);
+        if(spriteOptions && (config.map.main.walls.indexOf(tile.index) !== -1 || config.map.main.danger.indexOf(tile.index) !== -1)){
+          var groundSpriteOptions = tileSprites[config.map.defaultGroundByLevelType[type]];
+          backLayer.create(worldPosition.x + groundSpriteOptions.offsetX, worldPosition.y + groundSpriteOptions.offsetY, groundSpriteOptions.key);
         }
       });
 
@@ -130,7 +114,7 @@ module.exports = function(game, Phaser){
       });
 
       // fill dangers
-      map.getTilesInLayer(config.map.main.name, config.map.main.danger).forEach(function(tile, index){
+      map.getTilesInLayer(config.map.main.name, config.map.main.danger.concat(config.map.main.groundDanger)).forEach(function(tile, index){
         var worldPosition = map.getTileWorldXY(tile);
         var spriteOptions = tileSprites[tile.index];
 
