@@ -4,7 +4,7 @@ module.exports = {
   height: 1080,
   defaultLanguage: 'ru',
   defaultBlockIndex: 0,
-  defaultBonusDelay: 3,
+  defaultBonusDelay: 5,
   bonusActiveTime: 10,
   bonusMarkScale: 0.7,
   failDelay: 800,
