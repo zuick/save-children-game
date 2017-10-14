@@ -29,7 +29,7 @@ module.exports = function(game, Phaser){
     middleLayer, backLayer, UILayer,
     timerText, state, pauseButton, statusText, levelNumberText,
     pausePopup, successPopup, gameoverPopup,
-    bonusDelay, bonusPlaces, bonuses;
+    bonusDelay, bonusPlaces, bonuses, trapsActive, bonusesMarks;
 
   var screenParams = {
     scale: 1,
@@ -49,6 +49,8 @@ module.exports = function(game, Phaser){
       bonusDelay = config.defaultBonusDelay;
       bonusPlaces = [];
       bonuses = [];
+      bonusesMarks = [];
+      trapsActive = true;
       time = 0;
       state = states.normal;
       timerText = void 0;
@@ -75,7 +77,7 @@ module.exports = function(game, Phaser){
       }
     },
     loadMap: function(){
-      map.create('level' + currentBlockIndex + '-' + currentLevelIndex, void 0, this.isHeroOnTile.bind(this));
+      map.create('level' + currentBlockIndex + '-' + currentLevelIndex, void 0, this.isTileOccupied.bind(this));
       backLayer = game.add.group();
       middleLayer = game.add.group();
       UILayer = game.add.group();
@@ -190,6 +192,7 @@ module.exports = function(game, Phaser){
       game.input.keyboard.addKey(Phaser.Keyboard.N).onUp.add(this.nextLevel, this);
       game.input.keyboard.addKey(Phaser.Keyboard.S).onUp.add(this.onSuccess, this);
       game.time.events.loop(Phaser.Timer.SECOND, this.updateTime, this);
+      this.activateTraps();
 
       timerText = this.createText(UI.game.timerText, utils.formatTime(time), 0.5);
       levelNumberText = this.createText(UI.game.levelNumberText, currentLevelIndex + 1, 0.5);
@@ -262,28 +265,52 @@ module.exports = function(game, Phaser){
       if(state === states.normal){
         time++;
         timerText.text = utils.formatTime(time);
-        if(time !== 0 && time % bonusDelay === 0 && bonuses.length === 0){
-          this.createBonuses();
-        }
-
       }
     },
     createBonuses: function(){
-      var tile = bonusPlaces[Math.floor(Math.random() * bonusPlaces.length)];
-      var worldPosition = map.getTileWorldXY(tile);
-      var spriteOptions = tileSprites[config.map.objects.bonus[0]];
-      var instance = new Bonus();
+      if(bonuses.length === 0){
+        var tile = bonusPlaces[Math.floor(Math.random() * bonusPlaces.length)];
+        var worldPosition = map.getTileWorldXY(tile);
+        var spriteOptions = tileSprites[config.map.objects.bonus[0]];
+        var instance = new Bonus();
 
-      instance.create(worldPosition.x, worldPosition.y, map, spriteOptions, this.onBonusClicked, this);
-      bonuses.push(instance);
-      middleLayer.add(instance.sprite);
+        instance.create(worldPosition.x, worldPosition.y, map, spriteOptions, this.onBonusClicked, this);
+        bonuses.push(instance);
+        middleLayer.add(instance.sprite);
+      }
     },
     onBonusClicked: function(){
-      bonuses.forEach(function(b){
-        this.destroyFromLayer(middleLayer, b.sprite);
-        b.destroy();
-      }.bind(this));
-      bonuses = [];
+      if(trapsActive){
+        this.deactivateTraps();
+
+        game.time.events.add(Phaser.Timer.SECOND * config.bonusActiveTime, this.activateTraps, this);
+        bonuses.forEach(function(b){
+          this.destroyFromLayer(middleLayer, b.sprite);
+          b.destroy();
+        }.bind(this));
+        bonuses = [];
+      }
+    },
+    deactivateTraps: function(){
+      trapsActive = false;
+      map.getTilesInLayer(config.map.main.name, config.map.main.danger.concat(config.map.main.groundDanger)).forEach(function(tile, index){
+        var worldPosition = map.getTileWorldXY(tile);
+        var w = map.get().tileWidth;
+        var h = map.get().tileHeight;
+        var mark = game.add.sprite(worldPosition.x + w/2, worldPosition.y + h/2 + 5, 'bonus');
+        mark.scale.x = config.bonusMarkScale;
+        mark.scale.y = config.bonusMarkScale;
+        mark.anchor.set(0.5);
+        game.add.tween(mark).to( { y: mark.y - 5 }, 1400, "Linear", true, 0, -1, true);
+        bonusesMarks.push(mark);
+      });
+    },
+    activateTraps: function(){
+      trapsActive = true;
+      game.time.events.add(Phaser.Timer.SECOND * bonusDelay, this.createBonuses, this);
+      bonusesMarks.forEach(function(m){m.destroy()});
+      console.log(trapsActive);
+
     },
     update: function(){
       if(state === states.normal){
@@ -374,11 +401,16 @@ module.exports = function(game, Phaser){
         hero = void 0;
       }
     },
-    isHeroOnTile: function(tile){
+    isTileOccupied: function(tile){
+      if(!trapsActive && config.map.main.danger.concat(config.map.main.groundDanger).indexOf(tile.index) !== -1){
+        return true;
+      }
+
       if(hero){
         var heroTile = map.getTileAt(hero.getCollider().x, hero.getCollider().y);
         return tile === heroTile;
       }
+
       return false;
     },
     onPointerDown: function(pointer){
@@ -396,7 +428,7 @@ module.exports = function(game, Phaser){
           ){
             hero = new Hero();
             hero.create(ceiled.x, ceiled.y, map, tileSprites[config.map.objects.hero[0]], config.hero.bodyScale);
-            var childOverlap = children.some(function(child){ return child.isBodyOverlap(hero.getCollider())});
+            var childOverlap = children.filter(function(child){ return child.isBodyOverlap(hero.getCollider())}).length > 0;
             middleLayer.add(hero.getCollider());
             if(childOverlap){
               this.destroyHero();
