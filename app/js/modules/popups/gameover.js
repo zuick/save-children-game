@@ -5,12 +5,12 @@ var utils = require('../utils');
 module.exports = function(game, Phaser){
   var basic = require('../popups/basic')(game, Phaser);
   return {
-    create: function(x, y, time, children, childrenTotal, onToMenu, onToLevels, onReplay, onNext, context){
-      var options = config.UI.popups.success;
+    create: function(x, y, time, children, childrenTotal, onToMenu, onToLevels, onReplay, context){
+      var options = config.UI.popups.gameover;
       var base = basic.create(x, y, options.opacity);
-      var win = basic.tint(x, y, options.width, options.height, 0.9, 0xc29629);
+      var win = basic.tint(x, y, options.width, options.height, 0.9, 0xc24729);
 
-      var text = game.add.text(x, y + options.header.offsetY, l10n.get('CONGRATULATIONS'), options.header.style);
+      var text = game.add.text(x, y + options.header.offsetY, l10n.get('FAIL'), options.header.style);
       text.anchor.set(0.5);
 
       var time = game.add.text(x, y + options.time.offsetY, l10n.get('TIME', [utils.formatTime(time)]), options.time.style);
@@ -20,9 +20,8 @@ module.exports = function(game, Phaser){
       stat.anchor.set(0.5);
 
       var toMenu = basic.textButton(x + options.buttons.toMenuOffsetX, y + options.buttons.offsetY, 200, 75, '', 'Menu', onToMenu, context);
+      var replay = basic.textButton(x + options.buttons.replayOffsetX, y + options.buttons.offsetY, 200, 75, '#5d2', 'Replay', onReplay, context);
       var toLevels = basic.textButton(x + options.buttons.toLevelsOffsetX, y + options.buttons.offsetY, 200, 75, '', 'Levels', onToLevels, context);
-      var replay = basic.textButton(x + options.buttons.replayOffsetX, y + options.buttons.offsetY, 200, 75, '', 'Replay', onReplay, context);
-      var next = basic.textButton(x + options.buttons.nextOffsetX, y + options.buttons.offsetY, 200, 75, '#5d2', 'Next', onNext, context);
 
       base.add(win);
       base.add(text);
@@ -32,7 +31,6 @@ module.exports = function(game, Phaser){
       base.add(toMenu);
       base.add(toLevels);
       base.add(replay);
-      base.add(next);
       return base;
     }
   }
