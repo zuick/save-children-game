@@ -5,8 +5,10 @@ module.exports = {
   height: 1080,
   defaultLanguage: 'ru',
   defaultBlockIndex: 0,
+  failDelay: 800,
   UI: {
     levels: {
+      backgroundColor: '#000',
       levelItem: { width: 150, height: 150 },
       levelItemsPadding: 20,
       blockWidthScale: 0.5,
@@ -21,6 +23,7 @@ module.exports = {
       }
     },
     game: {
+      backgroundColor: '#271212',
       timerText: {
         marginTop: 50,
         offsetX: -50, // from center
@@ -37,32 +40,61 @@ module.exports = {
         style: { font: "42px Arial", fill: "#fff", align: "center" }
       },
       pauseButton: {
-        marginTop: 50,
+        marginTop: 48,
         offsetX: 50, // from center
       }
     },
     popups: {
+      textButtonStyle: { font: "48px Arial", fill: "#fff", align: "center" },
       pause: {
         textStyle: { font: "64px Arial", fill: "#dd0", align: "center" },
         opacity: 0.5
       },
       success: {
+        width: 900,
+        height: 500,
         opacity: 0.5,
         header: {
           style: { font: "48px Arial", fill: "#fff", align: "center" },
-          offsetY: -100
+          offsetY: -180
         },
         stat: {
           style: { font: "48px Arial", fill: "#fff", align: "center" },
-          offsetY: 50
+          offsetY: -50
         },
         time: {
           style: { font: "48px Arial", fill: "#fff", align: "center" },
-          offsetY: 120
+          offsetY: 50
         },
-        nextButton: {
-          offsetX: 0,
-          offsetY: 220
+        buttons: {
+          offsetY: 200,
+          toMenuOffsetX: -310,
+          toLevelsOffsetX: -100,
+          replayOffsetX: 110,
+          nextOffsetX: 320
+        }
+      },
+      gameover: {
+        width: 900,
+        height: 500,
+        opacity: 0.5,
+        header: {
+          style: { font: "48px Arial", fill: "#fff", align: "center" },
+          offsetY: -180
+        },
+        stat: {
+          style: { font: "48px Arial", fill: "#fff", align: "center" },
+          offsetY: -50
+        },
+        time: {
+          style: { font: "48px Arial", fill: "#fff", align: "center" },
+          offsetY: 50
+        },
+        buttons: {
+          offsetY: 200,
+          toMenuOffsetX: -210,
+          replayOffsetX: 0,
+          toLevelsOffsetX: 210
         }
       }
     }
@@ -106,6 +138,7 @@ module.exports = {
   "LEVEL_NUMBER": "Уровень {0}-{1}",
   "PAUSE": "Пауза",
   "CONGRATULATIONS": "Поздравляем!",
+  "FAIL": "Поражение :(",
   "TIME": "Время: {0}",
   "STAT": "Спасено детей: {0}/{1}"
 }
@@ -380,7 +413,7 @@ module.exports = [
   game.state.start('preloader');
 })();
 
-},{"./configs/config":1,"./states/game":18,"./states/levels":19,"./states/preloader":20,"./states/start":21,"phaser/build/custom/p2":24,"phaser/build/custom/phaser-split":25,"phaser/build/custom/pixi":26}],6:[function(require,module,exports){
+},{"./configs/config":1,"./states/game":20,"./states/levels":21,"./states/preloader":22,"./states/start":23,"phaser/build/custom/p2":26,"phaser/build/custom/phaser-split":27,"phaser/build/custom/pixi":28}],6:[function(require,module,exports){
 var difference = require('lodash.difference');
 
 module.exports = {
@@ -416,7 +449,7 @@ module.exports = {
   }
 }
 
-},{"lodash.difference":23}],7:[function(require,module,exports){
+},{"lodash.difference":25}],7:[function(require,module,exports){
 module.exports = function(game, Phaser){
   function Escape(){
     var sprite;
@@ -497,7 +530,7 @@ module.exports = {
   }
 }
 
-},{"../configs/config":1,"../configs/languages/ba":2,"../configs/languages/ru":3,"../modules/stringFormat":15}],10:[function(require,module,exports){
+},{"../configs/config":1,"../configs/languages/ba":2,"../configs/languages/ru":3,"../modules/stringFormat":16}],10:[function(require,module,exports){
 var config = require('../configs/config');
 var directions = require('./directions');
 
@@ -663,19 +696,80 @@ module.exports = function(game, Phaser){
   return {
     create: function(x, y, opacity){
       var popup = game.add.group();
-      var tint = game.add.sprite(x || config.width / 2, y || config.height / 2, 'pixel');
-      tint.width = config.width;
-      tint.height = config.height;
-      tint.anchor.set(0.5);
-      tint.tint = 0x000000;
-      tint.alpha = opacity || 0.3;
+      var tint = this.tint(x, y, config.width, config.height, opacity);
       popup.add(tint);
       return popup;
+    },
+    tint: function(x, y, w, h, opacity, color, key){
+      var tint = game.add.sprite(x || config.width / 2, y || config.height / 2, key || 'pixel');
+      tint.width = w;
+      tint.height = h;
+      tint.anchor.set(0.5);
+      tint.tint = color || 0x000000;
+      tint.alpha = opacity || 0.5;
+      return tint;
+    },
+    textButton: function(x, y, w, h, color, text, callback, context){
+      var group = game.add.group();
+
+      var tint = game.add.button(x, y, 'pixel', callback, context);
+      tint.width = w;
+      tint.height = h;
+      tint.anchor.set(0.5);
+      tint.tint = 0x000000;
+      tint.alpha = 0.5;
+
+      var text = game.add.text(x, y, text, config.UI.popups.textButtonStyle);
+      text.fill = color || '#fff';
+      text.anchor.set(0.5);
+
+      group.add(tint);
+      group.add(text);
+      return tint;
     }
   }
 }
 
 },{"../../configs/config":1}],12:[function(require,module,exports){
+var config = require('../../configs/config');
+var l10n = require('../l10n');
+var utils = require('../utils');
+
+module.exports = function(game, Phaser){
+  var basic = require('../popups/basic')(game, Phaser);
+  return {
+    create: function(x, y, time, children, childrenTotal, onToMenu, onToLevels, onReplay, context){
+      var options = config.UI.popups.gameover;
+      var base = basic.create(x, y, options.opacity);
+      var win = basic.tint(x, y, options.width, options.height, 0.9, 0xc24729);
+
+      var text = game.add.text(x, y + options.header.offsetY, l10n.get('FAIL'), options.header.style);
+      text.anchor.set(0.5);
+
+      var time = game.add.text(x, y + options.time.offsetY, l10n.get('TIME', [utils.formatTime(time)]), options.time.style);
+      time.anchor.set(0.5);
+
+      var stat = game.add.text(x, y + options.stat.offsetY, l10n.get('STAT', [children, childrenTotal]), options.stat.style);
+      stat.anchor.set(0.5);
+
+      var toMenu = basic.textButton(x + options.buttons.toMenuOffsetX, y + options.buttons.offsetY, 200, 75, '', 'Menu', onToMenu, context);
+      var replay = basic.textButton(x + options.buttons.replayOffsetX, y + options.buttons.offsetY, 200, 75, '#5d2', 'Replay', onReplay, context);
+      var toLevels = basic.textButton(x + options.buttons.toLevelsOffsetX, y + options.buttons.offsetY, 200, 75, '', 'Levels', onToLevels, context);
+
+      base.add(win);
+      base.add(text);
+      base.add(time);
+      base.add(stat);
+
+      base.add(toMenu);
+      base.add(toLevels);
+      base.add(replay);
+      return base;
+    }
+  }
+}
+
+},{"../../configs/config":1,"../l10n":9,"../popups/basic":11,"../utils":18}],13:[function(require,module,exports){
 var config = require('../../configs/config');
 var l10n = require('../l10n');
 
@@ -695,7 +789,7 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../../configs/config":1,"../l10n":9,"../popups/basic":11}],13:[function(require,module,exports){
+},{"../../configs/config":1,"../l10n":9,"../popups/basic":11}],14:[function(require,module,exports){
 var config = require('../../configs/config');
 var l10n = require('../l10n');
 var utils = require('../utils');
@@ -703,9 +797,11 @@ var utils = require('../utils');
 module.exports = function(game, Phaser){
   var basic = require('../popups/basic')(game, Phaser);
   return {
-    create: function(x, y, time, children, childrenTotal, onNextButton, context){
+    create: function(x, y, time, children, childrenTotal, onToMenu, onToLevels, onReplay, onNext, context){
       var options = config.UI.popups.success;
       var base = basic.create(x, y, options.opacity);
+      var win = basic.tint(x, y, options.width, options.height, 0.9, 0xc29629);
+
       var text = game.add.text(x, y + options.header.offsetY, l10n.get('CONGRATULATIONS'), options.header.style);
       text.anchor.set(0.5);
 
@@ -715,21 +811,26 @@ module.exports = function(game, Phaser){
       var stat = game.add.text(x, y + options.stat.offsetY, l10n.get('STAT', [children, childrenTotal]), options.stat.style);
       stat.anchor.set(0.5);
 
-      var next = game.add.button(x + options.nextButton.offsetX, y + options.nextButton.offsetY, 'pauseButton', onNextButton, context, 1 );
-      next.setFrames(1, 1, 1);
-      next.anchor.set(0.5);
-      next.scale.set(2);
+      var toMenu = basic.textButton(x + options.buttons.toMenuOffsetX, y + options.buttons.offsetY, 200, 75, '', 'Menu', onToMenu, context);
+      var toLevels = basic.textButton(x + options.buttons.toLevelsOffsetX, y + options.buttons.offsetY, 200, 75, '', 'Levels', onToLevels, context);
+      var replay = basic.textButton(x + options.buttons.replayOffsetX, y + options.buttons.offsetY, 200, 75, '', 'Replay', onReplay, context);
+      var next = basic.textButton(x + options.buttons.nextOffsetX, y + options.buttons.offsetY, 200, 75, '#5d2', 'Next', onNext, context);
 
+      base.add(win);
       base.add(text);
-      base.add(next);
       base.add(time);
       base.add(stat);
+
+      base.add(toMenu);
+      base.add(toLevels);
+      base.add(replay);
+      base.add(next);
       return base;
     }
   }
 }
 
-},{"../../configs/config":1,"../l10n":9,"../popups/basic":11,"../utils":17}],14:[function(require,module,exports){
+},{"../../configs/config":1,"../l10n":9,"../popups/basic":11,"../utils":18}],15:[function(require,module,exports){
 var directions = require('./directions');
 var difference = require('lodash.difference');
 
@@ -816,6 +917,8 @@ module.exports = function(game, Phaser){
               }else if(!canMoveForward && canMoveBackward){
                 currentDir = backwardDir;
                 delta = this.getDeltaTo(nextTile, true);
+              }else{
+                currentDir = void 0;
               }
             }
           }
@@ -913,7 +1016,7 @@ module.exports = function(game, Phaser){
              point.y <= rect.y + rect.h;
     }
     this.onTrap = function(){
-      game.add.tween(sprite).to( { alpha: 0.2 }, 150, "Linear", true, 0, 3, true);
+      game.add.tween(sprite).to( { alpha: 0.2 }, 100, "Linear", true, 0, 3, true);
     }
 
     this.onHero = function(){
@@ -924,7 +1027,7 @@ module.exports = function(game, Phaser){
   return Stray;
 }
 
-},{"./directions":6,"lodash.difference":23}],15:[function(require,module,exports){
+},{"./directions":6,"lodash.difference":25}],16:[function(require,module,exports){
 module.exports = function (string, params){
   var replaced = string;
   replaced = replaced.replace(/\·\{(.*?)\}\·/gmi,function(match,capture,index,all){
@@ -964,7 +1067,7 @@ function contextEval($__context,$__evaluation){
   return eval($__evaluation);
 }
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 module.exports = function(game, Phaser){
   function Trap(){
     var sprite;
@@ -983,7 +1086,7 @@ module.exports = function(game, Phaser){
   return Trap;
 }
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 module.exports = {
   formatTime: function(timeInSeconds){
     var minutes = (Math.floor(timeInSeconds / 60)).toString();
@@ -994,12 +1097,38 @@ module.exports = {
   }
 }
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
+var stateKey, eventKey, keys = {
+  hidden: "visibilitychange",
+  webkitHidden: "webkitvisibilitychange",
+  mozHidden: "mozvisibilitychange",
+  msHidden: "msvisibilitychange"
+};
+for (stateKey in keys) {
+  if (stateKey in document) {
+    eventKey = keys[stateKey];
+    break;
+  }
+}
+module.exports = {
+  state: function(){
+    return !document[stateKey];
+  },
+  subsribe: function(c) {
+    if (c) document.addEventListener(eventKey, c);
+  },
+  unsubscribe: function(c){
+    if (c) document.addEventListener(eventKey, c);
+  }
+}
+
+},{}],20:[function(require,module,exports){
 var config = require('../configs/config');
 var levelsConfig = require('../configs/levels');
 var tileSprites = require('../tileSprites');
 var l10n = require('../modules/l10n');
 var utils = require('../modules/utils');
+var vis = require('../modules/vis');
 
 var states = {
   normal: 0,
@@ -1016,6 +1145,8 @@ module.exports = function(game, Phaser){
   var Hero = require('../modules/hero')(game, Phaser);
   var pausePopupCreator = require('../modules/popups/pause')(game, Phaser);
   var successPopupCreator = require('../modules/popups/success')(game, Phaser);
+  var gameoverPopupCreator = require('../modules/popups/gameover')(game, Phaser);
+
   var children, traps, escapes, savedChildren, hero,
     currentLevelIndex, currentBlockIndex, initialChildrenCount,
     middleLayer, backLayer, UILayer,
@@ -1054,6 +1185,14 @@ module.exports = function(game, Phaser){
       if(gameoverPopup) gameoverPopup.destroy();
       gameoverPopup = void 0;
       this.loadMap();
+
+      vis.unsubscribe(this.onWindowVisibleChanged.bind(this));
+      vis.subsribe(this.onWindowVisibleChanged.bind(this));
+    },
+    onWindowVisibleChanged: function(){
+      if(!vis.state()){
+        this.onPauseClicked();
+      }
     },
     loadMap: function(){
       map.create('level' + currentBlockIndex + '-' + currentLevelIndex, void 0, this.isHeroOnTile.bind(this));
@@ -1163,11 +1302,12 @@ module.exports = function(game, Phaser){
       return t;
     },
     create: function() {
-      game.stage.backgroundColor = '#000';
+      game.stage.backgroundColor = config.UI.game.backgroundColor;
       game.physics.startSystem(Phaser.Physics.ARCADE);
       game.input.onDown.add(this.onPointerDown, this);
 
       game.input.keyboard.addKey(Phaser.Keyboard.N).onUp.add(this.nextLevel, this);
+      game.input.keyboard.addKey(Phaser.Keyboard.S).onUp.add(this.onSuccess, this);
       game.time.events.loop(Phaser.Timer.SECOND, this.updateTime, this);
 
       timerText = this.createText(config.UI.game.timerText, utils.formatTime(time), 0.5);
@@ -1191,6 +1331,31 @@ module.exports = function(game, Phaser){
       UILayer.add(pauseButton);
 
       this.updateStatusText();savedChildren + " / " + children.length
+    },
+    onSuccess: function(){
+      successPopup = successPopupCreator.create(
+        config.width / 2 - screenParams.offsetX,
+        config.height / 2 - screenParams.offsetY,
+        time, savedChildren, initialChildrenCount,
+        this.returnToLevels,
+        this.returnToLevels,
+        this.restartLevel,
+        this.nextLevel,
+        this
+      );
+      state = states.success;
+    },
+    onFail: function(){
+      gameoverPopup = gameoverPopupCreator.create(
+        config.width / 2 - screenParams.offsetX,
+        config.height / 2 - screenParams.offsetY,
+        time, savedChildren, initialChildrenCount,
+        this.returnToLevels,
+        this.returnToLevels,
+        this.restartLevel,
+        this
+      );
+      state = states.gameover;
     },
     onPauseClicked: function(){
       if(state === states.normal){
@@ -1237,21 +1402,19 @@ module.exports = function(game, Phaser){
         });
 
         if(initialChildrenCount !== 0 && initialChildrenCount === savedChildren){
-          successPopup = successPopupCreator.create(
-            config.width / 2 - screenParams.offsetX,
-            config.height / 2 - screenParams.offsetY,
-            time, savedChildren, initialChildrenCount,
-            this.nextLevel, this
-          );
-          state = states.success;
+          this.onSuccess();
         }
 
         middleLayer.sort('y', Phaser.Group.SORT_ASCENDING);
 
         if (game.input.keyboard.isDown(Phaser.Keyboard.ESC)){
-          game.state.start('levels', true, false, void 0);
+          this.returnToLevels();
         }
       }
+    },
+    returnToLevels: function(){
+      this.destroyHero();
+      game.state.start('levels', true, false, void 0);
     },
     nextLevel: function(){
       this.destroyHero();
@@ -1260,6 +1423,10 @@ module.exports = function(game, Phaser){
       var nextLevelIndex = currentLevelIndex + 1 >= levelsConfig[nextBlockIndex].length || nextBlockIndex !== currentBlockIndex ? 0 : currentLevelIndex + 1;
 
       game.state.restart(true, false, nextBlockIndex, nextLevelIndex);
+    },
+    restartLevel: function(){
+      this.destroyHero();
+      game.state.restart(true, false, currentBlockIndex, currentLevelIndex);
     },
     escapeCollision: function(child, esc){
       this.removeChild(child, function(){ savedChildren++; this.updateStatusText() }.bind(this));
@@ -1276,10 +1443,7 @@ module.exports = function(game, Phaser){
         children[index].onTrap();
       }
       state = states.gameover;
-      setTimeout(function(){
-        _this.destroyHero();
-        game.state.restart(true, false, currentBlockIndex, currentLevelIndex);
-      }, 1000);
+      setTimeout(this.onFail.bind(this), config.failDelay);
     },
     heroCollision: function(child, hero){
       var index = children.map(function(c){ return c.getCollider() }).indexOf(child);
@@ -1354,7 +1518,7 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../configs/config":1,"../configs/levels":4,"../modules/escape":7,"../modules/hero":8,"../modules/l10n":9,"../modules/map":10,"../modules/popups/pause":12,"../modules/popups/success":13,"../modules/stray":14,"../modules/trap":16,"../modules/utils":17,"../tileSprites":22}],19:[function(require,module,exports){
+},{"../configs/config":1,"../configs/levels":4,"../modules/escape":7,"../modules/hero":8,"../modules/l10n":9,"../modules/map":10,"../modules/popups/gameover":12,"../modules/popups/pause":13,"../modules/popups/success":14,"../modules/stray":15,"../modules/trap":17,"../modules/utils":18,"../modules/vis":19,"../tileSprites":24}],21:[function(require,module,exports){
 var config = require('../configs/config');
 var levelsConfig = require('../configs/levels');
 var l10n = require('../modules/l10n');
@@ -1455,27 +1619,32 @@ module.exports = function(game, Phaser){
     },
 
     create: function(){
+      game.stage.backgroundColor = config.UI.levels.backgroundColor;
       game.world.setBounds(0, 0, config.width, config.height);
       this.redraw();
     }
   }
 }
 
-},{"../configs/config":1,"../configs/levels":4,"../modules/l10n":9}],20:[function(require,module,exports){
+},{"../configs/config":1,"../configs/levels":4,"../modules/l10n":9}],22:[function(require,module,exports){
 var config = require('../configs/config');
 var levelsConfig = require('../configs/levels');
 module.exports = function(game, Phaser){
   return {
+    text: void 0,
     doScale: function(){
       var w = document.body.clientWidth / config.width;
       var h = document.body.clientHeight / config.height;
       game.scale.setUserScale(Math.min(w,h), Math.min(w,h));
       game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
     },
+    loadUpdate: function(){
+      text.text = "Loading: " + this.load.progress + "%";
+    },
     preload: function() {
       this.doScale();
       game.scale.setResizeCallback(this.doScale, this);
-      game.add.text( game.world.centerX, game.world.centerY, "Loading", { fill: "#4b692f" } ).anchor.setTo( 0.5, 0.5 );
+      text = game.add.text( game.world.centerX, game.world.centerY, "Loading: 0%", { fill: "#ccc", align: "center" } ).anchor.setTo( 0.5, 0.5 );
       levelsConfig.forEach(function(levelsBlock, blockIndex){
         levelsBlock.forEach(function(level, index){
           game.load.tilemap('level' + blockIndex + '-' + index, level.src, null, Phaser.Tilemap.TILED_JSON);
@@ -1503,7 +1672,7 @@ module.exports = function(game, Phaser){
       game.load.image('levelItemHouse', 'assets/UI/level_item_house.png');
       game.load.image('levelsBlockArrow', 'assets/UI/levels_block_arrow.png');
 
-      game.load.spritesheet('pauseButton', 'assets/UI/game_pause.png', 32, 32, 2);
+      game.load.spritesheet('pauseButton', 'assets/UI/buttons.png', 48, 48, 2);
       game.load.image('pixel', 'assets/UI/pixel.png');
     },
     create: function(){
@@ -1513,7 +1682,7 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../configs/config":1,"../configs/levels":4}],21:[function(require,module,exports){
+},{"../configs/config":1,"../configs/levels":4}],23:[function(require,module,exports){
 var config = require('../configs/config');
 module.exports = function(game, Phaser){
   return {
@@ -1531,7 +1700,7 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../configs/config":1}],22:[function(require,module,exports){
+},{"../configs/config":1}],24:[function(require,module,exports){
 function tileSprite(key, offsetX, offsetY, shadow){
   return {
     key: key,
@@ -1555,7 +1724,7 @@ module.exports = {
   34: tileSprite('target', 12, 5)
 }
 
-},{}],23:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 (function (global){
 /**
  * lodash (Custom Build) <https://lodash.com/>
@@ -2729,7 +2898,7 @@ function isObjectLike(value) {
 module.exports = difference;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],24:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 (function (global){
 /**
  * The MIT License (MIT)
@@ -16345,7 +16514,7 @@ World.prototype.raycast = function(result, ray){
 (36)
 });
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],25:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 (function (process){
 /**
 * @author       Richard Davey <rich@photonstorm.com>
@@ -96709,7 +96878,7 @@ PIXI.TextureSilentFail = true;
 */
 
 }).call(this,require('_process'))
-},{"_process":27}],26:[function(require,module,exports){
+},{"_process":29}],28:[function(require,module,exports){
 /**
 * @author       Richard Davey <rich@photonstorm.com>
 * @copyright    2016 Photon Storm Ltd.
@@ -105831,7 +106000,7 @@ Object.defineProperty(PIXI.TilingSprite.prototype, 'height', {
 
     return PIXI;
 }).call(this);
-},{}],27:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
