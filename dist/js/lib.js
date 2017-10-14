@@ -5,22 +5,30 @@ module.exports = {
   height: 1080,
   defaultLanguage: 'ru',
   defaultBlockIndex: 0,
+  defaultBonusDelay: 5,
+  bonusActiveTime: 10,
+  bonusMarkScale: 0.7,
   failDelay: 800,
   map: {
     main: {
       name: "main",
       walls: [7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24],
       ground: [1,2,3,4,5,6],
-      underground: [25],
       groundDanger: [25],
-      danger: [26, 27]
+      danger: [26,27,28,29,30,36]
     },
     objects: {
       name: "objects",
       children: [31, 32],
       traps: [25,26,27,28,29,30],
+      hero: [33],
       escapes: [34],
-      hero: [33]
+      bonus: [35]
+    },
+    defaultGroundByLevelType: {
+      0: 1,
+      1: 3,
+      2: 5
     }
   },
   children: {
@@ -402,21 +410,52 @@ module.exports = {
   window.p2 = require('phaser/build/custom/p2');
   window.Phaser = require('phaser/build/custom/phaser-split');
   var config = require('./configs/config');
-  var game = new Phaser.Game(config.width, config.height, window.Phaser.AUTO);  
+  var game = new Phaser.Game(config.width, config.height, window.Phaser.AUTO);
   var gameState = require('./states/game')(game, window.Phaser);
   var preloaderState = require('./states/preloader')(game, window.Phaser);
   var startState = require('./states/start')(game, window.Phaser);
   var levelsState = require('./states/levels')(game, window.Phaser);
+  var bootState = require('./states/boot')(game, window.Phaser);
 
   game.state.add('preloader', preloaderState);
   game.state.add('levels', levelsState);
   game.state.add('start', startState);
   game.state.add('game', gameState);
+  game.state.add('boot', bootState);
 
-  game.state.start('preloader');
+  game.state.start('boot');
 })();
 
-},{"./configs/config":1,"./states/game":21,"./states/levels":22,"./states/preloader":23,"./states/start":24,"phaser/build/custom/p2":27,"phaser/build/custom/phaser-split":28,"phaser/build/custom/pixi":29}],7:[function(require,module,exports){
+},{"./configs/config":1,"./states/boot":22,"./states/game":23,"./states/levels":24,"./states/preloader":25,"./states/start":26,"phaser/build/custom/p2":29,"phaser/build/custom/phaser-split":30,"phaser/build/custom/pixi":31}],7:[function(require,module,exports){
+module.exports = function(game, Phaser){
+  function Bonus(){
+    this.sprite;
+    this.create = function(x, y, map, spriteOptions, callback, context){
+      var w = map.get().tileWidth;
+      var h = map.get().tileHeight;
+
+      this.sprite = game.add.button(x + w/2, y + h/2, spriteOptions.key, callback, context);
+      this.sprite.alpha = 0;
+      this.sprite.anchor.set(0.5);
+
+      game.add.tween(this.sprite).to( { alpha: 1 }, 500, "Linear", true);
+      game.add.tween(this.sprite.scale).to( { x: 1.2, y: 1.2 }, 500, "Linear", true, 0, -1, true);
+    }
+
+    this.destroy = function(){
+      game.add.tween(this.sprite.scale).to( { x: 2, y: 2 }, 500, "Linear", true);
+      game.add.tween(this.sprite).to( { alpha: 0 }, 500, "Linear", true).onComplete.add(this.doDestroy, this);
+    }
+
+    this.doDestroy = function(){
+      this.sprite.destroy();
+    }
+  }
+
+  return Bonus;
+}
+
+},{}],8:[function(require,module,exports){
 var difference = require('lodash.difference');
 
 module.exports = {
@@ -452,7 +491,7 @@ module.exports = {
   }
 }
 
-},{"lodash.difference":26}],8:[function(require,module,exports){
+},{"lodash.difference":28}],9:[function(require,module,exports){
 module.exports = function(game, Phaser){
   function Escape(){
     var sprite;
@@ -471,7 +510,7 @@ module.exports = function(game, Phaser){
   return Escape;
 }
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 module.exports = function(game, Phaser){
   function Hero(){
     var sprite;
@@ -510,7 +549,7 @@ module.exports = function(game, Phaser){
   return Hero;
 }
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 var format = require("../modules/stringFormat");
 var config = require('../configs/config');
 var languages = {
@@ -533,7 +572,7 @@ module.exports = {
   }
 }
 
-},{"../configs/config":1,"../configs/languages/ba":2,"../configs/languages/ru":3,"../modules/stringFormat":17}],11:[function(require,module,exports){
+},{"../configs/config":1,"../configs/languages/ba":2,"../configs/languages/ru":3,"../modules/stringFormat":18}],12:[function(require,module,exports){
 var config = require('../configs/config');
 var directions = require('./directions');
 
@@ -542,9 +581,9 @@ module.exports = function(game, Phaser){
     var map;
     var mainLayer;
     var children;
-    var _isHeroOnTile;
-    this.create = function(tilemap, mainLayerName, isHeroOnTile){
-      _isHeroOnTile = isHeroOnTile;
+    var _isTileOccupied;
+    this.create = function(tilemap, mainLayerName, isTileOccupied){
+      _isTileOccupied = isTileOccupied;
       map = game.add.tilemap(tilemap);
       map.addTilesetImage('tilemap', 'tilemap');
 
@@ -670,7 +709,7 @@ module.exports = function(game, Phaser){
     }
 
     this.isWall = function(tile){
-      return config.map.main.walls.indexOf(tile.index) !== -1 || typeof(_isHeroOnTile) !== 'undefined' && _isHeroOnTile(tile);
+      return config.map.main.walls.indexOf(tile.index) !== -1 || typeof(_isTileOccupied) !== 'undefined' && _isTileOccupied(tile);
     }
 
     this.get = function(){
@@ -692,7 +731,7 @@ module.exports = function(game, Phaser){
   return new Map();
 }
 
-},{"../configs/config":1,"./directions":7}],12:[function(require,module,exports){
+},{"../configs/config":1,"./directions":8}],13:[function(require,module,exports){
 var config = require('../../configs/config');
 var UI = require('../../configs/ui');
 
@@ -734,7 +773,7 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../../configs/config":1,"../../configs/ui":5}],13:[function(require,module,exports){
+},{"../../configs/config":1,"../../configs/ui":5}],14:[function(require,module,exports){
 var config = require('../../configs/config');
 var UI = require('../../configs/ui');
 var l10n = require('../l10n');
@@ -774,7 +813,7 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../../configs/config":1,"../../configs/ui":5,"../l10n":10,"../popups/basic":12,"../utils":19}],14:[function(require,module,exports){
+},{"../../configs/config":1,"../../configs/ui":5,"../l10n":11,"../popups/basic":13,"../utils":20}],15:[function(require,module,exports){
 var config = require('../../configs/config');
 var l10n = require('../l10n');
 var UI = require('../../configs/ui');
@@ -795,7 +834,7 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../../configs/config":1,"../../configs/ui":5,"../l10n":10,"../popups/basic":12}],15:[function(require,module,exports){
+},{"../../configs/config":1,"../../configs/ui":5,"../l10n":11,"../popups/basic":13}],16:[function(require,module,exports){
 var config = require('../../configs/config');
 var UI = require('../../configs/ui');
 var l10n = require('../l10n');
@@ -837,7 +876,7 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../../configs/config":1,"../../configs/ui":5,"../l10n":10,"../popups/basic":12,"../utils":19}],16:[function(require,module,exports){
+},{"../../configs/config":1,"../../configs/ui":5,"../l10n":11,"../popups/basic":13,"../utils":20}],17:[function(require,module,exports){
 var directions = require('./directions');
 var difference = require('lodash.difference');
 
@@ -1034,7 +1073,7 @@ module.exports = function(game, Phaser){
   return Stray;
 }
 
-},{"./directions":7,"lodash.difference":26}],17:[function(require,module,exports){
+},{"./directions":8,"lodash.difference":28}],18:[function(require,module,exports){
 module.exports = function (string, params){
   var replaced = string;
   replaced = replaced.replace(/\·\{(.*?)\}\·/gmi,function(match,capture,index,all){
@@ -1074,7 +1113,7 @@ function contextEval($__context,$__evaluation){
   return eval($__evaluation);
 }
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 module.exports = function(game, Phaser){
   function Trap(){
     var sprite;
@@ -1105,7 +1144,7 @@ module.exports = function(game, Phaser){
   return Trap;
 }
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 module.exports = {
   formatTime: function(timeInSeconds){
     var minutes = (Math.floor(timeInSeconds / 60)).toString();
@@ -1116,7 +1155,7 @@ module.exports = {
   }
 }
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 var stateKey, eventKey, keys = {
   hidden: "visibilitychange",
   webkitHidden: "webkitvisibilitychange",
@@ -1141,7 +1180,30 @@ module.exports = {
   }
 }
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
+var config = require('../configs/config');
+
+module.exports = function(game, Phaser){
+  return {
+    doScale: function(){
+      var w = document.body.clientWidth / config.width;
+      var h = document.body.clientHeight / config.height;
+      game.scale.setUserScale(Math.min(w,h), Math.min(w,h));
+      game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
+    },
+    preload: function() {
+      this.doScale();
+      game.load.image('splash', 'assets/splash.jpg');
+      game.scale.setResizeCallback(this.doScale, this);
+
+    },
+    create: function(){
+      game.state.start('preloader', true, false);
+    }
+  }
+}
+
+},{"../configs/config":1}],23:[function(require,module,exports){
 var config = require('../configs/config');
 var UI = require('../configs/ui');
 var levelsConfig = require('../configs/levels');
@@ -1163,6 +1225,7 @@ module.exports = function(game, Phaser){
   var Trap = require('../modules/trap')(game, Phaser);
   var Escape = require('../modules/escape')(game, Phaser);
   var Hero = require('../modules/hero')(game, Phaser);
+  var Bonus = require('../modules/bonus')(game, Phaser);
   var pausePopupCreator = require('../modules/popups/pause')(game, Phaser);
   var successPopupCreator = require('../modules/popups/success')(game, Phaser);
   var gameoverPopupCreator = require('../modules/popups/gameover')(game, Phaser);
@@ -1171,13 +1234,13 @@ module.exports = function(game, Phaser){
     currentLevelIndex, currentBlockIndex, initialChildrenCount,
     middleLayer, backLayer, UILayer,
     timerText, state, pauseButton, statusText, levelNumberText,
-    pausePopup, successPopup, gameoverPopup;
+    pausePopup, successPopup, gameoverPopup,
+    bonusDelay, bonusPlaces, bonuses, trapsActive, bonusesMarks;
 
   var screenParams = {
     scale: 1,
     offsetX: 0,
-    offsetY: 0,
-    canvas: void 0
+    offsetY: 0
   }
   var time = 0;
   return {
@@ -1189,6 +1252,11 @@ module.exports = function(game, Phaser){
       initialChildrenCount = 0;
       currentBlockIndex = blockIndex;
       currentLevelIndex = levelIndex;
+      bonusDelay = config.defaultBonusDelay;
+      bonusPlaces = [];
+      bonuses = [];
+      bonusesMarks = [];
+      trapsActive = true;
       time = 0;
       state = states.normal;
       timerText = void 0;
@@ -1215,41 +1283,29 @@ module.exports = function(game, Phaser){
       }
     },
     loadMap: function(){
-      map.create('level' + currentBlockIndex + '-' + currentLevelIndex, void 0, this.isHeroOnTile.bind(this));
+      map.create('level' + currentBlockIndex + '-' + currentLevelIndex, void 0, this.isTileOccupied.bind(this));
       backLayer = game.add.group();
       middleLayer = game.add.group();
       UILayer = game.add.group();
-      var childSpeed = (levelsConfig[currentBlockIndex][currentLevelIndex].childrenSpeed || config.children.defaultSpeed ) - Math.round(Math.random() * config.children.speedAccuracy);
-      // underground
-      map.getTilesInLayer(config.map.main.name).forEach(function(tile, index){
-        var worldPosition = map.getTileWorldXY(tile);
-        var spriteOptions = tileSprites[tile.index];
 
-        if(spriteOptions && config.map.main.underground.indexOf(tile.index) !== -1){
-          backLayer.create(worldPosition.x + spriteOptions.offsetX, worldPosition.y + spriteOptions.offsetY, spriteOptions.shadow.key);
-        }
-      });
+      var childSpeed = (levelsConfig[currentBlockIndex][currentLevelIndex].childrenSpeed || config.children.defaultSpeed ) - Math.round(Math.random() * config.children.speedAccuracy);
+      var type = levelsConfig[currentBlockIndex][currentLevelIndex].type || 0;
+
+      bonusDelay = levelsConfig[currentBlockIndex][currentLevelIndex].bonusDelay || config.defaultBonusDelay;
+      bonusPlaces = map.getTilesInLayer(config.map.main.name, config.map.main.ground);
 
       // fill gorunds, empty space with last ground option
-      var lastSpriteOptions = { key: 'ground01', offsetX: 0, offsetY: 0 };
       map.getTilesInLayer(config.map.main.name).forEach(function(tile, index){
         var worldPosition = map.getTileWorldXY(tile);
         var spriteOptions = tileSprites[tile.index];
 
         if(spriteOptions && config.map.main.ground.indexOf(tile.index) !== -1){
           backLayer.create(worldPosition.x + spriteOptions.offsetX, worldPosition.y + spriteOptions.offsetY, spriteOptions.key);
-          lastSpriteOptions = spriteOptions;
         }
 
-        if(spriteOptions && config.map.main.groundDanger.indexOf(tile.index) !== -1){
-          var instance = new Trap();
-          instance.create(worldPosition.x, worldPosition.y, map, spriteOptions);
-          backLayer.add(instance.getCollider());
-          traps.push(instance);
-        }
-
-        if(lastSpriteOptions && (config.map.main.walls.indexOf(tile.index) !== -1 || config.map.main.danger.indexOf(tile.index) !== -1)){
-          backLayer.create(worldPosition.x + lastSpriteOptions.offsetX, worldPosition.y + lastSpriteOptions.offsetY, lastSpriteOptions.key);
+        if(spriteOptions && (config.map.main.walls.indexOf(tile.index) !== -1 || config.map.main.danger.indexOf(tile.index) !== -1)){
+          var groundSpriteOptions = tileSprites[config.map.defaultGroundByLevelType[type]];
+          backLayer.create(worldPosition.x + groundSpriteOptions.offsetX, worldPosition.y + groundSpriteOptions.offsetY, groundSpriteOptions.key);
         }
       });
 
@@ -1274,7 +1330,7 @@ module.exports = function(game, Phaser){
       });
 
       // fill dangers
-      map.getTilesInLayer(config.map.main.name, config.map.main.danger).forEach(function(tile, index){
+      map.getTilesInLayer(config.map.main.name, config.map.main.danger.concat(config.map.main.groundDanger)).forEach(function(tile, index){
         var worldPosition = map.getTileWorldXY(tile);
         var spriteOptions = tileSprites[tile.index];
 
@@ -1342,6 +1398,7 @@ module.exports = function(game, Phaser){
       game.input.keyboard.addKey(Phaser.Keyboard.N).onUp.add(this.nextLevel, this);
       game.input.keyboard.addKey(Phaser.Keyboard.S).onUp.add(this.onSuccess, this);
       game.time.events.loop(Phaser.Timer.SECOND, this.updateTime, this);
+      this.activateTraps();
 
       timerText = this.createText(UI.game.timerText, utils.formatTime(time), 0.5);
       levelNumberText = this.createText(UI.game.levelNumberText, currentLevelIndex + 1, 0.5);
@@ -1415,6 +1472,51 @@ module.exports = function(game, Phaser){
         time++;
         timerText.text = utils.formatTime(time);
       }
+    },
+    createBonuses: function(){
+      if(bonuses.length === 0){
+        var tile = bonusPlaces[Math.floor(Math.random() * bonusPlaces.length)];
+        var worldPosition = map.getTileWorldXY(tile);
+        var spriteOptions = tileSprites[config.map.objects.bonus[0]];
+        var instance = new Bonus();
+
+        instance.create(worldPosition.x, worldPosition.y, map, spriteOptions, this.onBonusClicked, this);
+        bonuses.push(instance);
+        middleLayer.add(instance.sprite);
+      }
+    },
+    onBonusClicked: function(){
+      if(trapsActive){
+        this.deactivateTraps();
+
+        game.time.events.add(Phaser.Timer.SECOND * config.bonusActiveTime, this.activateTraps, this);
+        bonuses.forEach(function(b){
+          this.destroyFromLayer(middleLayer, b.sprite);
+          b.destroy();
+        }.bind(this));
+        bonuses = [];
+      }
+    },
+    deactivateTraps: function(){
+      trapsActive = false;
+      map.getTilesInLayer(config.map.main.name, config.map.main.danger.concat(config.map.main.groundDanger)).forEach(function(tile, index){
+        var worldPosition = map.getTileWorldXY(tile);
+        var w = map.get().tileWidth;
+        var h = map.get().tileHeight;
+        var mark = game.add.sprite(worldPosition.x + w/2, worldPosition.y + h/2 + 5, 'bonus');
+        mark.scale.x = config.bonusMarkScale;
+        mark.scale.y = config.bonusMarkScale;
+        mark.anchor.set(0.5);
+        game.add.tween(mark).to( { y: mark.y - 5 }, 1400, "Linear", true, 0, -1, true);
+        bonusesMarks.push(mark);
+      });
+    },
+    activateTraps: function(){
+      trapsActive = true;
+      game.time.events.add(Phaser.Timer.SECOND * bonusDelay, this.createBonuses, this);
+      bonusesMarks.forEach(function(m){m.destroy()});
+      console.log(trapsActive);
+
     },
     update: function(){
       if(state === states.normal){
@@ -1505,35 +1607,38 @@ module.exports = function(game, Phaser){
         hero = void 0;
       }
     },
-    isHeroOnTile: function(tile){
+    isTileOccupied: function(tile){
+      if(!trapsActive && config.map.main.danger.concat(config.map.main.groundDanger).indexOf(tile.index) !== -1){
+        return true;
+      }
+
       if(hero){
         var heroTile = map.getTileAt(hero.getCollider().x, hero.getCollider().y);
         return tile === heroTile;
       }
+
       return false;
     },
     onPointerDown: function(pointer){
       if(state === states.paused){
         this.onContinueClicked();
       }else if(state === states.normal){
-        this.destroyHero();
+        var ceiled = map.ceilPosition(pointer.x - screenParams.offsetX, pointer.y - screenParams.offsetY);
+        if(bonuses.map(function(b){ return map.ceilPosition(b.sprite.x, b.sprite.y) }).filter(function(b){ return ceiled.x === b.x && ceiled.y === b.y }).length === 0){
+          this.destroyHero();
 
-        if(!screenParams.canvas){
-          screenParams.canvas = document.getElementsByTagName('canvas')[0];
-        }
-
-        var ceiled = map.ceilPosition(pointer.x - screenParams.offsetX, pointer.y - screenParams.offsetY)
-        var tileBehind = map.getTileAt(ceiled.x, ceiled.y);
-        if(tileBehind &&
-          config.map.main.walls.indexOf(tileBehind.index) === -1 &&
-          traps.map(function(t){ return map.ceilPosition(t.getCollider().x, t.getCollider().y) }).filter(function(p){ return ceiled.x === p.x && ceiled.y === p.y }).length === 0 // no traps on this tile
-        ){
-          hero = new Hero();
-          hero.create(ceiled.x, ceiled.y, map, tileSprites[config.map.objects.hero[0]], config.hero.bodyScale);
-          var childOverlap = children.some(function(child){ return child.isBodyOverlap(hero.getCollider())});
-          middleLayer.add(hero.getCollider());
-          if(childOverlap){
-            this.destroyHero();
+          var tileBehind = map.getTileAt(ceiled.x, ceiled.y);
+          if(tileBehind &&
+            config.map.main.walls.indexOf(tileBehind.index) === -1 &&
+            traps.map(function(t){ return map.ceilPosition(t.getCollider().x, t.getCollider().y) }).filter(function(p){ return ceiled.x === p.x && ceiled.y === p.y }).length === 0 // no traps on this tile
+          ){
+            hero = new Hero();
+            hero.create(ceiled.x, ceiled.y, map, tileSprites[config.map.objects.hero[0]], config.hero.bodyScale);
+            var childOverlap = children.filter(function(child){ return child.isBodyOverlap(hero.getCollider())}).length > 0;
+            middleLayer.add(hero.getCollider());
+            if(childOverlap){
+              this.destroyHero();
+            }
           }
         }
       }
@@ -1551,7 +1656,7 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../configs/config":1,"../configs/levels":4,"../configs/ui":5,"../modules/escape":8,"../modules/hero":9,"../modules/l10n":10,"../modules/map":11,"../modules/popups/gameover":13,"../modules/popups/pause":14,"../modules/popups/success":15,"../modules/stray":16,"../modules/trap":18,"../modules/utils":19,"../modules/vis":20,"../tileSprites":25}],22:[function(require,module,exports){
+},{"../configs/config":1,"../configs/levels":4,"../configs/ui":5,"../modules/bonus":7,"../modules/escape":9,"../modules/hero":10,"../modules/l10n":11,"../modules/map":12,"../modules/popups/gameover":14,"../modules/popups/pause":15,"../modules/popups/success":16,"../modules/stray":17,"../modules/trap":19,"../modules/utils":20,"../modules/vis":21,"../tileSprites":27}],24:[function(require,module,exports){
 var config = require('../configs/config');
 var UI = require('../configs/ui');
 var levelsConfig = require('../configs/levels');
@@ -1660,25 +1765,18 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../configs/config":1,"../configs/levels":4,"../configs/ui":5,"../modules/l10n":10}],23:[function(require,module,exports){
+},{"../configs/config":1,"../configs/levels":4,"../configs/ui":5,"../modules/l10n":11}],25:[function(require,module,exports){
 var config = require('../configs/config');
 var levelsConfig = require('../configs/levels');
 module.exports = function(game, Phaser){
   return {
     text: void 0,
-    doScale: function(){
-      var w = document.body.clientWidth / config.width;
-      var h = document.body.clientHeight / config.height;
-      game.scale.setUserScale(Math.min(w,h), Math.min(w,h));
-      game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
-    },
     loadUpdate: function(){
-      text.text = "Loading: " + this.load.progress + "%";
+      this.text.text = "Loading: " + this.load.progress + "%";
     },
     preload: function() {
-      this.doScale();
-      game.scale.setResizeCallback(this.doScale, this);
-      text = game.add.text( game.world.centerX, game.world.centerY, "Loading: 0%", { fill: "#ccc", align: "center" } ).anchor.setTo( 0.5, 0.5 );
+      var splash = game.add.sprite(0, 0, 'splash');
+      this.text = game.add.text( game.world.centerX, game.world.centerY + 300, "Loading: 0%", { fill: "#fff", align: "center" } ).anchor.setTo( 0.5, 0.5 );
       levelsConfig.forEach(function(levelsBlock, blockIndex){
         levelsBlock.forEach(function(level, index){
           game.load.tilemap('level' + blockIndex + '-' + index, level.src, null, Phaser.Tilemap.TILED_JSON);
@@ -1686,6 +1784,7 @@ module.exports = function(game, Phaser){
       });
       game.load.image('tilemap', 'assets/tilemap_big.png');
       game.load.image('target', 'assets/target.png');
+      game.load.image('bonus', 'assets/bonus.png');
 
       game.load.image('boy', 'assets/characters/boy.png');
       game.load.image('girl', 'assets/characters/girl.png');
@@ -1695,7 +1794,8 @@ module.exports = function(game, Phaser){
       game.load.image('ground02', 'assets/ground/02.png');
       game.load.image('ground03', 'assets/ground/03.png');
       game.load.image('ground04', 'assets/ground/04.png');
-      game.load.image('underground', 'assets/ground/underground.png');
+      game.load.image('ground05', 'assets/ground/05.png');
+      game.load.image('ground06', 'assets/ground/06.png');
       game.load.image('houseA1', 'assets/walls/A1.png');
       game.load.image('houseA2', 'assets/walls/A2.png');
       game.load.image('houseA3', 'assets/walls/A3.png');
@@ -1705,9 +1805,18 @@ module.exports = function(game, Phaser){
       game.load.image('wall01', 'assets/walls/01.png');
       game.load.image('wall02', 'assets/walls/02.png');
       game.load.image('wall03', 'assets/walls/03.png');
+      game.load.image('wall04', 'assets/walls/04.png');
+      game.load.image('wall05', 'assets/walls/05.png');
+      game.load.image('wall06', 'assets/walls/06.png');
+      game.load.image('wall07', 'assets/walls/07.png');
+      game.load.image('wall08', 'assets/walls/08.png');
       game.load.image('danger01', 'assets/danger/01.png');
       game.load.image('danger02', 'assets/danger/02.png');
       game.load.image('danger03', 'assets/danger/03.png');
+      game.load.image('danger04', 'assets/danger/04.png');
+      game.load.image('danger05', 'assets/danger/05.png');
+      game.load.image('danger06', 'assets/danger/06.png');
+      game.load.image('danger07', 'assets/danger/07.png');
       game.load.image('houseShadow', 'assets/walls/shadow.png');
 
       game.load.image('levelItemCity', 'assets/UI/level_item_city.png');
@@ -1725,7 +1834,7 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../configs/config":1,"../configs/levels":4}],24:[function(require,module,exports){
+},{"../configs/config":1,"../configs/levels":4}],26:[function(require,module,exports){
 var config = require('../configs/config');
 module.exports = function(game, Phaser){
   return {
@@ -1743,7 +1852,7 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../configs/config":1}],25:[function(require,module,exports){
+},{"../configs/config":1}],27:[function(require,module,exports){
 function tileSprite(key, offsetX, offsetY, shadow){
   return {
     key: key,
@@ -1758,8 +1867,8 @@ module.exports = {
   2: tileSprite('ground02'),
   3: tileSprite('ground03'),
   4: tileSprite('ground04'),
-  5: tileSprite('ground01'),
-  6: tileSprite('ground02'),
+  5: tileSprite('ground05'),
+  6: tileSprite('ground06'),
   7: tileSprite('houseA1', 0, -136, tileSprite('houseShadow', -81, -137)),
   8: tileSprite('houseA2', 0, -136),
   9: tileSprite('houseA3', 0, -136),
@@ -1767,18 +1876,28 @@ module.exports = {
   14: tileSprite('houseB2', 0, -136),
   15: tileSprite('houseB3', 0, -136),
   19: tileSprite('wall01', 0, -60),
-  20: tileSprite('wall02', 0, -45),
+  20: tileSprite('wall02', 5, -45),
   21: tileSprite('wall03', 0, -35),
-  25: tileSprite('danger01', 0, 10, tileSprite('underground', 0, 5)),
+  10: tileSprite('wall04', -4, -144),
+  16: tileSprite('wall05', 0, -143),
+  11: tileSprite('wall06', -3, -148),
+  17: tileSprite('wall07', 6, -40),
+  22: tileSprite('wall08', 0, -45),
+  25: tileSprite('danger01', 0, 15),
   26: tileSprite('danger02', 1, -40),
-  27: tileSprite('danger03', 1, -50),
+  27: tileSprite('danger03', 0, -50),
+  28: tileSprite('danger04', 14, -60),
+  29: tileSprite('danger05', -15, -50),
+  30: tileSprite('danger06', 0, -18),
+  36: tileSprite('danger07', 0, 3),
   31: tileSprite('boy', 0, -60),
   32: tileSprite('girl', 0, -55),
   33: tileSprite('hero', 0, -100),
-  34: tileSprite('target', 12, 5)
+  34: tileSprite('target', 12, 5),
+  35: tileSprite('bonus')
 }
 
-},{}],26:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 (function (global){
 /**
  * lodash (Custom Build) <https://lodash.com/>
@@ -2952,7 +3071,7 @@ function isObjectLike(value) {
 module.exports = difference;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],27:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 (function (global){
 /**
  * The MIT License (MIT)
@@ -16568,7 +16687,7 @@ World.prototype.raycast = function(result, ray){
 (36)
 });
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],28:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 (function (process){
 /**
 * @author       Richard Davey <rich@photonstorm.com>
@@ -96932,7 +97051,7 @@ PIXI.TextureSilentFail = true;
 */
 
 }).call(this,require('_process'))
-},{"_process":30}],29:[function(require,module,exports){
+},{"_process":32}],31:[function(require,module,exports){
 /**
 * @author       Richard Davey <rich@photonstorm.com>
 * @copyright    2016 Photon Storm Ltd.
@@ -106054,7 +106173,7 @@ Object.defineProperty(PIXI.TilingSprite.prototype, 'height', {
 
     return PIXI;
 }).call(this);
-},{}],30:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
