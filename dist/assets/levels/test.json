@@ -1,7 +1,7 @@
 { "height":7,
  "layers":[
         {
-         "data":[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 12, 12, 7, 12, 7, 12, 7, 12, 7, 12, 1, 1, 7, 7, 1, 7, 1, 7, 1, 7, 1, 7, 1, 1, 12, 1, 1, 1, 1, 1, 1, 1, 1, 12, 1, 1, 7, 12, 1, 12, 1, 12, 1, 12, 1, 7, 1, 1, 12, 7, 12, 7, 12, 7, 12, 7, 12, 12, 1, 1, 1, 1, 7, 1, 7, 1, 7, 1, 7, 1, 1],
+         "data":[1, 12, 12, 12, 3, 4, 3, 4, 5, 6, 5, 6, 2, 7, 8, 9, 4, 3, 4, 3, 6, 5, 6, 5, 1, 2, 1, 2, 3, 19, 20, 19, 5, 20, 5, 26, 2, 12, 12, 12, 4, 3, 27, 3, 6, 20, 6, 5, 1, 13, 14, 15, 3, 19, 21, 19, 5, 20, 5, 26, 2, 1, 2, 1, 4, 3, 4, 3, 6, 5, 6, 5, 1, 27, 19, 25, 3, 4, 3, 4, 5, 6, 5, 6],
          "height":7,
          "name":"main",
          "opacity":1,
@@ -13,29 +13,8 @@
         }, 
         {
          "draworder":"topdown",
-         "height":0,
          "name":"objects",
          "objects":[
-                {
-                 "gid":31,
-                 "height":135,
-                 "id":6,
-                 "name":"",
-                 "properties":
-                    {
-                     "dir":"up"
-                    },
-                 "propertytypes":
-                    {
-                     "dir":"string"
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":157,
-                 "x":471,
-                 "y":540
-                }, 
                 {
                  "gid":34,
                  "height":135,
@@ -49,26 +28,99 @@
                  "y":540
                 }, 
                 {
-                 "height":0,
-                 "id":22,
+                 "gid":31,
+                 "height":135,
+                 "id":24,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":0,
-                 "x":1808,
-                 "y":74
+                 "width":157,
+                 "x":785,
+                 "y":270
+                }, 
+                {
+                 "gid":32,
+                 "height":135,
+                 "id":25,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":157,
+                 "x":1413,
+                 "y":270
+                }, 
+                {
+                 "gid":32,
+                 "height":135,
+                 "id":26,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":157,
+                 "x":1570,
+                 "y":945
+                }, 
+                {
+                 "gid":32,
+                 "height":135,
+                 "id":27,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":157,
+                 "x":0,
+                 "y":405
+                }, 
+                {
+                 "gid":31,
+                 "height":135,
+                 "id":28,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":157,
+                 "x":942,
+                 "y":945
+                }, 
+                {
+                 "gid":31,
+                 "height":135,
+                 "id":29,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":157,
+                 "x":1099,
+                 "y":135
+                }, 
+                {
+                 "gid":31,
+                 "height":135,
+                 "id":30,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":157,
+                 "x":0,
+                 "y":810
                 }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
-         "width":0,
          "x":0,
          "y":0
         }],
- "nextobjectid":24,
+ "nextobjectid":31,
  "orientation":"orthogonal",
  "renderorder":"right-down",
+ "tiledversion":"1.0.2",
  "tileheight":135,
  "tilesets":[
         {
@@ -85,6 +137,7 @@
          "tilewidth":157
         }],
  "tilewidth":157,
+ "type":"map",
  "version":1,
  "width":12
 }

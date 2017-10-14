@@ -1,4 +1,5 @@
 var config = require('../../configs/config');
+var UI = require('../../configs/ui');
 var l10n = require('../l10n');
 var utils = require('../utils');
 
@@ -6,7 +7,7 @@ module.exports = function(game, Phaser){
   var basic = require('../popups/basic')(game, Phaser);
   return {
     create: function(x, y, time, children, childrenTotal, onToMenu, onToLevels, onReplay, onNext, context){
-      var options = config.UI.popups.success;
+      var options = UI.popups.success;
       var base = basic.create(x, y, options.opacity);
       var win = basic.tint(x, y, options.width, options.height, 0.9, 0xc29629);
 
