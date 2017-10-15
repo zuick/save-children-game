@@ -4,9 +4,9 @@ module.exports = {
   height: 1080,
   defaultLanguage: 'ru',
   defaultBlockIndex: 0,
-  defaultBonusDelay: 5,
-  bonusActiveTime: 10,
-  bonusMarkScale: 0.7,
+  defaultBonusDelay: 15,
+  bonusActiveTime: 5,
+  bonusMarkScale: 0.9,
   failDelay: 800,
   map: {
     main: {
