@@ -373,13 +373,15 @@ module.exports = [
 module.exports = {
   levels: {
     backgroundColor: '#000',
-    levelItem: { width: 150, height: 150 },
-    levelItemsPadding: 20,
-    blockWidthScale: 0.5,
-    blockMarginTop: 120,
+    levelItem: { width: 200, height: 250 },
+    levelItemsPadding: 0,
+    blockWidthScale: 0.8,
+    blockMarginTop: 170,
     blockArrowMarginLeft: 50,
-    levelItemTextStyle: { font: "64px Arial", fill: "#fff", align: "center" },
-    headerTextStyle: { font: "32px Arial", fill: "#fff", align: "center" },
+    levelItemTextStyle: { font: "72px Arial", fill: "#fff", align: "center" },
+    levelItemTextOffsetY: 20,
+    levelItemTextOffsetX: -5,
+    headerTextStyle: { font: "48px Arial", fill: "#333", align: "center" },
     types: {
       0: 'levelItemCity',
       1: 'levelItemCountrySide',
@@ -1743,7 +1745,7 @@ module.exports = function(game, Phaser){
 
     drawLevelItem: function(x, y, index, key){
       var item = game.add.button(x, y, key, function(){ game.state.start('game', true, false, currentBlockIndex, index);});
-      var text = game.add.text(item.width / 2, item.height / 2, index + 1, UI.levels.levelItemTextStyle);
+      var text = game.add.text(item.width / 2 + UI.levels.levelItemTextOffsetX, item.height / 2 + UI.levels.levelItemTextOffsetY, index + 1, UI.levels.levelItemTextStyle);
       text.anchor.x = 0.5;
       text.anchor.y = 0.5;
       item.addChild(text);
@@ -1785,14 +1787,13 @@ module.exports = function(game, Phaser){
       var maxLevelsRows = Math.ceil(levelsConfig[currentBlockIndex].length / maxLevelItems);
       var y = blockY + (maxLevelsRows * levelItemFullHeight) / 2
       if(currentBlockIndex < levelsConfig.length - 1){
-        nextArrow = game.add.button(blockX + blockWidth + UI.levels.blockArrowMarginLeft, y, 'levelsBlockArrow', this.onNextBlock, this);
+        nextArrow = game.add.button(blockX + blockWidth + UI.levels.blockArrowMarginLeft, y, 'levelsBlockArrowRight', this.onNextBlock, this);
         nextArrow.anchor.x = 0.5;
         nextArrow.anchor.y = 0.5;
-        nextArrow.scale.x = -1;
       }
       // draw prev
       if(currentBlockIndex > 0){
-        prevArrow = game.add.button(blockX - UI.levels.blockArrowMarginLeft, y, 'levelsBlockArrow', this.onPrevBlock, this);
+        prevArrow = game.add.button(blockX - UI.levels.blockArrowMarginLeft, y, 'levelsBlockArrowLeft', this.onPrevBlock, this);
         prevArrow.anchor.x = 0.5;
         prevArrow.anchor.y = 0.5;
       }
@@ -1818,6 +1819,7 @@ module.exports = function(game, Phaser){
     },
 
     create: function(){
+      game.add.sprite(0, 0, 'levelsBackground');
       game.stage.backgroundColor = UI.levels.backgroundColor;
       game.world.setBounds(0, 0, config.width, config.height);
       this.redraw();
@@ -1833,7 +1835,7 @@ module.exports = function(game, Phaser){
     text: void 0,
     preload: function() {
       var splash = game.add.sprite(0, 0, 'splash');
-      var loadingText = game.add.text( game.world.centerX, game.world.centerY + 300, "Loading: 0%", { fill: "#fff", align: "center" } ).anchor.setTo( 0.5, 0.5 );
+      var loadingText = game.add.text( game.world.centerX, game.world.centerY + 300, "Loading...", { fill: "#fff", align: "center" } ).anchor.setTo( 0.5, 0.5 );
       levelsConfig.forEach(function(levelsBlock, blockIndex){
         levelsBlock.forEach(function(level, index){
           game.load.tilemap('level' + blockIndex + '-' + index, level.src, null, Phaser.Tilemap.TILED_JSON);
@@ -1879,22 +1881,11 @@ module.exports = function(game, Phaser){
       game.load.image('levelItemCity', 'assets/UI/level_item_city.png');
       game.load.image('levelItemCountrySide', 'assets/UI/level_item_countryside.png');
       game.load.image('levelItemHouse', 'assets/UI/level_item_house.png');
-      game.load.image('levelsBlockArrow', 'assets/UI/levels_block_arrow.png');
-
+      game.load.image('levelsBlockArrowLeft', 'assets/UI/prev.png');
+      game.load.image('levelsBlockArrowRight', 'assets/UI/next.png');
+      game.load.image('levelsBackground', 'assets/UI/bkg.jpg');
       game.load.spritesheet('pauseButton', 'assets/UI/buttons.png', 48, 48, 2);
       game.load.image('pixel', 'assets/UI/pixel.png');
-
-      progressDisplay = 0
-      var timerEvt = game.time.events.loop(100, function (){
-        if(progressDisplay < 100){
-          if(progressDisplay < game.load.progress){
-            loadingText.text = "Loading: " +(++progressDisplay)+ "%";
-          }
-        }else{
-          loadingText.text = 'Ready, Go!';
-          game.time.events.remove(timerEvt);
-        }
-      }, this);
     },
     create: function(){
       //game.state.start('game', true, false, 0, 0);
