@@ -1,13 +1,15 @@
 module.exports = {
   levels: {
     backgroundColor: '#000',
-    levelItem: { width: 150, height: 150 },
-    levelItemsPadding: 20,
-    blockWidthScale: 0.5,
-    blockMarginTop: 120,
+    levelItem: { width: 200, height: 250 },
+    levelItemsPadding: 0,
+    blockWidthScale: 0.8,
+    blockMarginTop: 170,
     blockArrowMarginLeft: 50,
-    levelItemTextStyle: { font: "64px Arial", fill: "#fff", align: "center" },
-    headerTextStyle: { font: "32px Arial", fill: "#fff", align: "center" },
+    levelItemTextStyle: { font: "72px Arial", fill: "#fff", align: "center" },
+    levelItemTextOffsetY: 20,
+    levelItemTextOffsetX: -5,
+    headerTextStyle: { font: "48px Arial", fill: "#333", align: "center" },
     types: {
       0: 'levelItemCity',
       1: 'levelItemCountrySide',

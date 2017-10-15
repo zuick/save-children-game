@@ -5,7 +5,7 @@ module.exports = function(game, Phaser){
     text: void 0,
     preload: function() {
       var splash = game.add.sprite(0, 0, 'splash');
-      var loadingText = game.add.text( game.world.centerX, game.world.centerY + 300, "Loading: 0%", { fill: "#fff", align: "center" } ).anchor.setTo( 0.5, 0.5 );
+      var loadingText = game.add.text( game.world.centerX, game.world.centerY + 300, "Loading...", { fill: "#fff", align: "center" } ).anchor.setTo( 0.5, 0.5 );
       levelsConfig.forEach(function(levelsBlock, blockIndex){
         levelsBlock.forEach(function(level, index){
           game.load.tilemap('level' + blockIndex + '-' + index, level.src, null, Phaser.Tilemap.TILED_JSON);
@@ -51,22 +51,11 @@ module.exports = function(game, Phaser){
       game.load.image('levelItemCity', 'assets/UI/level_item_city.png');
       game.load.image('levelItemCountrySide', 'assets/UI/level_item_countryside.png');
       game.load.image('levelItemHouse', 'assets/UI/level_item_house.png');
-      game.load.image('levelsBlockArrow', 'assets/UI/levels_block_arrow.png');
-
+      game.load.image('levelsBlockArrowLeft', 'assets/UI/prev.png');
+      game.load.image('levelsBlockArrowRight', 'assets/UI/next.png');
+      game.load.image('levelsBackground', 'assets/UI/bkg.jpg');
       game.load.spritesheet('pauseButton', 'assets/UI/buttons.png', 48, 48, 2);
       game.load.image('pixel', 'assets/UI/pixel.png');
-
-      progressDisplay = 0
-      var timerEvt = game.time.events.loop(100, function (){
-        if(progressDisplay < 100){
-          if(progressDisplay < game.load.progress){
-            loadingText.text = "Loading: " +(++progressDisplay)+ "%";
-          }
-        }else{
-          loadingText.text = 'Ready, Go!';
-          game.time.events.remove(timerEvt);
-        }
-      }, this);
     },
     create: function(){
       //game.state.start('game', true, false, 0, 0);
