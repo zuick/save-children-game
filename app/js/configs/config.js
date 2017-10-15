@@ -32,7 +32,7 @@ module.exports = {
   },
   children: {
     bodyScale: 0.5, // 1 - full tile, 0 - no body
-    defaultSpeed: 120,
+    defaultSpeed: 100,
     speedAccuracy: 10
   },
   hero: {
