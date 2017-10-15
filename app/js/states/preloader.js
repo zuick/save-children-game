@@ -51,8 +51,9 @@ module.exports = function(game, Phaser){
       game.load.image('levelItemCity', 'assets/UI/level_item_city.png');
       game.load.image('levelItemCountrySide', 'assets/UI/level_item_countryside.png');
       game.load.image('levelItemHouse', 'assets/UI/level_item_house.png');
-      game.load.image('levelsBlockArrow', 'assets/UI/levels_block_arrow.png');
-
+      game.load.image('levelsBlockArrowLeft', 'assets/UI/prev.png');
+      game.load.image('levelsBlockArrowRight', 'assets/UI/next.png');
+      game.load.image('levelsBackground', 'assets/UI/bkg.jpg');
       game.load.spritesheet('pauseButton', 'assets/UI/buttons.png', 48, 48, 2);
       game.load.image('pixel', 'assets/UI/pixel.png');
     },

@@ -24,7 +24,7 @@ module.exports = function(game, Phaser){
 
     drawLevelItem: function(x, y, index, key){
       var item = game.add.button(x, y, key, function(){ game.state.start('game', true, false, currentBlockIndex, index);});
-      var text = game.add.text(item.width / 2, item.height / 2, index + 1, UI.levels.levelItemTextStyle);
+      var text = game.add.text(item.width / 2 + UI.levels.levelItemTextOffsetX, item.height / 2 + UI.levels.levelItemTextOffsetY, index + 1, UI.levels.levelItemTextStyle);
       text.anchor.x = 0.5;
       text.anchor.y = 0.5;
       item.addChild(text);
@@ -66,14 +66,13 @@ module.exports = function(game, Phaser){
       var maxLevelsRows = Math.ceil(levelsConfig[currentBlockIndex].length / maxLevelItems);
       var y = blockY + (maxLevelsRows * levelItemFullHeight) / 2
       if(currentBlockIndex < levelsConfig.length - 1){
-        nextArrow = game.add.button(blockX + blockWidth + UI.levels.blockArrowMarginLeft, y, 'levelsBlockArrow', this.onNextBlock, this);
+        nextArrow = game.add.button(blockX + blockWidth + UI.levels.blockArrowMarginLeft, y, 'levelsBlockArrowRight', this.onNextBlock, this);
         nextArrow.anchor.x = 0.5;
         nextArrow.anchor.y = 0.5;
-        nextArrow.scale.x = -1;
       }
       // draw prev
       if(currentBlockIndex > 0){
-        prevArrow = game.add.button(blockX - UI.levels.blockArrowMarginLeft, y, 'levelsBlockArrow', this.onPrevBlock, this);
+        prevArrow = game.add.button(blockX - UI.levels.blockArrowMarginLeft, y, 'levelsBlockArrowLeft', this.onPrevBlock, this);
         prevArrow.anchor.x = 0.5;
         prevArrow.anchor.y = 0.5;
       }
@@ -99,6 +98,7 @@ module.exports = function(game, Phaser){
     },
 
     create: function(){
+      game.add.sprite(0, 0, 'levelsBackground');
       game.stage.backgroundColor = UI.levels.backgroundColor;
       game.world.setBounds(0, 0, config.width, config.height);
       this.redraw();
