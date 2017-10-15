@@ -309,8 +309,6 @@ module.exports = function(game, Phaser){
       trapsActive = true;
       game.time.events.add(Phaser.Timer.SECOND * bonusDelay, this.createBonuses, this);
       bonusesMarks.forEach(function(m){m.destroy()});
-      console.log(trapsActive);
-
     },
     update: function(){
       if(state === states.normal){

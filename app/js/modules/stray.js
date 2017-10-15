@@ -16,6 +16,7 @@ module.exports = function(game, Phaser){
     var preferedDir;
 
     this.child;
+    this.inTrap = false;
     this.create = function(x, y, _map, _speed, spriteOptions, bodyScale, properties){
       preferedDir = typeof(properties) === 'object' ? properties.dir : '';
       preferForward = typeof(properties) === 'object' ? properties.preferForward : false;
@@ -31,6 +32,10 @@ module.exports = function(game, Phaser){
       this.child = game.add.sprite(spriteOptions.offsetX + w/2, spriteOptions.offsetY + h/2, spriteOptions.key);
       this.child.anchor.x = 0.5;
       this.child.anchor.y = 0.5;
+      this.child.animations.add('walk_left_right', [0,1,2,3], 4, true);
+      this.child.animations.add('walk_up', [4,5,6,7], 4, true);
+      this.child.animations.add('walk_down', [8,9,10,11], 4, true);
+      this.child.animations.add('idle', [1], 4, true);
       sprite.addChild(this.child);
 
       sprite.texture.width = w;
@@ -44,73 +49,85 @@ module.exports = function(game, Phaser){
     }
 
     this.update = function(){
-      if(!currentDir){
-        var possibleWays = map.getTileWays(map.getTileAt(sprite.x, sprite.y));
-        if(preferedDir && possibleWays.indexOf(preferedDir) !== -1){
-          currentDir = preferedDir;
-        }else{
-          currentDir = directions.getRandomFrom(possibleWays);
-        }
-      }else{
-        var x = currentDir === 'right' || currentDir === 'down' ? floatX : floatX + sprite.texture.width - 1;
-        var y = currentDir === 'right' || currentDir === 'down' ? floatY : floatY + sprite.texture.height - 1;
-        currentTile = map.getTileAt(x, y);
-        nextTile = map.getNextTileFrom(currentTile, currentDir);
-        if(nextTile){
-          var delta = this.getDeltaTo(nextTile);
-          var nextDeltaTile = map.getTileAt(x + delta.x, y + delta.y);
-          if(nextDeltaTile.x === nextTile.x && nextDeltaTile.y === nextTile.y){
-            var ways = map.getTileWays(nextDeltaTile);
-            var backwardDir = directions.getOpposite(currentDir);
-            var canMoveForward = ways.indexOf(currentDir) !== -1;
-            var canMoveBackward = ways.indexOf(backwardDir) !== -1;
-            var exludeWays = [backwardDir];
-            if(preferTurning) exludeWays.push(currentDir);
+      if(!this.inTrap){
+        var oldValue = currentDir;
 
-            var turnWays = difference(ways, exludeWays);
-            if(preferForward){
-              if(!canMoveForward){
+        if(!currentDir){
+          var possibleWays = map.getTileWays(map.getTileAt(sprite.x, sprite.y));
+          if(preferedDir && possibleWays.indexOf(preferedDir) !== -1){
+            currentDir = preferedDir;
+          }else{
+            currentDir = directions.getRandomFrom(possibleWays);
+          }
+        }else{
+          var x = currentDir === 'right' || currentDir === 'down' ? floatX : floatX + sprite.texture.width - 1;
+          var y = currentDir === 'right' || currentDir === 'down' ? floatY : floatY + sprite.texture.height - 1;
+          currentTile = map.getTileAt(x, y);
+          nextTile = map.getNextTileFrom(currentTile, currentDir);
+          if(nextTile){
+            var delta = this.getDeltaTo(nextTile);
+            var nextDeltaTile = map.getTileAt(x + delta.x, y + delta.y);
+            if(nextDeltaTile.x === nextTile.x && nextDeltaTile.y === nextTile.y){
+              var ways = map.getTileWays(nextDeltaTile);
+              var backwardDir = directions.getOpposite(currentDir);
+              var canMoveForward = ways.indexOf(currentDir) !== -1;
+              var canMoveBackward = ways.indexOf(backwardDir) !== -1;
+              var exludeWays = [backwardDir];
+              if(preferTurning) exludeWays.push(currentDir);
+
+              var turnWays = difference(ways, exludeWays);
+              if(preferForward){
+                if(!canMoveForward){
+                  if(turnWays.length > 0){
+                    currentDir = directions.getRandomFrom(turnWays);
+                  }else if(canMoveBackward){
+                    currentDir = backwardDir;
+                  }
+                  delta = this.getDeltaTo(nextTile, true);
+                }
+              }else{
                 if(turnWays.length > 0){
                   currentDir = directions.getRandomFrom(turnWays);
-                }else if(canMoveBackward){
+                  delta = this.getDeltaTo(nextTile, true);
+                }else if(!canMoveForward && canMoveBackward){
                   currentDir = backwardDir;
+                  delta = this.getDeltaTo(nextTile, true);
+                }else{
+                  currentDir = void 0;
                 }
-                delta = this.getDeltaTo(nextTile, true);
-              }
-            }else{
-              if(turnWays.length > 0){
-                currentDir = directions.getRandomFrom(turnWays);
-                delta = this.getDeltaTo(nextTile, true);
-              }else if(!canMoveForward && canMoveBackward){
-                currentDir = backwardDir;
-                delta = this.getDeltaTo(nextTile, true);
-              }else{
-                currentDir = void 0;
               }
             }
+            floatX += delta.x;
+            floatY += delta.y;
+            sprite.x = Math.round(floatX);
+            sprite.y = Math.round(floatY);
+          }else{
+            currentDir = void 0;
+            var pos = map.getTileWorldXY(currentTile);
+            sprite.x = pos.x;
+            sprite.y = pos.y;
+            floatX = sprite.x;
+            floatY = sprite.y;
           }
-          floatX += delta.x;
-          floatY += delta.y;
-          sprite.x = Math.round(floatX);
-          sprite.y = Math.round(floatY);
-        }else{
-          currentDir = void 0;
-          var pos = map.getTileWorldXY(currentTile);
-          sprite.x = pos.x;
-          sprite.y = pos.y;
-          floatX = sprite.x;
-          floatY = sprite.y;
         }
-      }
 
-      if(currentDir === 'left'){
-        sprite.children.forEach(function(innerSprite){
-          innerSprite.scale.x = -1;
-        })
-      }else if(currentDir === 'right'){
-        sprite.children.forEach(function(innerSprite){
-          innerSprite.scale.x = 1;
-        })
+        if(currentDir === 'left'){
+          sprite.children.forEach(function(innerSprite){
+            innerSprite.scale.x = 1;
+          })
+          this.child.animations.play('walk_left_right');
+        }else if(currentDir === 'right'){
+          sprite.children.forEach(function(innerSprite){
+            innerSprite.scale.x = -1;
+          })
+          this.child.animations.play('walk_left_right');
+        }else if(currentDir === 'up'){
+          this.child.animations.play('walk_up');
+        }else if(currentDir === 'down'){
+          this.child.animations.play('walk_down');
+        }else{
+          this.child.animations.play('idle');
+        }
       }
     }
 
@@ -183,6 +200,8 @@ module.exports = function(game, Phaser){
              point.y <= rect.y + rect.h;
     }
     this.onTrap = function(){
+      this.inTrap = true;
+      this.child.animations.stop();
       game.add.tween(sprite).to( { alpha: 0.2 }, 100, "Linear", true, 0, 3, true);
     }
 

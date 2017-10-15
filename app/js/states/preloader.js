@@ -15,8 +15,8 @@ module.exports = function(game, Phaser){
       game.load.image('target', 'assets/target.png');
       game.load.image('bonus', 'assets/bonus.png');
 
-      game.load.image('boy', 'assets/characters/boy.png');
-      game.load.image('girl', 'assets/characters/girl.png');
+      game.load.spritesheet('boy', 'assets/characters/boy.png', 160, 185, 12);
+      game.load.spritesheet('girl', 'assets/characters/girl.png', 160, 185, 12);
       game.load.image('hero', 'assets/characters/hero.png');
 
       game.load.image('ground01', 'assets/ground/01.png');
