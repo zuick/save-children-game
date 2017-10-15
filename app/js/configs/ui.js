@@ -40,6 +40,14 @@ module.exports = {
     backButton: {
       marginTop: 48,
       offsetX: -600, // from center
+    },
+    sparks: {
+      simple: {
+        yRange: -60,
+        duration: 1000,
+        yoyo: false,
+        emptyFramesRange: 15
+      }
     }
   },
   popups: {

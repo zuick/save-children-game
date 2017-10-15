@@ -24,7 +24,7 @@ module.exports = function(game, Phaser){
   var successPopupCreator = require('../modules/popups/success')(game, Phaser);
   var gameoverPopupCreator = require('../modules/popups/gameover')(game, Phaser);
 
-  var children, traps, escapes, savedChildren, hero,
+  var children, traps, escapes, savedChildren, hero, sparksEffects,
     currentLevelIndex, currentBlockIndex, initialChildrenCount,
     middleLayer, backLayer, UILayer,
     timerText, state, pauseButton, statusText, levelNumberText, backButton,
@@ -42,6 +42,7 @@ module.exports = function(game, Phaser){
       children = [];
       traps = [];
       escapes = [];
+      sparksEffects = [];
       savedChildren = 0;
       initialChildrenCount = 0;
       currentBlockIndex = blockIndex;
@@ -321,11 +322,30 @@ module.exports = function(game, Phaser){
         game.add.tween(mark).to( { y: mark.y - 5 }, 1400, "Linear", true, 0, -1, true);
         bonusesMarks.push(mark);
       });
+      sparksEffects.forEach(function(s){
+        s.destroy();
+      })
     },
     activateTraps: function(){
       trapsActive = true;
       game.time.events.add(Phaser.Timer.SECOND * bonusDelay, this.createBonuses, this);
       bonusesMarks.forEach(function(m){m.destroy()});
+      traps.forEach(function(trap){
+        var options = UI.game.sparks.simple;
+        var basicFrames = [0,1,2,3,4,5,6,7,8,9,10,10,10,10,10];
+        for(var i; i <  Math.floor(Math.random() * options.emptyFramesRange); i++){
+          basicFrames.push(10);
+        };
+        var x = trap.getCollider().x + map.get().tileWidth / 2;
+        var y = trap.getCollider().y + map.get().tileHeight / 2
+        var sparks = game.add.sprite(x, y - options.yRange / 2, 'sparks');
+        sparks.animations.add('idle', basicFrames, 16, true);
+        sparks.animations.play('idle');
+        sparks.alpha = 0.9;
+        sparks.anchor.set(0.5);
+        game.add.tween(sparks).to({y: y + options.yRange / 2}, options.duration, "Linear", true, 0, -1, options.yoyo);
+        sparksEffects.push(sparks);
+      });
     },
     update: function(){
       if(state === states.normal){
