@@ -5,7 +5,7 @@ module.exports = {
   defaultLanguage: 'ru',
   defaultBlockIndex: 0,
   defaultBonusDelay: 15,
-  bonusActiveTime: 5,
+  bonusActiveTime: 7,
   bonusMarkScale: 0.9,
   failDelay: 800,
   map: {
