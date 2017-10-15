@@ -54,7 +54,7 @@ module.exports = function(game, Phaser){
       game.load.image('levelsBlockArrowLeft', 'assets/UI/prev.png');
       game.load.image('levelsBlockArrowRight', 'assets/UI/next.png');
       game.load.image('levelsBackground', 'assets/UI/bkg.jpg');
-      game.load.spritesheet('pauseButton', 'assets/UI/buttons.png', 48, 48, 2);
+      game.load.spritesheet('buttons', 'assets/UI/buttons.png', 80, 76, 3);
       game.load.image('pixel', 'assets/UI/pixel.png');
     },
     create: function(){

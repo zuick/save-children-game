@@ -27,7 +27,7 @@ module.exports = function(game, Phaser){
   var children, traps, escapes, savedChildren, hero,
     currentLevelIndex, currentBlockIndex, initialChildrenCount,
     middleLayer, backLayer, UILayer,
-    timerText, state, pauseButton, statusText, levelNumberText,
+    timerText, state, pauseButton, statusText, levelNumberText, backButton,
     pausePopup, successPopup, gameoverPopup,
     bonusDelay, bonusPlaces, bonuses, trapsActive, bonusesMarks;
 
@@ -57,6 +57,7 @@ module.exports = function(game, Phaser){
       statusText = void 0;
       levelNumberText = void 0;
       pauseButton = void 0;
+      backButton = void 0;
 
       if(pausePopup) pausePopup.destroy();
       pausePopup = void 0;
@@ -197,7 +198,18 @@ module.exports = function(game, Phaser){
       timerText = this.createText(UI.game.timerText, utils.formatTime(time), 0.5);
       levelNumberText = this.createText(UI.game.levelNumberText, currentLevelIndex + 1, 0.5);
       statusText = this.createText(UI.game.statusText, "", 0.5);
+      backButton = game.add.button(
+        config.width / 2 - screenParams.offsetX + UI.game.backButton.offsetX,
+        UI.game.backButton.marginTop - screenParams.offsetY,
+        'buttons',
+        this.onBackClicked,
+        this,
+        2
+      );
+      backButton.anchor.set(0.5);
+      backButton.setFrames(2, 2, 2);
 
+      UILayer.add(backButton);
       UILayer.add(timerText);
       UILayer.add(levelNumberText);
       UILayer.add(statusText);
@@ -205,7 +217,7 @@ module.exports = function(game, Phaser){
       pauseButton = game.add.button(
         config.width / 2 - screenParams.offsetX + UI.game.pauseButton.offsetX,
         UI.game.pauseButton.marginTop - screenParams.offsetY,
-        'pauseButton',
+        'buttons',
         this.onPauseClicked,
         this,
         0
@@ -243,6 +255,7 @@ module.exports = function(game, Phaser){
     },
     onPauseClicked: function(){
       if(state === states.normal){
+        game.paused = true;
         state = states.paused;
         if(pauseButton){
           pauseButton.input.enabled = false;
@@ -251,8 +264,12 @@ module.exports = function(game, Phaser){
         pausePopup = pausePopupCreator.create(config.width / 2 - screenParams.offsetX, config.height / 2 - screenParams.offsetY);
       }
     },
+    onBackClicked: function(){
+      this.returnToLevels();
+    },
     onContinueClicked: function(){
       if(state === states.paused){
+        game.paused = false;
         state = states.normal;
         if(pauseButton){
           pauseButton.input.enabled = true;
