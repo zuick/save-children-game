@@ -1,7 +1,7 @@
 { "height":3,
  "layers":[
         {
-         "data":[1, 1, 1, 2, 2, 12, 12, 1, 12, 12, 7, 8, 25, 7, 8],
+         "data":[3, 3, 3, 3, 3, 12, 12, 3, 12, 12, 7, 8, 25, 7, 8],
          "height":3,
          "name":"main",
          "opacity":1,
@@ -48,7 +48,7 @@
  "nextobjectid":32,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.0.2",
+ "tiledversion":"1.0.3",
  "tileheight":135,
  "tilesets":[
         {
