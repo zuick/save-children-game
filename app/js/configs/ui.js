@@ -20,22 +20,34 @@ module.exports = {
     backgroundColor: '#271212',
     timerText: {
       marginTop: 50,
-      offsetX: -50, // from center
+      offsetX: -60, // from center
       style: { font: "48px Arial", fill: "#fff", align: "center" }
     },
     levelNumberText: {
       marginTop: 50,
-      offsetX: 500, // from center
+      offsetX: 600, // from center
       style: { font: "48px Arial", fill: "#dd0", align: "center" }
     },
     statusText: {
       marginTop: 50,
-      offsetX: 400, // from center
+      offsetX: 500, // from center
       style: { font: "42px Arial", fill: "#fff", align: "center" }
     },
     pauseButton: {
       marginTop: 48,
-      offsetX: 50, // from center
+      offsetX: 60, // from center
+    },
+    backButton: {
+      marginTop: 48,
+      offsetX: -600, // from center
+    },
+    sparks: {
+      simple: {
+        yRange: -60,
+        duration: 1000,
+        yoyo: false,
+        emptyFramesRange: 15
+      }
     }
   },
   popups: {

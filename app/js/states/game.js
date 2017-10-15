@@ -24,10 +24,10 @@ module.exports = function(game, Phaser){
   var successPopupCreator = require('../modules/popups/success')(game, Phaser);
   var gameoverPopupCreator = require('../modules/popups/gameover')(game, Phaser);
 
-  var children, traps, escapes, savedChildren, hero,
+  var children, traps, escapes, savedChildren, hero, sparksEffects,
     currentLevelIndex, currentBlockIndex, initialChildrenCount,
     middleLayer, backLayer, UILayer,
-    timerText, state, pauseButton, statusText, levelNumberText,
+    timerText, state, pauseButton, statusText, levelNumberText, backButton,
     pausePopup, successPopup, gameoverPopup,
     bonusDelay, bonusPlaces, bonuses, trapsActive, bonusesMarks;
 
@@ -42,6 +42,7 @@ module.exports = function(game, Phaser){
       children = [];
       traps = [];
       escapes = [];
+      sparksEffects = [];
       savedChildren = 0;
       initialChildrenCount = 0;
       currentBlockIndex = blockIndex;
@@ -57,6 +58,7 @@ module.exports = function(game, Phaser){
       statusText = void 0;
       levelNumberText = void 0;
       pauseButton = void 0;
+      backButton = void 0;
 
       if(pausePopup) pausePopup.destroy();
       pausePopup = void 0;
@@ -197,7 +199,18 @@ module.exports = function(game, Phaser){
       timerText = this.createText(UI.game.timerText, utils.formatTime(time), 0.5);
       levelNumberText = this.createText(UI.game.levelNumberText, currentLevelIndex + 1, 0.5);
       statusText = this.createText(UI.game.statusText, "", 0.5);
+      backButton = game.add.button(
+        config.width / 2 - screenParams.offsetX + UI.game.backButton.offsetX,
+        UI.game.backButton.marginTop - screenParams.offsetY,
+        'buttons',
+        this.onBackClicked,
+        this,
+        2
+      );
+      backButton.anchor.set(0.5);
+      backButton.setFrames(2, 2, 2);
 
+      UILayer.add(backButton);
       UILayer.add(timerText);
       UILayer.add(levelNumberText);
       UILayer.add(statusText);
@@ -205,7 +218,7 @@ module.exports = function(game, Phaser){
       pauseButton = game.add.button(
         config.width / 2 - screenParams.offsetX + UI.game.pauseButton.offsetX,
         UI.game.pauseButton.marginTop - screenParams.offsetY,
-        'pauseButton',
+        'buttons',
         this.onPauseClicked,
         this,
         0
@@ -243,6 +256,7 @@ module.exports = function(game, Phaser){
     },
     onPauseClicked: function(){
       if(state === states.normal){
+        game.paused = true;
         state = states.paused;
         if(pauseButton){
           pauseButton.input.enabled = false;
@@ -251,8 +265,12 @@ module.exports = function(game, Phaser){
         pausePopup = pausePopupCreator.create(config.width / 2 - screenParams.offsetX, config.height / 2 - screenParams.offsetY);
       }
     },
+    onBackClicked: function(){
+      this.returnToLevels();
+    },
     onContinueClicked: function(){
       if(state === states.paused){
+        game.paused = false;
         state = states.normal;
         if(pauseButton){
           pauseButton.input.enabled = true;
@@ -304,13 +322,30 @@ module.exports = function(game, Phaser){
         game.add.tween(mark).to( { y: mark.y - 5 }, 1400, "Linear", true, 0, -1, true);
         bonusesMarks.push(mark);
       });
+      sparksEffects.forEach(function(s){
+        s.destroy();
+      })
     },
     activateTraps: function(){
       trapsActive = true;
       game.time.events.add(Phaser.Timer.SECOND * bonusDelay, this.createBonuses, this);
       bonusesMarks.forEach(function(m){m.destroy()});
-      console.log(trapsActive);
-
+      traps.forEach(function(trap){
+        var options = UI.game.sparks.simple;
+        var basicFrames = [0,1,2,3,4,5,6,7,8,9,10,10,10,10,10];
+        for(var i; i <  Math.floor(Math.random() * options.emptyFramesRange); i++){
+          basicFrames.push(10);
+        };
+        var x = trap.getCollider().x + map.get().tileWidth / 2;
+        var y = trap.getCollider().y + map.get().tileHeight / 2
+        var sparks = game.add.sprite(x, y - options.yRange / 2, 'sparks');
+        sparks.animations.add('idle', basicFrames, 16, true);
+        sparks.animations.play('idle');
+        sparks.alpha = 0.9;
+        sparks.anchor.set(0.5);
+        game.add.tween(sparks).to({y: y + options.yRange / 2}, options.duration, "Linear", true, 0, -1, options.yoyo);
+        sparksEffects.push(sparks);
+      });
     },
     update: function(){
       if(state === states.normal){

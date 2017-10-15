@@ -15,8 +15,8 @@ module.exports = function(game, Phaser){
       game.load.image('target', 'assets/target.png');
       game.load.image('bonus', 'assets/bonus.png');
 
-      game.load.image('boy', 'assets/characters/boy.png');
-      game.load.image('girl', 'assets/characters/girl.png');
+      game.load.spritesheet('boy', 'assets/characters/boy.png', 160, 185, 12);
+      game.load.spritesheet('girl', 'assets/characters/girl.png', 160, 185, 12);
       game.load.image('hero', 'assets/characters/hero.png');
 
       game.load.image('ground01', 'assets/ground/01.png');
@@ -54,7 +54,8 @@ module.exports = function(game, Phaser){
       game.load.image('levelsBlockArrowLeft', 'assets/UI/prev.png');
       game.load.image('levelsBlockArrowRight', 'assets/UI/next.png');
       game.load.image('levelsBackground', 'assets/UI/bkg.jpg');
-      game.load.spritesheet('pauseButton', 'assets/UI/buttons.png', 48, 48, 2);
+      game.load.spritesheet('buttons', 'assets/UI/buttons.png', 80, 76, 3);
+      game.load.spritesheet('sparks', 'assets/danger/sparks.png', 220, 180, 11);
       game.load.image('pixel', 'assets/UI/pixel.png');
     },
     create: function(){
