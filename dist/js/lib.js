@@ -392,22 +392,34 @@ module.exports = {
     backgroundColor: '#271212',
     timerText: {
       marginTop: 50,
-      offsetX: -50, // from center
+      offsetX: -60, // from center
       style: { font: "48px Arial", fill: "#fff", align: "center" }
     },
     levelNumberText: {
       marginTop: 50,
-      offsetX: 500, // from center
+      offsetX: 600, // from center
       style: { font: "48px Arial", fill: "#dd0", align: "center" }
     },
     statusText: {
       marginTop: 50,
-      offsetX: 400, // from center
+      offsetX: 500, // from center
       style: { font: "42px Arial", fill: "#fff", align: "center" }
     },
     pauseButton: {
       marginTop: 48,
-      offsetX: 50, // from center
+      offsetX: 60, // from center
+    },
+    backButton: {
+      marginTop: 48,
+      offsetX: -600, // from center
+    },
+    sparks: {
+      simple: {
+        yRange: -60,
+        duration: 1000,
+        yoyo: false,
+        emptyFramesRange: 15
+      }
     }
   },
   popups: {
@@ -887,9 +899,6 @@ module.exports = function(game, Phaser){
       var base = basic.create(x, y, UI.popups.pause.opacity);
       var text = game.add.text(x, y, l10n.get('PAUSE'), UI.popups.pause.textStyle);
       text.anchor.set(0.5);
-      text.alpha = 0.1;
-      var tween = game.add.tween(text).to( { alpha: 1 }, 500, "Linear", true, 0, -1, true);
-
       base.add(text);
       return base;
     }
@@ -957,6 +966,7 @@ module.exports = function(game, Phaser){
     var preferedDir;
 
     this.child;
+    this.inTrap = false;
     this.create = function(x, y, _map, _speed, spriteOptions, bodyScale, properties){
       preferedDir = typeof(properties) === 'object' ? properties.dir : '';
       preferForward = typeof(properties) === 'object' ? properties.preferForward : false;
@@ -972,6 +982,10 @@ module.exports = function(game, Phaser){
       this.child = game.add.sprite(spriteOptions.offsetX + w/2, spriteOptions.offsetY + h/2, spriteOptions.key);
       this.child.anchor.x = 0.5;
       this.child.anchor.y = 0.5;
+      this.child.animations.add('walk_left_right', [0,1,2,3], 4, true);
+      this.child.animations.add('walk_up', [4,5,6,7], 4, true);
+      this.child.animations.add('walk_down', [8,9,10,11], 4, true);
+      this.child.animations.add('idle', [1], 4, true);
       sprite.addChild(this.child);
 
       sprite.texture.width = w;
@@ -985,73 +999,85 @@ module.exports = function(game, Phaser){
     }
 
     this.update = function(){
-      if(!currentDir){
-        var possibleWays = map.getTileWays(map.getTileAt(sprite.x, sprite.y));
-        if(preferedDir && possibleWays.indexOf(preferedDir) !== -1){
-          currentDir = preferedDir;
-        }else{
-          currentDir = directions.getRandomFrom(possibleWays);
-        }
-      }else{
-        var x = currentDir === 'right' || currentDir === 'down' ? floatX : floatX + sprite.texture.width - 1;
-        var y = currentDir === 'right' || currentDir === 'down' ? floatY : floatY + sprite.texture.height - 1;
-        currentTile = map.getTileAt(x, y);
-        nextTile = map.getNextTileFrom(currentTile, currentDir);
-        if(nextTile){
-          var delta = this.getDeltaTo(nextTile);
-          var nextDeltaTile = map.getTileAt(x + delta.x, y + delta.y);
-          if(nextDeltaTile.x === nextTile.x && nextDeltaTile.y === nextTile.y){
-            var ways = map.getTileWays(nextDeltaTile);
-            var backwardDir = directions.getOpposite(currentDir);
-            var canMoveForward = ways.indexOf(currentDir) !== -1;
-            var canMoveBackward = ways.indexOf(backwardDir) !== -1;
-            var exludeWays = [backwardDir];
-            if(preferTurning) exludeWays.push(currentDir);
+      if(!this.inTrap){
+        var oldValue = currentDir;
 
-            var turnWays = difference(ways, exludeWays);
-            if(preferForward){
-              if(!canMoveForward){
+        if(!currentDir){
+          var possibleWays = map.getTileWays(map.getTileAt(sprite.x, sprite.y));
+          if(preferedDir && possibleWays.indexOf(preferedDir) !== -1){
+            currentDir = preferedDir;
+          }else{
+            currentDir = directions.getRandomFrom(possibleWays);
+          }
+        }else{
+          var x = currentDir === 'right' || currentDir === 'down' ? floatX : floatX + sprite.texture.width - 1;
+          var y = currentDir === 'right' || currentDir === 'down' ? floatY : floatY + sprite.texture.height - 1;
+          currentTile = map.getTileAt(x, y);
+          nextTile = map.getNextTileFrom(currentTile, currentDir);
+          if(nextTile){
+            var delta = this.getDeltaTo(nextTile);
+            var nextDeltaTile = map.getTileAt(x + delta.x, y + delta.y);
+            if(nextDeltaTile.x === nextTile.x && nextDeltaTile.y === nextTile.y){
+              var ways = map.getTileWays(nextDeltaTile);
+              var backwardDir = directions.getOpposite(currentDir);
+              var canMoveForward = ways.indexOf(currentDir) !== -1;
+              var canMoveBackward = ways.indexOf(backwardDir) !== -1;
+              var exludeWays = [backwardDir];
+              if(preferTurning) exludeWays.push(currentDir);
+
+              var turnWays = difference(ways, exludeWays);
+              if(preferForward){
+                if(!canMoveForward){
+                  if(turnWays.length > 0){
+                    currentDir = directions.getRandomFrom(turnWays);
+                  }else if(canMoveBackward){
+                    currentDir = backwardDir;
+                  }
+                  delta = this.getDeltaTo(nextTile, true);
+                }
+              }else{
                 if(turnWays.length > 0){
                   currentDir = directions.getRandomFrom(turnWays);
-                }else if(canMoveBackward){
+                  delta = this.getDeltaTo(nextTile, true);
+                }else if(!canMoveForward && canMoveBackward){
                   currentDir = backwardDir;
+                  delta = this.getDeltaTo(nextTile, true);
+                }else{
+                  currentDir = void 0;
                 }
-                delta = this.getDeltaTo(nextTile, true);
-              }
-            }else{
-              if(turnWays.length > 0){
-                currentDir = directions.getRandomFrom(turnWays);
-                delta = this.getDeltaTo(nextTile, true);
-              }else if(!canMoveForward && canMoveBackward){
-                currentDir = backwardDir;
-                delta = this.getDeltaTo(nextTile, true);
-              }else{
-                currentDir = void 0;
               }
             }
+            floatX += delta.x;
+            floatY += delta.y;
+            sprite.x = Math.round(floatX);
+            sprite.y = Math.round(floatY);
+          }else{
+            currentDir = void 0;
+            var pos = map.getTileWorldXY(currentTile);
+            sprite.x = pos.x;
+            sprite.y = pos.y;
+            floatX = sprite.x;
+            floatY = sprite.y;
           }
-          floatX += delta.x;
-          floatY += delta.y;
-          sprite.x = Math.round(floatX);
-          sprite.y = Math.round(floatY);
-        }else{
-          currentDir = void 0;
-          var pos = map.getTileWorldXY(currentTile);
-          sprite.x = pos.x;
-          sprite.y = pos.y;
-          floatX = sprite.x;
-          floatY = sprite.y;
         }
-      }
 
-      if(currentDir === 'left'){
-        sprite.children.forEach(function(innerSprite){
-          innerSprite.scale.x = -1;
-        })
-      }else if(currentDir === 'right'){
-        sprite.children.forEach(function(innerSprite){
-          innerSprite.scale.x = 1;
-        })
+        if(currentDir === 'left'){
+          sprite.children.forEach(function(innerSprite){
+            innerSprite.scale.x = 1;
+          })
+          this.child.animations.play('walk_left_right');
+        }else if(currentDir === 'right'){
+          sprite.children.forEach(function(innerSprite){
+            innerSprite.scale.x = -1;
+          })
+          this.child.animations.play('walk_left_right');
+        }else if(currentDir === 'up'){
+          this.child.animations.play('walk_up');
+        }else if(currentDir === 'down'){
+          this.child.animations.play('walk_down');
+        }else{
+          this.child.animations.play('idle');
+        }
       }
     }
 
@@ -1124,6 +1150,8 @@ module.exports = function(game, Phaser){
              point.y <= rect.y + rect.h;
     }
     this.onTrap = function(){
+      this.inTrap = true;
+      this.child.animations.stop();
       game.add.tween(sprite).to( { alpha: 0.2 }, 100, "Linear", true, 0, 3, true);
     }
 
@@ -1292,10 +1320,10 @@ module.exports = function(game, Phaser){
   var successPopupCreator = require('../modules/popups/success')(game, Phaser);
   var gameoverPopupCreator = require('../modules/popups/gameover')(game, Phaser);
 
-  var children, traps, escapes, savedChildren, hero,
+  var children, traps, escapes, savedChildren, hero, sparksEffects,
     currentLevelIndex, currentBlockIndex, initialChildrenCount,
     middleLayer, backLayer, UILayer,
-    timerText, state, pauseButton, statusText, levelNumberText,
+    timerText, state, pauseButton, statusText, levelNumberText, backButton,
     pausePopup, successPopup, gameoverPopup,
     bonusDelay, bonusPlaces, bonuses, trapsActive, bonusesMarks;
 
@@ -1310,6 +1338,7 @@ module.exports = function(game, Phaser){
       children = [];
       traps = [];
       escapes = [];
+      sparksEffects = [];
       savedChildren = 0;
       initialChildrenCount = 0;
       currentBlockIndex = blockIndex;
@@ -1325,6 +1354,7 @@ module.exports = function(game, Phaser){
       statusText = void 0;
       levelNumberText = void 0;
       pauseButton = void 0;
+      backButton = void 0;
 
       if(pausePopup) pausePopup.destroy();
       pausePopup = void 0;
@@ -1465,7 +1495,18 @@ module.exports = function(game, Phaser){
       timerText = this.createText(UI.game.timerText, utils.formatTime(time), 0.5);
       levelNumberText = this.createText(UI.game.levelNumberText, currentLevelIndex + 1, 0.5);
       statusText = this.createText(UI.game.statusText, "", 0.5);
+      backButton = game.add.button(
+        config.width / 2 - screenParams.offsetX + UI.game.backButton.offsetX,
+        UI.game.backButton.marginTop - screenParams.offsetY,
+        'buttons',
+        this.onBackClicked,
+        this,
+        2
+      );
+      backButton.anchor.set(0.5);
+      backButton.setFrames(2, 2, 2);
 
+      UILayer.add(backButton);
       UILayer.add(timerText);
       UILayer.add(levelNumberText);
       UILayer.add(statusText);
@@ -1473,7 +1514,7 @@ module.exports = function(game, Phaser){
       pauseButton = game.add.button(
         config.width / 2 - screenParams.offsetX + UI.game.pauseButton.offsetX,
         UI.game.pauseButton.marginTop - screenParams.offsetY,
-        'pauseButton',
+        'buttons',
         this.onPauseClicked,
         this,
         0
@@ -1511,6 +1552,7 @@ module.exports = function(game, Phaser){
     },
     onPauseClicked: function(){
       if(state === states.normal){
+        game.paused = true;
         state = states.paused;
         if(pauseButton){
           pauseButton.input.enabled = false;
@@ -1519,8 +1561,12 @@ module.exports = function(game, Phaser){
         pausePopup = pausePopupCreator.create(config.width / 2 - screenParams.offsetX, config.height / 2 - screenParams.offsetY);
       }
     },
+    onBackClicked: function(){
+      this.returnToLevels();
+    },
     onContinueClicked: function(){
       if(state === states.paused){
+        game.paused = false;
         state = states.normal;
         if(pauseButton){
           pauseButton.input.enabled = true;
@@ -1572,13 +1618,30 @@ module.exports = function(game, Phaser){
         game.add.tween(mark).to( { y: mark.y - 5 }, 1400, "Linear", true, 0, -1, true);
         bonusesMarks.push(mark);
       });
+      sparksEffects.forEach(function(s){
+        s.destroy();
+      })
     },
     activateTraps: function(){
       trapsActive = true;
       game.time.events.add(Phaser.Timer.SECOND * bonusDelay, this.createBonuses, this);
       bonusesMarks.forEach(function(m){m.destroy()});
-      console.log(trapsActive);
-
+      traps.forEach(function(trap){
+        var options = UI.game.sparks.simple;
+        var basicFrames = [0,1,2,3,4,5,6,7,8,9,10,10,10,10,10];
+        for(var i; i <  Math.floor(Math.random() * options.emptyFramesRange); i++){
+          basicFrames.push(10);
+        };
+        var x = trap.getCollider().x + map.get().tileWidth / 2;
+        var y = trap.getCollider().y + map.get().tileHeight / 2
+        var sparks = game.add.sprite(x, y - options.yRange / 2, 'sparks');
+        sparks.animations.add('idle', basicFrames, 16, true);
+        sparks.animations.play('idle');
+        sparks.alpha = 0.9;
+        sparks.anchor.set(0.5);
+        game.add.tween(sparks).to({y: y + options.yRange / 2}, options.duration, "Linear", true, 0, -1, options.yoyo);
+        sparksEffects.push(sparks);
+      });
     },
     update: function(){
       if(state === states.normal){
@@ -1845,8 +1908,8 @@ module.exports = function(game, Phaser){
       game.load.image('target', 'assets/target.png');
       game.load.image('bonus', 'assets/bonus.png');
 
-      game.load.image('boy', 'assets/characters/boy.png');
-      game.load.image('girl', 'assets/characters/girl.png');
+      game.load.spritesheet('boy', 'assets/characters/boy.png', 160, 185, 12);
+      game.load.spritesheet('girl', 'assets/characters/girl.png', 160, 185, 12);
       game.load.image('hero', 'assets/characters/hero.png');
 
       game.load.image('ground01', 'assets/ground/01.png');
@@ -1884,7 +1947,8 @@ module.exports = function(game, Phaser){
       game.load.image('levelsBlockArrowLeft', 'assets/UI/prev.png');
       game.load.image('levelsBlockArrowRight', 'assets/UI/next.png');
       game.load.image('levelsBackground', 'assets/UI/bkg.jpg');
-      game.load.spritesheet('pauseButton', 'assets/UI/buttons.png', 48, 48, 2);
+      game.load.spritesheet('buttons', 'assets/UI/buttons.png', 80, 76, 3);
+      game.load.spritesheet('sparks', 'assets/danger/sparks.png', 220, 180, 11);
       game.load.image('pixel', 'assets/UI/pixel.png');
     },
     create: function(){
