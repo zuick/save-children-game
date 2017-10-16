@@ -1,15 +1,16 @@
 module.exports = {
   levels: {
     backgroundColor: '#000',
-    levelItem: { width: 200, height: 250 },
+    levelItem: { width: 215, height: 260 },
     levelItemsPadding: 0,
-    blockWidthScale: 0.8,
+    blockWidthScale: 0.85,
     blockMarginTop: 170,
     blockArrowMarginLeft: 50,
     levelItemTextStyle: { font: "72px Arial", fill: "#fff", align: "center" },
     levelItemTextOffsetY: 20,
     levelItemTextOffsetX: -5,
-    headerTextStyle: { font: "48px Arial", fill: "#333", align: "center" },
+    headerTextStyle: { font: "48px Arial", fill: "#fff", align: "center" },
+    headerHeight: 80,
     types: {
       0: 'levelItemCity',
       1: 'levelItemCountrySide',
@@ -18,20 +19,28 @@ module.exports = {
   },
   game: {
     backgroundColor: '#271212',
+    timer: {
+      marginTop: 10,
+      offsetX: -220, // from center
+    },
+    status: {
+      marginTop: 5,
+      offsetX: 600, // from center
+    },
     timerText: {
       marginTop: 50,
-      offsetX: -60, // from center
-      style: { font: "48px Arial", fill: "#fff", align: "center" }
+      offsetX: -90, // from center
+      style: { font: "35px Arial", fill: "#fff", align: "center" }
     },
     levelNumberText: {
-      marginTop: 50,
-      offsetX: 600, // from center
-      style: { font: "48px Arial", fill: "#dd0", align: "center" }
+      marginTop: 55,
+      offsetX: 838, // from center
+      style: { font: "48px Arial", fill: "#fff", align: "center" }
     },
     statusText: {
-      marginTop: 50,
-      offsetX: 500, // from center
-      style: { font: "42px Arial", fill: "#fff", align: "center" }
+      marginTop: 55,
+      offsetX: 735, // from center
+      style: { font: "40px Arial", fill: "#579D00", align: "center" }
     },
     pauseButton: {
       marginTop: 48,
@@ -39,7 +48,7 @@ module.exports = {
     },
     backButton: {
       marginTop: 48,
-      offsetX: -600, // from center
+      offsetX: -800, // from center
     },
     sparks: {
       simple: {
@@ -51,7 +60,7 @@ module.exports = {
     }
   },
   popups: {
-    textButtonStyle: { font: "48px Arial", fill: "#fff", align: "center" },
+    textButtonStyle: { font: "36px Arial", fill: "#fff", align: "center" },
     pause: {
       textStyle: { font: "64px Arial", fill: "#dd0", align: "center" },
       opacity: 0.5
@@ -61,23 +70,31 @@ module.exports = {
       height: 500,
       opacity: 0.5,
       header: {
-        style: { font: "48px Arial", fill: "#fff", align: "center" },
-        offsetY: -180
+        style: { font: "40px Arial", fill: "#fff", align: "center" },
+        offsetY: -265,
+        titleOffsetY: -260,
+        stroke: "#111",
+        strokeThickness: 2,
+        scale: 1.1
+      },
+      icon: {
+        offsetY: -100
       },
       stat: {
-        style: { font: "48px Arial", fill: "#fff", align: "center" },
-        offsetY: -50
+        style: { font: "36px Arial", fill: "#B04E0D", align: "center" },
+        offsetY: 40
       },
       time: {
-        style: { font: "48px Arial", fill: "#fff", align: "center" },
-        offsetY: 50
+        style: { font: "36px Arial", fill: "#B04E0D", align: "center" },
+        offsetY: 85
       },
       buttons: {
-        offsetY: 200,
-        toMenuOffsetX: -310,
-        toLevelsOffsetX: -100,
-        replayOffsetX: 110,
-        nextOffsetX: 320
+        offsetY: 165,
+        toMenuOffsetX: -190,
+        toLevelsOffsetX: -115,
+        replayOffsetX: -40,
+        nextOffsetX: 105,
+        nextTextStyle: { font: "36px Arial", fill: "#fff", align: "center" }
       }
     },
     gameover: {
@@ -85,22 +102,29 @@ module.exports = {
       height: 500,
       opacity: 0.5,
       header: {
-        style: { font: "48px Arial", fill: "#fff", align: "center" },
-        offsetY: -180
+        style: { font: "40px Arial", fill: "#fff", align: "center" },
+        offsetY: -235,
+        titleOffsetY: -230,
+        stroke: "#111",
+        strokeThickness: 2,
+        scale: 1.1
+      },
+      icon: {
+        offsetY: -75
       },
       stat: {
-        style: { font: "48px Arial", fill: "#fff", align: "center" },
-        offsetY: -50
+        style: { font: "36px Arial", fill: "#B04E0D", align: "center" },
+        offsetY: 45
       },
       time: {
-        style: { font: "48px Arial", fill: "#fff", align: "center" },
-        offsetY: 50
+        style: { font: "36px Arial", fill: "#B04E0D", align: "center" },
+        offsetY: 85
       },
       buttons: {
-        offsetY: 200,
-        toMenuOffsetX: -210,
+        offsetY: 150,
+        toMenuOffsetX: -150,
         replayOffsetX: 0,
-        toLevelsOffsetX: 210
+        toLevelsOffsetX: 150
       }
     }
   }

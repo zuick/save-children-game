@@ -13,7 +13,7 @@ module.exports = function(game, Phaser){
 
   var currentBlockIndex = 0;
   var levelItems = [];
-  var prevArrow, nextArrow, header;
+  var prevArrow, nextArrow, header, headerTint;
 
   return {
     init: function(index){
@@ -27,6 +27,8 @@ module.exports = function(game, Phaser){
       var text = game.add.text(item.width / 2 + UI.levels.levelItemTextOffsetX, item.height / 2 + UI.levels.levelItemTextOffsetY, index + 1, UI.levels.levelItemTextStyle);
       text.anchor.x = 0.5;
       text.anchor.y = 0.5;
+      text.fontWeight = 'bold';
+      text.setShadow(3, 3, 'rgba(0,0,0,0.5)', 0, true);
       item.addChild(text);
       return item;
     },
@@ -78,6 +80,16 @@ module.exports = function(game, Phaser){
       }
     },
 
+    drawHeaderTint: function(){
+      if(headerTint) headerTint.destroy();
+      headerTint = game.add.sprite(config.width / 2, UI.levels.blockMarginTop / 2, 'pixel');
+      headerTint.anchor.set(0.5);
+      headerTint.tint = 0x000000;
+      headerTint.width = config.width;
+      headerTint.height = UI.levels.headerHeight;
+      headerTint.alpha = 0.5;
+    },
+
     onNextBlock: function(){
       if(currentBlockIndex + 1 < levelsConfig.length){
         currentBlockIndex++;
@@ -99,6 +111,7 @@ module.exports = function(game, Phaser){
 
     create: function(){
       game.add.sprite(0, 0, 'levelsBackground');
+      this.drawHeaderTint();
       game.stage.backgroundColor = UI.levels.backgroundColor;
       game.world.setBounds(0, 0, config.width, config.height);
       this.redraw();
