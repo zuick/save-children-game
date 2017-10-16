@@ -51,7 +51,7 @@ module.exports = {
     }
   },
   popups: {
-    textButtonStyle: { font: "48px Arial", fill: "#fff", align: "center" },
+    textButtonStyle: { font: "36px Arial", fill: "#fff", align: "center" },
     pause: {
       textStyle: { font: "64px Arial", fill: "#dd0", align: "center" },
       opacity: 0.5
