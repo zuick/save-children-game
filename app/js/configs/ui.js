@@ -61,23 +61,31 @@ module.exports = {
       height: 500,
       opacity: 0.5,
       header: {
-        style: { font: "48px Arial", fill: "#fff", align: "center" },
-        offsetY: -180
+        style: { font: "40px Arial", fill: "#fff", align: "center" },
+        offsetY: -265,
+        titleOffsetY: -260,
+        stroke: "#111",
+        strokeThickness: 2,
+        scale: 1.1
+      },
+      icon: {
+        offsetY: -100
       },
       stat: {
-        style: { font: "48px Arial", fill: "#fff", align: "center" },
-        offsetY: -50
+        style: { font: "36px Arial", fill: "#B04E0D", align: "center" },
+        offsetY: 40
       },
       time: {
-        style: { font: "48px Arial", fill: "#fff", align: "center" },
-        offsetY: 50
+        style: { font: "36px Arial", fill: "#B04E0D", align: "center" },
+        offsetY: 85
       },
       buttons: {
-        offsetY: 200,
-        toMenuOffsetX: -310,
-        toLevelsOffsetX: -100,
-        replayOffsetX: 110,
-        nextOffsetX: 320
+        offsetY: 165,
+        toMenuOffsetX: -190,
+        toLevelsOffsetX: -115,
+        replayOffsetX: -40,
+        nextOffsetX: 105,
+        nextTextStyle: { font: "36px Arial", fill: "#fff", align: "center" }
       }
     },
     gameover: {
@@ -85,22 +93,29 @@ module.exports = {
       height: 500,
       opacity: 0.5,
       header: {
-        style: { font: "48px Arial", fill: "#fff", align: "center" },
-        offsetY: -180
+        style: { font: "40px Arial", fill: "#fff", align: "center" },
+        offsetY: -235,
+        titleOffsetY: -230,
+        stroke: "#111",
+        strokeThickness: 2,
+        scale: 1.1
+      },
+      icon: {
+        offsetY: -75
       },
       stat: {
-        style: { font: "48px Arial", fill: "#fff", align: "center" },
-        offsetY: -50
+        style: { font: "36px Arial", fill: "#B04E0D", align: "center" },
+        offsetY: 45
       },
       time: {
-        style: { font: "48px Arial", fill: "#fff", align: "center" },
-        offsetY: 50
+        style: { font: "36px Arial", fill: "#B04E0D", align: "center" },
+        offsetY: 85
       },
       buttons: {
-        offsetY: 200,
-        toMenuOffsetX: -210,
+        offsetY: 150,
+        toMenuOffsetX: -150,
         replayOffsetX: 0,
-        toLevelsOffsetX: 210
+        toLevelsOffsetX: 150
       }
     }
   }

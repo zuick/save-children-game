@@ -227,7 +227,7 @@ module.exports = function(game, Phaser){
       pauseButton.anchor.set(0.5);
       UILayer.add(pauseButton);
 
-      this.updateStatusText();savedChildren + " / " + children.length
+      this.updateStatusText();
     },
     onSuccess: function(){
       successPopup = successPopupCreator.create(

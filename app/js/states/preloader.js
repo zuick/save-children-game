@@ -54,7 +54,12 @@ module.exports = function(game, Phaser){
       game.load.image('levelsBlockArrowLeft', 'assets/UI/prev.png');
       game.load.image('levelsBlockArrowRight', 'assets/UI/next.png');
       game.load.image('levelsBackground', 'assets/UI/bkg.jpg');
-      game.load.spritesheet('buttons', 'assets/UI/buttons.png', 80, 76, 3);
+      game.load.image('popup', 'assets/UI/popup.png');
+      game.load.image('iconSuccess', 'assets/UI/icon_success.png');
+      game.load.image('iconFail', 'assets/UI/icon_fail.png');
+      game.load.spritesheet('buttons', 'assets/UI/buttons.png', 80, 76, 6);
+      game.load.spritesheet('buttonsLarge', 'assets/UI/buttons_large.png', 200, 80, 2);
+      game.load.spritesheet('popupTitle', 'assets/UI/popup_title.png', 391, 72, 2);
       game.load.spritesheet('sparks', 'assets/danger/sparks.png', 220, 180, 11);
       game.load.image('pixel', 'assets/UI/pixel.png');
     },
