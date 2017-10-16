@@ -1,9 +1,9 @@
 module.exports = {
   levels: {
     backgroundColor: '#000',
-    levelItem: { width: 200, height: 250 },
+    levelItem: { width: 215, height: 260 },
     levelItemsPadding: 0,
-    blockWidthScale: 0.8,
+    blockWidthScale: 0.85,
     blockMarginTop: 170,
     blockArrowMarginLeft: 50,
     levelItemTextStyle: { font: "72px Arial", fill: "#fff", align: "center" },
@@ -51,7 +51,7 @@ module.exports = {
     }
   },
   popups: {
-    textButtonStyle: { font: "48px Arial", fill: "#fff", align: "center" },
+    textButtonStyle: { font: "36px Arial", fill: "#fff", align: "center" },
     pause: {
       textStyle: { font: "64px Arial", fill: "#dd0", align: "center" },
       opacity: 0.5
