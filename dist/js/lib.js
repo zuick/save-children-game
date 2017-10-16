@@ -43,9 +43,17 @@ module.exports = {
 
 },{}],2:[function(require,module,exports){
 module.exports = {
-  "DIFFICULTY_LEVEL": "ҠАТМАРЛЫЛЫҠ КИМӘЛЕ: {0}",
-  "LEVEL_NUMBER": "КИМӘЛ {0}-{1}",
-  "PAUSE": "Тынлыҡ"
+  "DIFFICULTY_LEVEL": "Ҡатмарлылыҡ кимәле: {0}",
+  "LEVEL_NUMBER": "Кимәл {0}-{1}",
+  "PAUSE": "Тынлыҡ",
+  "CONGRATULATIONS": "Еңеү!",
+  "FAIL": "Еңелеү",
+  "TIME": "Ваҡыт: {0}",
+  "STAT": "Ҡотҡарылды: {0}/{1}",
+  "MENU": "МЕНЮ",
+  "REPLAY": "Ҡабат уйнау",
+  "LEVELS": "Кимәлдәр",
+  "NEXT": "Артабан"
 }
 
 },{}],3:[function(require,module,exports){
@@ -53,10 +61,14 @@ module.exports = {
   "DIFFICULTY_LEVEL": "Уровень сложности: {0}",
   "LEVEL_NUMBER": "Уровень {0}-{1}",
   "PAUSE": "Пауза",
-  "CONGRATULATIONS": "Поздравляем!",
-  "FAIL": "Поражение :(",
+  "CONGRATULATIONS": "Победа!",
+  "FAIL": "Поражение",
   "TIME": "Время: {0}",
-  "STAT": "Спасено детей: {0}/{1}"
+  "STAT": "Спасено детей: {0}/{1}",
+  "MENU": "МЕНЮ",
+  "REPLAY": "Переиграть",
+  "LEVELS": "Уровни",
+  "NEXT": "Далее"
 }
 
 },{}],4:[function(require,module,exports){
@@ -381,7 +393,8 @@ module.exports = {
     levelItemTextStyle: { font: "72px Arial", fill: "#fff", align: "center" },
     levelItemTextOffsetY: 20,
     levelItemTextOffsetX: -5,
-    headerTextStyle: { font: "48px Arial", fill: "#333", align: "center" },
+    headerTextStyle: { font: "48px Arial", fill: "#fff", align: "center" },
+    headerHeight: 80,
     types: {
       0: 'levelItemCity',
       1: 'levelItemCountrySide',
@@ -390,20 +403,28 @@ module.exports = {
   },
   game: {
     backgroundColor: '#271212',
+    timer: {
+      marginTop: 10,
+      offsetX: -220, // from center
+    },
+    status: {
+      marginTop: 5,
+      offsetX: 600, // from center
+    },
     timerText: {
       marginTop: 50,
-      offsetX: -60, // from center
-      style: { font: "48px Arial", fill: "#fff", align: "center" }
+      offsetX: -90, // from center
+      style: { font: "35px Arial", fill: "#fff", align: "center" }
     },
     levelNumberText: {
-      marginTop: 50,
-      offsetX: 600, // from center
-      style: { font: "48px Arial", fill: "#dd0", align: "center" }
+      marginTop: 55,
+      offsetX: 838, // from center
+      style: { font: "48px Arial", fill: "#fff", align: "center" }
     },
     statusText: {
-      marginTop: 50,
-      offsetX: 500, // from center
-      style: { font: "42px Arial", fill: "#fff", align: "center" }
+      marginTop: 55,
+      offsetX: 735, // from center
+      style: { font: "40px Arial", fill: "#579D00", align: "center" }
     },
     pauseButton: {
       marginTop: 48,
@@ -411,7 +432,7 @@ module.exports = {
     },
     backButton: {
       marginTop: 48,
-      offsetX: -600, // from center
+      offsetX: -800, // from center
     },
     sparks: {
       simple: {
@@ -433,23 +454,31 @@ module.exports = {
       height: 500,
       opacity: 0.5,
       header: {
-        style: { font: "48px Arial", fill: "#fff", align: "center" },
-        offsetY: -180
+        style: { font: "40px Arial", fill: "#fff", align: "center" },
+        offsetY: -265,
+        titleOffsetY: -260,
+        stroke: "#111",
+        strokeThickness: 2,
+        scale: 1.1
+      },
+      icon: {
+        offsetY: -100
       },
       stat: {
-        style: { font: "48px Arial", fill: "#fff", align: "center" },
-        offsetY: -50
+        style: { font: "36px Arial", fill: "#B04E0D", align: "center" },
+        offsetY: 40
       },
       time: {
-        style: { font: "48px Arial", fill: "#fff", align: "center" },
-        offsetY: 50
+        style: { font: "36px Arial", fill: "#B04E0D", align: "center" },
+        offsetY: 85
       },
       buttons: {
-        offsetY: 200,
-        toMenuOffsetX: -310,
-        toLevelsOffsetX: -100,
-        replayOffsetX: 110,
-        nextOffsetX: 320
+        offsetY: 165,
+        toMenuOffsetX: -190,
+        toLevelsOffsetX: -115,
+        replayOffsetX: -40,
+        nextOffsetX: 105,
+        nextTextStyle: { font: "36px Arial", fill: "#fff", align: "center" }
       }
     },
     gameover: {
@@ -457,22 +486,29 @@ module.exports = {
       height: 500,
       opacity: 0.5,
       header: {
-        style: { font: "48px Arial", fill: "#fff", align: "center" },
-        offsetY: -180
+        style: { font: "40px Arial", fill: "#fff", align: "center" },
+        offsetY: -235,
+        titleOffsetY: -230,
+        stroke: "#111",
+        strokeThickness: 2,
+        scale: 1.1
+      },
+      icon: {
+        offsetY: -75
       },
       stat: {
-        style: { font: "48px Arial", fill: "#fff", align: "center" },
-        offsetY: -50
+        style: { font: "36px Arial", fill: "#B04E0D", align: "center" },
+        offsetY: 45
       },
       time: {
-        style: { font: "48px Arial", fill: "#fff", align: "center" },
-        offsetY: 50
+        style: { font: "36px Arial", fill: "#B04E0D", align: "center" },
+        offsetY: 85
       },
       buttons: {
-        offsetY: 200,
-        toMenuOffsetX: -210,
+        offsetY: 150,
+        toMenuOffsetX: -150,
         replayOffsetX: 0,
-        toLevelsOffsetX: 210
+        toLevelsOffsetX: 150
       }
     }
   }
@@ -811,19 +847,21 @@ var UI = require('../../configs/ui');
 
 module.exports = function(game, Phaser){
   return {
-    create: function(x, y, opacity){
+    create: function(x, y, opacity, key){
       var popup = game.add.group();
-      var tint = this.tint(x, y, config.width, config.height, opacity);
+      var tint = this.tint(x, y, config.width, config.height, opacity, key);
       popup.add(tint);
       return popup;
     },
     tint: function(x, y, w, h, opacity, color, key){
       var tint = game.add.sprite(x || config.width / 2, y || config.height / 2, key || 'pixel');
-      tint.width = w;
-      tint.height = h;
       tint.anchor.set(0.5);
-      tint.tint = color || 0x000000;
-      tint.alpha = opacity || 0.5;
+      if(!key){
+        tint.width = w;
+        tint.height = h;
+        tint.tint = color || 0x000000;
+        tint.alpha = opacity || 0.5;
+      }
       return tint;
     },
     textButton: function(x, y, w, h, color, text, callback, context){
@@ -843,6 +881,12 @@ module.exports = function(game, Phaser){
       group.add(tint);
       group.add(text);
       return tint;
+    },
+    button: function(x, y, key, frame, onClick, context){
+      var button = game.add.button(x, y, key, onClick, context, frame);
+      button.anchor.set(0.5);
+      button.setFrames(frame,frame,frame);
+      return button;
     }
   }
 }
@@ -859,10 +903,19 @@ module.exports = function(game, Phaser){
     create: function(x, y, time, children, childrenTotal, onToMenu, onToLevels, onReplay, context){
       var options = UI.popups.gameover;
       var base = basic.create(x, y, options.opacity);
-      var win = basic.tint(x, y, options.width, options.height, 0.9, 0xc24729);
+      var win = basic.tint(x, y, options.width, options.height, 1, 0xc24729, 'popup');
 
-      var text = game.add.text(x, y + options.header.offsetY, l10n.get('FAIL'), options.header.style);
+      var title = game.add.sprite(x, y + options.header.offsetY, 'popupTitle');
+      title.frame = 1;
+      title.anchor.set(0.5);
+
+      var text = game.add.text(x, y + options.header.titleOffsetY, l10n.get('FAIL'), options.header.style);
       text.anchor.set(0.5);
+      text.stroke = options.header.stroke;
+      text.strokeThickness = options.header.strokeThickness;
+
+      var icon = game.add.sprite(x, y + options.icon.offsetY, 'iconFail');
+      icon.anchor.set(0.5);
 
       var time = game.add.text(x, y + options.time.offsetY, l10n.get('TIME', [utils.formatTime(time)]), options.time.style);
       time.anchor.set(0.5);
@@ -870,11 +923,13 @@ module.exports = function(game, Phaser){
       var stat = game.add.text(x, y + options.stat.offsetY, l10n.get('STAT', [children, childrenTotal]), options.stat.style);
       stat.anchor.set(0.5);
 
-      var toMenu = basic.textButton(x + options.buttons.toMenuOffsetX, y + options.buttons.offsetY, 200, 75, '', 'В меню', onToMenu, context);
-      var replay = basic.textButton(x + options.buttons.replayOffsetX, y + options.buttons.offsetY, 200, 75, '#5d2', 'Переиграть', onReplay, context);
-      var toLevels = basic.textButton(x + options.buttons.toLevelsOffsetX, y + options.buttons.offsetY, 200, 75, '', 'Уровни', onToLevels, context);
+      var toMenu = basic.button(x + options.buttons.toMenuOffsetX, y + options.buttons.offsetY, 'buttons', 4, onToMenu, context);
+      var replay = basic.button(x + options.buttons.replayOffsetX, y + options.buttons.offsetY, 'buttonsLarge', 1, onReplay, context);
+      var toLevels = basic.button(x + options.buttons.toLevelsOffsetX, y + options.buttons.offsetY, 'buttons', 3, onToLevels, context);
 
       base.add(win);
+      base.add(title);
+      base.add(icon);
       base.add(text);
       base.add(time);
       base.add(stat);
@@ -917,10 +972,20 @@ module.exports = function(game, Phaser){
     create: function(x, y, time, children, childrenTotal, onToMenu, onToLevels, onReplay, onNext, context){
       var options = UI.popups.success;
       var base = basic.create(x, y, options.opacity);
-      var win = basic.tint(x, y, options.width, options.height, 0.9, 0xc29629);
+      var win = basic.tint(x, y, options.width, options.height, 1, 0xc24729, 'popup');
+      win.scale.set(options.header.scale)
 
-      var text = game.add.text(x, y + options.header.offsetY, l10n.get('CONGRATULATIONS'), options.header.style);
+      var title = game.add.sprite(x, y + options.header.offsetY, 'popupTitle');
+      title.frame = 0;
+      title.anchor.set(0.5);
+
+      var text = game.add.text(x, y + options.header.titleOffsetY, l10n.get('CONGRATULATIONS'), options.header.style);
       text.anchor.set(0.5);
+      text.stroke = options.header.stroke;
+      text.strokeThickness = options.header.strokeThickness;
+
+      var icon = game.add.sprite(x, y + options.icon.offsetY, 'iconSuccess');
+      icon.anchor.set(0.5);
 
       var time = game.add.text(x, y + options.time.offsetY, l10n.get('TIME', [utils.formatTime(time)]), options.time.style);
       time.anchor.set(0.5);
@@ -928,12 +993,16 @@ module.exports = function(game, Phaser){
       var stat = game.add.text(x, y + options.stat.offsetY, l10n.get('STAT', [children, childrenTotal]), options.stat.style);
       stat.anchor.set(0.5);
 
-      var toMenu = basic.textButton(x + options.buttons.toMenuOffsetX, y + options.buttons.offsetY, 200, 75, '', 'В меню', onToMenu, context);
-      var toLevels = basic.textButton(x + options.buttons.toLevelsOffsetX, y + options.buttons.offsetY, 200, 75, '', 'Уровни', onToLevels, context);
-      var replay = basic.textButton(x + options.buttons.replayOffsetX, y + options.buttons.offsetY, 200, 75, '', 'Переиграть', onReplay, context);
-      var next = basic.textButton(x + options.buttons.nextOffsetX, y + options.buttons.offsetY, 200, 75, '#5d2', 'Далее', onNext, context);
+      var toMenu = basic.button(x + options.buttons.toMenuOffsetX, y + options.buttons.offsetY, 'buttons', 4, onToMenu, context);
+      var replay = basic.button(x + options.buttons.replayOffsetX, y + options.buttons.offsetY, 'buttons', 5, onReplay, context);
+      var toLevels = basic.button(x + options.buttons.toLevelsOffsetX, y + options.buttons.offsetY, 'buttons', 3, onToLevels, context);
+      var next = basic.button(x + options.buttons.nextOffsetX, y + options.buttons.offsetY, 'buttonsLarge', 0, onNext, context);
+      var nextText = game.add.text(x + options.buttons.nextOffsetX, y + options.buttons.offsetY, l10n.get('NEXT'), options.buttons.nextTextStyle );
+      nextText.anchor.set(0.5);
 
       base.add(win);
+      base.add(title);
+      base.add(icon);
       base.add(text);
       base.add(time);
       base.add(stat);
@@ -1506,6 +1575,9 @@ module.exports = function(game, Phaser){
       backButton.anchor.set(0.5);
       backButton.setFrames(2, 2, 2);
 
+
+      UILayer.add(game.add.sprite(config.width / 2 - screenParams.offsetX + UI.game.timer.offsetX, UI.game.timer.marginTop - screenParams.offsetY, 'timer'));
+      UILayer.add(game.add.sprite(config.width / 2 - screenParams.offsetX + UI.game.status.offsetX, UI.game.status.marginTop - screenParams.offsetY, 'levelStatus'));
       UILayer.add(backButton);
       UILayer.add(timerText);
       UILayer.add(levelNumberText);
@@ -1523,7 +1595,7 @@ module.exports = function(game, Phaser){
       pauseButton.anchor.set(0.5);
       UILayer.add(pauseButton);
 
-      this.updateStatusText();savedChildren + " / " + children.length
+      this.updateStatusText();
     },
     onSuccess: function(){
       successPopup = successPopupCreator.create(
@@ -1812,7 +1884,7 @@ module.exports = function(game, Phaser){
 
   var currentBlockIndex = 0;
   var levelItems = [];
-  var prevArrow, nextArrow, header;
+  var prevArrow, nextArrow, header, headerTint;
 
   return {
     init: function(index){
@@ -1826,6 +1898,8 @@ module.exports = function(game, Phaser){
       var text = game.add.text(item.width / 2 + UI.levels.levelItemTextOffsetX, item.height / 2 + UI.levels.levelItemTextOffsetY, index + 1, UI.levels.levelItemTextStyle);
       text.anchor.x = 0.5;
       text.anchor.y = 0.5;
+      text.fontWeight = 'bold';
+      text.setShadow(3, 3, 'rgba(0,0,0,0.5)', 0, true);
       item.addChild(text);
       return item;
     },
@@ -1877,6 +1951,16 @@ module.exports = function(game, Phaser){
       }
     },
 
+    drawHeaderTint: function(){
+      if(headerTint) headerTint.destroy();
+      headerTint = game.add.sprite(config.width / 2, UI.levels.blockMarginTop / 2, 'pixel');
+      headerTint.anchor.set(0.5);
+      headerTint.tint = 0x000000;
+      headerTint.width = config.width;
+      headerTint.height = UI.levels.headerHeight;
+      headerTint.alpha = 0.5;
+    },
+
     onNextBlock: function(){
       if(currentBlockIndex + 1 < levelsConfig.length){
         currentBlockIndex++;
@@ -1898,6 +1982,7 @@ module.exports = function(game, Phaser){
 
     create: function(){
       game.add.sprite(0, 0, 'levelsBackground');
+      this.drawHeaderTint();
       game.stage.backgroundColor = UI.levels.backgroundColor;
       game.world.setBounds(0, 0, config.width, config.height);
       this.redraw();
@@ -1962,7 +2047,14 @@ module.exports = function(game, Phaser){
       game.load.image('levelsBlockArrowLeft', 'assets/UI/prev.png');
       game.load.image('levelsBlockArrowRight', 'assets/UI/next.png');
       game.load.image('levelsBackground', 'assets/UI/bkg.jpg');
-      game.load.spritesheet('buttons', 'assets/UI/buttons.png', 80, 76, 3);
+      game.load.image('popup', 'assets/UI/popup.png');
+      game.load.image('iconSuccess', 'assets/UI/icon_success.png');
+      game.load.image('iconFail', 'assets/UI/icon_fail.png');
+      game.load.image('levelStatus', 'assets/UI/level_stat.png');
+      game.load.image('timer', 'assets/UI/timer.png');
+      game.load.spritesheet('buttons', 'assets/UI/buttons.png', 80, 76, 6);
+      game.load.spritesheet('buttonsLarge', 'assets/UI/buttons_large.png', 200, 80, 2);
+      game.load.spritesheet('popupTitle', 'assets/UI/popup_title.png', 391, 72, 2);
       game.load.spritesheet('sparks', 'assets/danger/sparks.png', 220, 180, 11);
       game.load.image('pixel', 'assets/UI/pixel.png');
     },
