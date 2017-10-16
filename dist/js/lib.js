@@ -33,7 +33,7 @@ module.exports = {
   },
   children: {
     bodyScale: 0.5, // 1 - full tile, 0 - no body
-    defaultSpeed: 100,
+    defaultSpeed: 110,
     speedAccuracy: 10
   },
   hero: {
@@ -373,9 +373,9 @@ module.exports = [
 module.exports = {
   levels: {
     backgroundColor: '#000',
-    levelItem: { width: 200, height: 250 },
+    levelItem: { width: 215, height: 260 },
     levelItemsPadding: 0,
-    blockWidthScale: 0.8,
+    blockWidthScale: 0.85,
     blockMarginTop: 170,
     blockArrowMarginLeft: 50,
     levelItemTextStyle: { font: "72px Arial", fill: "#fff", align: "center" },
@@ -423,7 +423,7 @@ module.exports = {
     }
   },
   popups: {
-    textButtonStyle: { font: "48px Arial", fill: "#fff", align: "center" },
+    textButtonStyle: { font: "36px Arial", fill: "#fff", align: "center" },
     pause: {
       textStyle: { font: "64px Arial", fill: "#dd0", align: "center" },
       opacity: 0.5
@@ -870,9 +870,9 @@ module.exports = function(game, Phaser){
       var stat = game.add.text(x, y + options.stat.offsetY, l10n.get('STAT', [children, childrenTotal]), options.stat.style);
       stat.anchor.set(0.5);
 
-      var toMenu = basic.textButton(x + options.buttons.toMenuOffsetX, y + options.buttons.offsetY, 200, 75, '', 'Menu', onToMenu, context);
-      var replay = basic.textButton(x + options.buttons.replayOffsetX, y + options.buttons.offsetY, 200, 75, '#5d2', 'Replay', onReplay, context);
-      var toLevels = basic.textButton(x + options.buttons.toLevelsOffsetX, y + options.buttons.offsetY, 200, 75, '', 'Levels', onToLevels, context);
+      var toMenu = basic.textButton(x + options.buttons.toMenuOffsetX, y + options.buttons.offsetY, 200, 75, '', 'В меню', onToMenu, context);
+      var replay = basic.textButton(x + options.buttons.replayOffsetX, y + options.buttons.offsetY, 200, 75, '#5d2', 'Переиграть', onReplay, context);
+      var toLevels = basic.textButton(x + options.buttons.toLevelsOffsetX, y + options.buttons.offsetY, 200, 75, '', 'Уровни', onToLevels, context);
 
       base.add(win);
       base.add(text);
@@ -928,10 +928,10 @@ module.exports = function(game, Phaser){
       var stat = game.add.text(x, y + options.stat.offsetY, l10n.get('STAT', [children, childrenTotal]), options.stat.style);
       stat.anchor.set(0.5);
 
-      var toMenu = basic.textButton(x + options.buttons.toMenuOffsetX, y + options.buttons.offsetY, 200, 75, '', 'Menu', onToMenu, context);
-      var toLevels = basic.textButton(x + options.buttons.toLevelsOffsetX, y + options.buttons.offsetY, 200, 75, '', 'Levels', onToLevels, context);
-      var replay = basic.textButton(x + options.buttons.replayOffsetX, y + options.buttons.offsetY, 200, 75, '', 'Replay', onReplay, context);
-      var next = basic.textButton(x + options.buttons.nextOffsetX, y + options.buttons.offsetY, 200, 75, '#5d2', 'Next', onNext, context);
+      var toMenu = basic.textButton(x + options.buttons.toMenuOffsetX, y + options.buttons.offsetY, 200, 75, '', 'В меню', onToMenu, context);
+      var toLevels = basic.textButton(x + options.buttons.toLevelsOffsetX, y + options.buttons.offsetY, 200, 75, '', 'Уровни', onToLevels, context);
+      var replay = basic.textButton(x + options.buttons.replayOffsetX, y + options.buttons.offsetY, 200, 75, '', 'Переиграть', onReplay, context);
+      var next = basic.textButton(x + options.buttons.nextOffsetX, y + options.buttons.offsetY, 200, 75, '#5d2', 'Далее', onNext, context);
 
       base.add(win);
       base.add(text);
@@ -1594,7 +1594,7 @@ module.exports = function(game, Phaser){
       }
     },
     onBonusClicked: function(){
-      if(trapsActive){
+      if(trapsActive && state === states.normal){
         this.deactivateTraps();
 
         game.time.events.add(Phaser.Timer.SECOND * config.bonusActiveTime, this.activateTraps, this);
@@ -1611,36 +1611,51 @@ module.exports = function(game, Phaser){
         var worldPosition = map.getTileWorldXY(tile);
         var w = map.get().tileWidth;
         var h = map.get().tileHeight;
-        var mark = game.add.sprite(worldPosition.x + w/2, worldPosition.y + h/2 + 5, 'bonus');
+        var offset = map.get().tileHeight / 6;
+        var markWrapper = game.add.sprite(worldPosition.x + w/2, worldPosition.y + h/2 + offset);
+        var mark = game.add.sprite(0, 5 - offset, 'bonus');
+        markWrapper.addChild(mark);
         mark.scale.x = config.bonusMarkScale;
         mark.scale.y = config.bonusMarkScale;
         mark.anchor.set(0.5);
-        game.add.tween(mark).to( { y: mark.y - 5 }, 1400, "Linear", true, 0, -1, true);
-        bonusesMarks.push(mark);
+        game.add.tween(mark).to( { y: - 5 - offset}, 1400, "Linear", true, 0, -1, true);
+        bonusesMarks.push(markWrapper);
+        middleLayer.add(markWrapper);
       });
       sparksEffects.forEach(function(s){
+        this.destroyFromLayer(middleLayer, s);
         s.destroy();
-      })
+      }.bind(this));
     },
     activateTraps: function(){
       trapsActive = true;
       game.time.events.add(Phaser.Timer.SECOND * bonusDelay, this.createBonuses, this);
-      bonusesMarks.forEach(function(m){m.destroy()});
+
+      bonusesMarks.forEach(function(m){
+        this.destroyFromLayer(middleLayer, m);
+        m.destroy()
+      }.bind(this));
+
       traps.forEach(function(trap){
         var options = UI.game.sparks.simple;
-        var basicFrames = [0,1,2,3,4,5,6,7,8,9,10,10,10,10,10];
-        for(var i; i <  Math.floor(Math.random() * options.emptyFramesRange); i++){
+        var basicFrames = [0,1,2,3,4,5,6,7,8,9,10,10,10];
+        for(var i = 0; i < Math.floor(Math.random() * options.emptyFramesRange); i++){
           basicFrames.push(10);
         };
         var x = trap.getCollider().x + map.get().tileWidth / 2;
         var y = trap.getCollider().y + map.get().tileHeight / 2
-        var sparks = game.add.sprite(x, y - options.yRange / 2, 'sparks');
+        var offset = map.get().tileHeight / 6;
+        var roffset = Math.floor(Math.random() * options.yRange / 2);
+        var sparksWrapper = game.add.sprite(x, y + offset);
+        var sparks = game.add.sprite(0, -options.yRange / 2 - offset, 'sparks');
+        sparksWrapper.addChild(sparks);
         sparks.animations.add('idle', basicFrames, 16, true);
         sparks.animations.play('idle');
         sparks.alpha = 0.9;
         sparks.anchor.set(0.5);
-        game.add.tween(sparks).to({y: y + options.yRange / 2}, options.duration, "Linear", true, 0, -1, options.yoyo);
-        sparksEffects.push(sparks);
+        game.add.tween(sparks).to({y: options.yRange / 2 - offset}, options.duration + Math.floor(Math.random() * options.duration), "Linear", true, 0, -1, options.yoyo);
+        sparksEffects.push(sparksWrapper);
+        middleLayer.add(sparksWrapper);
       });
     },
     update: function(){
