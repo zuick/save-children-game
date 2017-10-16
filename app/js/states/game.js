@@ -342,13 +342,14 @@ module.exports = function(game, Phaser){
 
       traps.forEach(function(trap){
         var options = UI.game.sparks.simple;
-        var basicFrames = [0,1,2,3,4,5,6,7,8,9,10,10,10,10,10];
-        for(var i; i <  Math.floor(Math.random() * options.emptyFramesRange); i++){
+        var basicFrames = [0,1,2,3,4,5,6,7,8,9,10,10,10];
+        for(var i = 0; i < Math.floor(Math.random() * options.emptyFramesRange); i++){
           basicFrames.push(10);
         };
         var x = trap.getCollider().x + map.get().tileWidth / 2;
         var y = trap.getCollider().y + map.get().tileHeight / 2
         var offset = map.get().tileHeight / 6;
+        var roffset = Math.floor(Math.random() * options.yRange / 2);
         var sparksWrapper = game.add.sprite(x, y + offset);
         var sparks = game.add.sprite(0, -options.yRange / 2 - offset, 'sparks');
         sparksWrapper.addChild(sparks);
@@ -356,7 +357,7 @@ module.exports = function(game, Phaser){
         sparks.animations.play('idle');
         sparks.alpha = 0.9;
         sparks.anchor.set(0.5);
-        game.add.tween(sparks).to({y: options.yRange / 2 - offset}, options.duration, "Linear", true, 0, -1, options.yoyo);
+        game.add.tween(sparks).to({y: options.yRange / 2 - offset}, options.duration + Math.floor(Math.random() * options.duration), "Linear", true, 0, -1, options.yoyo);
         sparksEffects.push(sparksWrapper);
         middleLayer.add(sparksWrapper);
       });
