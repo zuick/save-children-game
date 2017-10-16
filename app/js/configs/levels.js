@@ -3,7 +3,7 @@ module.exports = [
     {
       src: 'assets/levels/Level_1.json',
       type: 1,
-      bonusDelay: 10
+      bonusDelay: 1
     },
     {
       src: 'assets/levels/Level_2.json',
@@ -302,7 +302,7 @@ module.exports = [
     {
       src: 'assets/levels/Level_60.json',
       type: 2,
-      bonusDelay: 85
+      bonusDelay: 1
     }
   ]
 ]

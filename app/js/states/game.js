@@ -298,7 +298,7 @@ module.exports = function(game, Phaser){
       }
     },
     onBonusClicked: function(){
-      if(trapsActive){
+      if(trapsActive && state === states.normal){
         this.deactivateTraps();
 
         game.time.events.add(Phaser.Timer.SECOND * config.bonusActiveTime, this.activateTraps, this);
@@ -315,21 +315,31 @@ module.exports = function(game, Phaser){
         var worldPosition = map.getTileWorldXY(tile);
         var w = map.get().tileWidth;
         var h = map.get().tileHeight;
-        var mark = game.add.sprite(worldPosition.x + w/2, worldPosition.y + h/2 + 5, 'bonus');
+        var offset = map.get().tileHeight / 6;
+        var markWrapper = game.add.sprite(worldPosition.x + w/2, worldPosition.y + h/2 + offset);
+        var mark = game.add.sprite(0, 5 - offset, 'bonus');
+        markWrapper.addChild(mark);
         mark.scale.x = config.bonusMarkScale;
         mark.scale.y = config.bonusMarkScale;
         mark.anchor.set(0.5);
-        game.add.tween(mark).to( { y: mark.y - 5 }, 1400, "Linear", true, 0, -1, true);
-        bonusesMarks.push(mark);
+        game.add.tween(mark).to( { y: - 5 - offset}, 1400, "Linear", true, 0, -1, true);
+        bonusesMarks.push(markWrapper);
+        middleLayer.add(markWrapper);
       });
       sparksEffects.forEach(function(s){
+        this.destroyFromLayer(middleLayer, s);
         s.destroy();
-      })
+      }.bind(this));
     },
     activateTraps: function(){
       trapsActive = true;
       game.time.events.add(Phaser.Timer.SECOND * bonusDelay, this.createBonuses, this);
-      bonusesMarks.forEach(function(m){m.destroy()});
+
+      bonusesMarks.forEach(function(m){
+        this.destroyFromLayer(middleLayer, m);
+        m.destroy()
+      }.bind(this));
+
       traps.forEach(function(trap){
         var options = UI.game.sparks.simple;
         var basicFrames = [0,1,2,3,4,5,6,7,8,9,10,10,10,10,10];
@@ -338,13 +348,17 @@ module.exports = function(game, Phaser){
         };
         var x = trap.getCollider().x + map.get().tileWidth / 2;
         var y = trap.getCollider().y + map.get().tileHeight / 2
-        var sparks = game.add.sprite(x, y - options.yRange / 2, 'sparks');
+        var offset = map.get().tileHeight / 6;
+        var sparksWrapper = game.add.sprite(x, y + offset);
+        var sparks = game.add.sprite(0, -options.yRange / 2 - offset, 'sparks');
+        sparksWrapper.addChild(sparks);
         sparks.animations.add('idle', basicFrames, 16, true);
         sparks.animations.play('idle');
         sparks.alpha = 0.9;
         sparks.anchor.set(0.5);
-        game.add.tween(sparks).to({y: y + options.yRange / 2}, options.duration, "Linear", true, 0, -1, options.yoyo);
-        sparksEffects.push(sparks);
+        game.add.tween(sparks).to({y: options.yRange / 2 - offset}, options.duration, "Linear", true, 0, -1, options.yoyo);
+        sparksEffects.push(sparksWrapper);
+        middleLayer.add(sparksWrapper);
       });
     },
     update: function(){
