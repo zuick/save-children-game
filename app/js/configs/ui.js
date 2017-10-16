@@ -9,7 +9,8 @@ module.exports = {
     levelItemTextStyle: { font: "72px Arial", fill: "#fff", align: "center" },
     levelItemTextOffsetY: 20,
     levelItemTextOffsetX: -5,
-    headerTextStyle: { font: "48px Arial", fill: "#333", align: "center" },
+    headerTextStyle: { font: "48px Arial", fill: "#fff", align: "center" },
+    headerHeight: 80,
     types: {
       0: 'levelItemCity',
       1: 'levelItemCountrySide',
