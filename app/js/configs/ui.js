@@ -19,20 +19,28 @@ module.exports = {
   },
   game: {
     backgroundColor: '#271212',
+    timer: {
+      marginTop: 10,
+      offsetX: -220, // from center
+    },
+    status: {
+      marginTop: 5,
+      offsetX: 600, // from center
+    },
     timerText: {
       marginTop: 50,
-      offsetX: -60, // from center
-      style: { font: "48px Arial", fill: "#fff", align: "center" }
+      offsetX: -90, // from center
+      style: { font: "35px Arial", fill: "#fff", align: "center" }
     },
     levelNumberText: {
-      marginTop: 50,
-      offsetX: 600, // from center
-      style: { font: "48px Arial", fill: "#dd0", align: "center" }
+      marginTop: 55,
+      offsetX: 838, // from center
+      style: { font: "48px Arial", fill: "#fff", align: "center" }
     },
     statusText: {
-      marginTop: 50,
-      offsetX: 500, // from center
-      style: { font: "42px Arial", fill: "#fff", align: "center" }
+      marginTop: 55,
+      offsetX: 735, // from center
+      style: { font: "40px Arial", fill: "#579D00", align: "center" }
     },
     pauseButton: {
       marginTop: 48,
@@ -40,7 +48,7 @@ module.exports = {
     },
     backButton: {
       marginTop: 48,
-      offsetX: -600, // from center
+      offsetX: -800, // from center
     },
     sparks: {
       simple: {

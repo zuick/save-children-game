@@ -210,6 +210,9 @@ module.exports = function(game, Phaser){
       backButton.anchor.set(0.5);
       backButton.setFrames(2, 2, 2);
 
+
+      UILayer.add(game.add.sprite(config.width / 2 - screenParams.offsetX + UI.game.timer.offsetX, UI.game.timer.marginTop - screenParams.offsetY, 'timer'));
+      UILayer.add(game.add.sprite(config.width / 2 - screenParams.offsetX + UI.game.status.offsetX, UI.game.status.marginTop - screenParams.offsetY, 'levelStatus'));
       UILayer.add(backButton);
       UILayer.add(timerText);
       UILayer.add(levelNumberText);
