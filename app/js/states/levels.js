@@ -27,6 +27,8 @@ module.exports = function(game, Phaser){
       var text = game.add.text(item.width / 2 + UI.levels.levelItemTextOffsetX, item.height / 2 + UI.levels.levelItemTextOffsetY, index + 1, UI.levels.levelItemTextStyle);
       text.anchor.x = 0.5;
       text.anchor.y = 0.5;
+      text.fontWeight = 'bold';
+      text.setShadow(3, 3, 'rgba(0,0,0,0.5)', 0, true);
       item.addChild(text);
       return item;
     },
