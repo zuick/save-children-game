@@ -201,7 +201,7 @@ module.exports = function(game, Phaser){
       this.activateTraps();
 
       timerText = this.createText(UI.game.timerText, utils.formatTime(time), 0.5);
-      levelNumberText = this.createText(UI.game.levelNumberText, currentLevelIndex + 1, 0.5);
+      levelNumberText = this.createText(UI.game.levelNumberText, utils.levelNumber(currentBlockIndex, currentLevelIndex), 0.5);
       statusText = this.createText(UI.game.statusText, "", 0.5);
       backButton = game.add.button(
         config.width / 2 - screenParams.offsetX + UI.game.backButton.offsetX,

@@ -6,7 +6,7 @@ module.exports = {
     blockWidthScale: 0.85,
     blockMarginTop: 200,
     blockArrowMarginLeft: 50,
-    levelItemTextStyle: { font: "70px KZSupercell", fill: "#fff", align: "center" },
+    levelItemTextStyle: { font: "64px KZSupercell", fill: "#fff", align: "center" },
     levelItemTextShadow: { x: 8, y: 8, alpha: 0.7, style: { font: "70px KZSupercell", fill: "#111s", align: "center" } },
     levelItemTextOffsetY: 20,
     levelItemTextOffsetX: -5,
@@ -65,7 +65,7 @@ module.exports = {
   popups: {
     textButtonStyle: { font: "36px KZSupercell", fill: "#fff", align: "center" },
     pause: {
-      textStyle: { font: "64px KZSupercell", fill: "#dd0", align: "center" },
+      textStyle: { font: "48px KZSupercell", fill: "#dd0", align: "center" },
       opacity: 0.5
     },
     success: {

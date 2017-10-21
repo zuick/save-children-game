@@ -2,6 +2,7 @@ var config = require('../configs/config');
 var UI = require('../configs/ui');
 var levelsConfig = require('../configs/levels');
 var l10n = require('../modules/l10n');
+var utils = require('../modules/utils');
 
 module.exports = function(game, Phaser){
   var blockWidth = config.width * UI.levels.blockWidthScale;
@@ -27,7 +28,7 @@ module.exports = function(game, Phaser){
       var shadow = game.add.text(
         item.width / 2 + UI.levels.levelItemTextOffsetX + shadowSettings.x,
         item.height / 2 + UI.levels.levelItemTextOffsetY + shadowSettings.y,
-        index + 1, shadowSettings.style
+        utils.levelNumber(currentBlockIndex, index), shadowSettings.style
       );
       shadow.anchor.set(0.5);
       shadow.alpha = shadowSettings.alpha;
@@ -35,7 +36,7 @@ module.exports = function(game, Phaser){
       var text = game.add.text(
         item.width / 2 + UI.levels.levelItemTextOffsetX,
         item.height / 2 + UI.levels.levelItemTextOffsetY,
-        index + 1, UI.levels.levelItemTextStyle
+        utils.levelNumber(currentBlockIndex, index), UI.levels.levelItemTextStyle
       );
       text.anchor.set(0.5);
 
