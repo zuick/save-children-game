@@ -59,15 +59,16 @@ module.exports = function(game, Phaser){
       game.load.image('iconFail', 'assets/UI/icon_fail.png');
       game.load.image('levelStatus', 'assets/UI/level_stat.png');
       game.load.image('timer', 'assets/UI/timer.png');
+      game.load.image('play', 'assets/UI/play.png');
       game.load.spritesheet('buttons', 'assets/UI/buttons.png', 80, 76, 6);
       game.load.spritesheet('buttonsLarge', 'assets/UI/buttons_large.png', 200, 80, 2);
+      game.load.spritesheet('buttonsMenu', 'assets/UI/menu_buttons.png', 256, 256, 4);
       game.load.spritesheet('popupTitle', 'assets/UI/popup_title.png', 391, 72, 2);
       game.load.spritesheet('sparks', 'assets/danger/sparks.png', 220, 180, 11);
       game.load.image('pixel', 'assets/UI/pixel.png');
     },
     create: function(){
-      //game.state.start('game', true, false, 0, 0);
-      game.state.start('levels', true, false, config.defaultBlockIndex || 0);
+      game.state.start('start', true, false);
     }
   }
 }

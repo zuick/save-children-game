@@ -102,6 +102,19 @@ module.exports = function(game, Phaser){
       headerTint.alpha = 0.5;
     },
 
+    drawBackButton: function(){
+      backButton = game.add.button(
+        config.width / 2  + UI.levels.backButton.offsetX,
+        config.height / 2  + UI.levels.backButton.offsetY,
+        'buttons',
+        this.onBack,
+        this,
+        2
+      );
+      backButton.anchor.set(0.5);
+      backButton.setFrames(2, 2, 2);
+    },
+
     onNextBlock: function(){
       if(currentBlockIndex + 1 < levelsConfig.length){
         currentBlockIndex++;
@@ -116,6 +129,10 @@ module.exports = function(game, Phaser){
       }
     },
 
+    onBack: function(){
+      game.state.start('start', true, false);
+    },
+
     redraw: function(){
       this.drawBlock();
       this.drawArrows();
@@ -124,6 +141,7 @@ module.exports = function(game, Phaser){
     create: function(){
       game.add.sprite(0, 0, 'levelsBackground');
       this.drawHeaderTint();
+      this.drawBackButton();
       game.stage.backgroundColor = UI.levels.backgroundColor;
       game.world.setBounds(0, 0, config.width, config.height);
       this.redraw();

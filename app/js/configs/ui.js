@@ -1,4 +1,30 @@
 module.exports = {
+  menu: {
+    playButton: {
+      offsetX: 0,
+      offsetY: 300
+    },
+    soundButton: {
+      offsetX: -320,
+      offsetY: 280
+    },
+    soundButtonSprite: {
+      offsetX: -320,
+      offsetY: 255
+    },
+    levelsButton: {
+      offsetX: 320,
+      offsetY: 280
+    },
+    levelsButtonSprite: {
+      offsetX: 320,
+      offsetY: 255
+    },
+    languageButton: {
+      offsetX: -600,
+      offsetY: 12
+    }
+  },
   levels: {
     backgroundColor: '#000',
     levelItem: { width: 215, height: 260 },
@@ -12,6 +38,10 @@ module.exports = {
     levelItemTextOffsetX: -5,
     headerTextStyle: { font: "36px KZSupercell", fill: "#fff", align: "center" },
     headerHeight: 100,
+    backButton: {
+      offsetY: -440,
+      offsetX: -800, // from center
+    },
     types: {
       0: 'levelItemCity',
       1: 'levelItemCountrySide',
