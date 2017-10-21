@@ -183,6 +183,10 @@ module.exports = function(game, Phaser){
         text,
         options.style
       );
+      if(options.stroke){
+        t.stroke = options.stroke.color;
+        t.strokeThickness = options.stroke.thickness;
+      }
       t.anchor.set(anchor);
       return t;
     },
@@ -415,7 +419,7 @@ module.exports = function(game, Phaser){
     },
     updateStatusText: function(){
       if(statusText){
-        statusText.text = savedChildren + " / " + initialChildrenCount;
+        statusText.text = savedChildren + "/" + initialChildrenCount;
       }
     },
     trapCollision: function(child, trap){

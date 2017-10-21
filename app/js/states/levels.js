@@ -14,7 +14,7 @@ module.exports = function(game, Phaser){
   var currentBlockIndex = 0;
   var levelItems = [];
   var prevArrow, nextArrow, header, headerTint;
-
+  var shadowSettings = UI.levels.levelItemTextShadow;
   return {
     init: function(index){
       if(typeof(index) !== 'undefined'){
@@ -24,11 +24,22 @@ module.exports = function(game, Phaser){
 
     drawLevelItem: function(x, y, index, key){
       var item = game.add.button(x, y, key, function(){ game.state.start('game', true, false, currentBlockIndex, index);});
-      var text = game.add.text(item.width / 2 + UI.levels.levelItemTextOffsetX, item.height / 2 + UI.levels.levelItemTextOffsetY, index + 1, UI.levels.levelItemTextStyle);
-      text.anchor.x = 0.5;
-      text.anchor.y = 0.5;
-      text.fontWeight = 'bold';
-      text.setShadow(3, 3, 'rgba(0,0,0,0.5)', 0, true);
+      var shadow = game.add.text(
+        item.width / 2 + UI.levels.levelItemTextOffsetX + shadowSettings.x,
+        item.height / 2 + UI.levels.levelItemTextOffsetY + shadowSettings.y,
+        index + 1, shadowSettings.style
+      );
+      shadow.anchor.set(0.5);
+      shadow.alpha = shadowSettings.alpha;
+
+      var text = game.add.text(
+        item.width / 2 + UI.levels.levelItemTextOffsetX,
+        item.height / 2 + UI.levels.levelItemTextOffsetY,
+        index + 1, UI.levels.levelItemTextStyle
+      );
+      text.anchor.set(0.5);
+
+      item.addChild(shadow);
       item.addChild(text);
       return item;
     },

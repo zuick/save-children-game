@@ -15,6 +15,8 @@ module.exports = function(game, Phaser){
 
     },
     create: function(){
+      game.add.text( 0, 0, ".", { font: "1pt Bangers" } );
+      game.add.text( 0, 0, ".", { font: "1pt KZSupercell" } );
       game.state.start('preloader', true, false);
     }
   }

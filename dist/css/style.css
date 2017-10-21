@@ -1,2 +1,15 @@
 body { background-color: #000; margin: 0;}
 canvas { margin: 0 auto; }
+@font-face {
+  font-family: 'Bangers';
+  src: url('Bangers.eot'); /* IE9 Compat Modes */
+  src: url('Bangers.woff') format('woff'), /* Modern Browsers */
+       url('Bangers.ttf')  format('truetype') /* Safari, Android, iOS */
+}
+
+@font-face {
+  font-family: 'KZSupercell';
+  src: url('KZSupercell.eot'); /* IE9 Compat Modes */
+  src: url('KZSupercell.woff') format('woff'), /* Modern Browsers */
+       url('KZSupercell.ttf')  format('truetype') /* Safari, Android, iOS */
+}

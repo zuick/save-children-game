@@ -4,13 +4,14 @@ module.exports = {
     levelItem: { width: 215, height: 260 },
     levelItemsPadding: 0,
     blockWidthScale: 0.85,
-    blockMarginTop: 170,
+    blockMarginTop: 200,
     blockArrowMarginLeft: 50,
-    levelItemTextStyle: { font: "72px Arial", fill: "#fff", align: "center" },
+    levelItemTextStyle: { font: "70px KZSupercell", fill: "#fff", align: "center" },
+    levelItemTextShadow: { x: 8, y: 8, alpha: 0.7, style: { font: "70px KZSupercell", fill: "#111s", align: "center" } },
     levelItemTextOffsetY: 20,
     levelItemTextOffsetX: -5,
-    headerTextStyle: { font: "48px Arial", fill: "#fff", align: "center" },
-    headerHeight: 80,
+    headerTextStyle: { font: "36px KZSupercell", fill: "#fff", align: "center" },
+    headerHeight: 100,
     types: {
       0: 'levelItemCity',
       1: 'levelItemCountrySide',
@@ -28,19 +29,21 @@ module.exports = {
       offsetX: 600, // from center
     },
     timerText: {
-      marginTop: 50,
+      marginTop: 47,
       offsetX: -90, // from center
-      style: { font: "35px Arial", fill: "#fff", align: "center" }
+      style: { font: "22px KZSupercell", fill: "#fff", align: "center" },
+      stroke: { color: '#111', thickness: 2 }
     },
     levelNumberText: {
-      marginTop: 55,
-      offsetX: 838, // from center
-      style: { font: "48px Arial", fill: "#fff", align: "center" }
+      marginTop: 50,
+      offsetX: 836, // from center
+      style: { font: "42px Bangers", fill: "#fff", align: "center" },
+      stroke: { color: '#111', thickness: 2 }
     },
     statusText: {
       marginTop: 55,
       offsetX: 735, // from center
-      style: { font: "40px Arial", fill: "#579D00", align: "center" }
+      style: { font: "28px KZSupercell", fill: "#579D00", align: "center" }
     },
     pauseButton: {
       marginTop: 48,
@@ -60,9 +63,9 @@ module.exports = {
     }
   },
   popups: {
-    textButtonStyle: { font: "36px Arial", fill: "#fff", align: "center" },
+    textButtonStyle: { font: "36px KZSupercell", fill: "#fff", align: "center" },
     pause: {
-      textStyle: { font: "64px Arial", fill: "#dd0", align: "center" },
+      textStyle: { font: "64px KZSupercell", fill: "#dd0", align: "center" },
       opacity: 0.5
     },
     success: {
@@ -70,7 +73,7 @@ module.exports = {
       height: 500,
       opacity: 0.5,
       header: {
-        style: { font: "40px Arial", fill: "#fff", align: "center" },
+        style: { font: "26px KZSupercell", fill: "#fff", align: "center" },
         offsetY: -265,
         titleOffsetY: -260,
         stroke: "#111",
@@ -81,11 +84,11 @@ module.exports = {
         offsetY: -100
       },
       stat: {
-        style: { font: "36px Arial", fill: "#B04E0D", align: "center" },
+        style: { font: "22px KZSupercell", fill: "#B04E0D", align: "center" },
         offsetY: 40
       },
       time: {
-        style: { font: "36px Arial", fill: "#B04E0D", align: "center" },
+        style: { font: "22px KZSupercell", fill: "#B04E0D", align: "center" },
         offsetY: 85
       },
       buttons: {
@@ -94,7 +97,7 @@ module.exports = {
         toLevelsOffsetX: -115,
         replayOffsetX: -40,
         nextOffsetX: 105,
-        nextTextStyle: { font: "36px Arial", fill: "#fff", align: "center" }
+        nextTextStyle: { font: "22px KZSupercell", fill: "#fff", align: "center" }
       }
     },
     gameover: {
@@ -102,7 +105,7 @@ module.exports = {
       height: 500,
       opacity: 0.5,
       header: {
-        style: { font: "40px Arial", fill: "#fff", align: "center" },
+        style: { font: "26px KZSupercell", fill: "#fff", align: "center" },
         offsetY: -235,
         titleOffsetY: -230,
         stroke: "#111",
@@ -113,11 +116,11 @@ module.exports = {
         offsetY: -75
       },
       stat: {
-        style: { font: "36px Arial", fill: "#B04E0D", align: "center" },
+        style: { font: "22px KZSupercell", fill: "#B04E0D", align: "center" },
         offsetY: 45
       },
       time: {
-        style: { font: "36px Arial", fill: "#B04E0D", align: "center" },
+        style: { font: "22px KZSupercell", fill: "#B04E0D", align: "center" },
         offsetY: 85
       },
       buttons: {
