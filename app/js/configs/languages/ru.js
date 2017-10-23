@@ -9,5 +9,6 @@ module.exports = {
   "MENU": "МЕНЮ",
   "REPLAY": "Переиграть",
   "LEVELS": "Уровни",
-  "NEXT": "Далее"
+  "NEXT": "Далее",
+  "LANGUAGE_NAME": 'Русский'
 }

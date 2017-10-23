@@ -1,9 +1,12 @@
 var config = require('../configs/config');
 var UI = require('../configs/ui');
 var storage = require('../modules/storage');
+var l10n = require('../modules/l10n');
 
 module.exports = function(game, Phaser){
   var soundButtonSprite;
+  var languageButtonSprite;
+  var languageButtonText;
 
   return {
     preload: function(){
@@ -53,6 +56,32 @@ module.exports = function(game, Phaser){
       levelsSprite.frame = 1;
       levelsSprite.anchor.set(0.5);
 
+      var language = game.add.button(
+        config.width / 2 + UI.menu.languageButton.offsetX,
+        config.height / 2 + UI.menu.languageButton.offsetY,
+        'languageButton',
+        this.onLanguage,
+        this
+      );
+      language.anchor.set(0.5);
+      language.setFrames(0,0,0);
+
+      languageButtonSprite =  game.add.sprite(
+        config.width / 2 + UI.menu.languageButton.offsetX + UI.menu.languageButton.flag.x,
+        config.height / 2 + UI.menu.languageButton.offsetY + UI.menu.languageButton.flag.y,
+        'buttons'
+      );
+      languageButtonSprite.anchor.set(0.5);
+
+      languageButtonText = game.add.text(
+        config.width / 2 + UI.menu.languageButton.offsetX + UI.menu.languageButton.text.x,
+        config.height / 2 + UI.menu.languageButton.offsetY + UI.menu.languageButton.text.y,
+        'language',
+        UI.menu.languageButton.text.style
+      );
+      languageButtonText.anchor.set(0.5);
+
+      this.updateLanguageButton();
     },
     updateSoundButtonSprite: function(){
       var settings = storage.getSettings();
@@ -60,6 +89,16 @@ module.exports = function(game, Phaser){
         soundButtonSprite.frame = 3;
       }else{
         soundButtonSprite.frame = 2;
+      }
+    },
+    updateLanguageButton: function(){
+      var settings = storage.getSettings();
+      if(settings.language === 'ru'){
+        languageButtonSprite.frame = 6;
+        languageButtonText.text = l10n.get('LANGUAGE_NAME', void 0, 'ba');
+      }else{
+        languageButtonSprite.frame = 7;
+        languageButtonText.text = l10n.get('LANGUAGE_NAME', void 0, 'ru');
       }
     },
     onPlay: function(){
@@ -73,6 +112,11 @@ module.exports = function(game, Phaser){
     },
     onLevels: function(){
       game.state.start('levels', true, false, config.defaultBlockIndex || 0);
+    },
+    onLanguage: function(){
+      var settings = storage.getSettings();
+      storage.setSettings('language', settings.language === 'ru' ? 'ba' : 'ru');
+      this.updateLanguageButton();
     }
   }
 }

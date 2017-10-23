@@ -9,5 +9,6 @@ module.exports = {
   "MENU": "МЕНЮ",
   "REPLAY": "Ҡабат уйнау",
   "LEVELS": "Кимәлдәр",
-  "NEXT": "Артабан"
+  "NEXT": "Артабан",
+  "LANGUAGE_NAME": 'Башкорт'
 }

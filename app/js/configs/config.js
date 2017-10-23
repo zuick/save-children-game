@@ -5,7 +5,6 @@ module.exports = {
   defaultLanguage: 'ru',
   defaultBlockIndex: 0,
   defaultBonusDelay: 15,
-  availableLanguages: ['ru', 'ba'],
   bonusActiveTime: 7,
   bonusMarkScale: 0.9,
   failDelay: 800,
