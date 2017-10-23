@@ -1,6 +1,10 @@
 var config = require('../configs/config');
 var UI = require('../configs/ui');
+var storage = require('../modules/storage');
+
 module.exports = function(game, Phaser){
+  var soundButtonSprite;
+
   return {
     preload: function(){
       var splash = game.add.sprite(0, 0, 'splash');
@@ -23,13 +27,13 @@ module.exports = function(game, Phaser){
       );
       sound.anchor.set(0.5);
       sound.setFrames(0,0,0);
-      var soundSprite = game.add.sprite(
+      soundButtonSprite = game.add.sprite(
         config.width / 2 + UI.menu.soundButtonSprite.offsetX,
         config.height / 2 + UI.menu.soundButtonSprite.offsetY,
         'buttonsMenu'
       );
-      soundSprite.frame = 2;
-      soundSprite.anchor.set(0.5);
+      soundButtonSprite.anchor.set(0.5);
+      this.updateSoundButtonSprite();
 
       var levels = game.add.button(
         config.width / 2 + UI.menu.levelsButton.offsetX,
@@ -50,12 +54,22 @@ module.exports = function(game, Phaser){
       levelsSprite.anchor.set(0.5);
 
     },
+    updateSoundButtonSprite: function(){
+      var settings = storage.getSettings();
+      if(settings.audio){
+        soundButtonSprite.frame = 3;
+      }else{
+        soundButtonSprite.frame = 2;
+      }
+    },
     onPlay: function(){
       // load from progress
       game.state.start('game', true, false, config.defaultBlockIndex || 0, 0);
     },
     onSound: function(){
-
+      var settings = storage.getSettings();
+      storage.setSettings('audio', !settings.audio);
+      this.updateSoundButtonSprite();
     },
     onLevels: function(){
       game.state.start('levels', true, false, config.defaultBlockIndex || 0);
