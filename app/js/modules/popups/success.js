@@ -6,7 +6,7 @@ var utils = require('../utils');
 module.exports = function(game, Phaser){
   var basic = require('../popups/basic')(game, Phaser);
   return {
-    create: function(x, y, time, children, childrenTotal, onToMenu, onToLevels, onReplay, onNext, context){
+    create: function(x, y, titleText, time, children, childrenTotal, onToMenu, onToLevels, onReplay, onNext, context){
       var options = UI.popups.success;
       var base = basic.create(x, y, options.opacity);
       var win = basic.tint(x, y, options.width, options.height, 1, 0xc24729, 'popup');
@@ -16,7 +16,7 @@ module.exports = function(game, Phaser){
       title.frame = 0;
       title.anchor.set(0.5);
 
-      var text = game.add.text(x, y + options.header.titleOffsetY, l10n.get('CONGRATULATIONS'), options.header.style);
+      var text = game.add.text(x, y + options.header.titleOffsetY, titleText, options.header.style);
       text.anchor.set(0.5);
       text.stroke = options.header.stroke;
       text.strokeThickness = options.header.strokeThickness;

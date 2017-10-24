@@ -10,5 +10,11 @@ module.exports = {
   "REPLAY": "Ҡабат уйнау",
   "LEVELS": "Кимәлдәр",
   "NEXT": "Артабан",
-  "LANGUAGE_NAME": 'Башкорт'
+  "LANGUAGE_NAME": 'Башкорт',
+  "DIFFICULTY_LEVEL_EAZY": "Яңы кеше",
+  "DIFFICULTY_LEVEL_MIDDLE": "Тәжрибәле кеше",
+  "DIFFICULTY_LEVEL_HARD": "Эксперт",
+  "LEVEL_TITLE_0_0_0": "Диңгеҙ бесәйе",
+  "LEVEL_TITLE_0_0_1": "ата Бесәй",
+  "LEVEL_TITLE_0_0_2": "Бесәй балаһы"
 }

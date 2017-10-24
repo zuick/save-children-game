@@ -10,5 +10,11 @@ module.exports = {
   "REPLAY": "Переиграть",
   "LEVELS": "Уровни",
   "NEXT": "Далее",
-  "LANGUAGE_NAME": 'Русский'
+  "LANGUAGE_NAME": "Русский",
+  "DIFFICULTY_LEVEL_EAZY": "Новичок",
+  "DIFFICULTY_LEVEL_MIDDLE": "Опытный",
+  "DIFFICULTY_LEVEL_HARD": "Эксперт",
+  "LEVEL_TITLE_0_0_0": "Котище",
+  "LEVEL_TITLE_0_0_1": "Кот",
+  "LEVEL_TITLE_0_0_2": "Котенок"
 }

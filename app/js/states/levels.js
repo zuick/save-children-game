@@ -4,6 +4,7 @@ var levelsConfig = require('../configs/levels');
 var l10n = require('../modules/l10n');
 var utils = require('../modules/utils');
 var storage = require('../modules/storage');
+var difficulty_titles = ['DIFFICULTY_LEVEL_EAZY', 'DIFFICULTY_LEVEL_MIDDLE', 'DIFFICULTY_LEVEL_HARD'];
 
 module.exports = function(game, Phaser){
   var blockWidth = config.width * UI.levels.blockWidthScale;
@@ -54,7 +55,7 @@ module.exports = function(game, Phaser){
         check.frame = 8;
         item.addChild(check);
       }
-      
+
       return item;
     },
 
@@ -83,7 +84,7 @@ module.exports = function(game, Phaser){
         ));
       }.bind(this))
 
-      header = game.add.text(config.width / 2, UI.levels.blockMarginTop / 2, l10n.get('DIFFICULTY_LEVEL', [currentBlockIndex + 1]), UI.levels.headerTextStyle);
+      header = game.add.text(config.width / 2, UI.levels.blockMarginTop / 2, l10n.get(difficulty_titles[currentBlockIndex]), UI.levels.headerTextStyle);
       header.anchor.x = 0.5;
       header.anchor.y = 0.5;
     },

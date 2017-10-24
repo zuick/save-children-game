@@ -239,10 +239,19 @@ module.exports = function(game, Phaser){
     },
     onSuccess: function(){
       storage.setProgress(utils.levelNumber(currentBlockIndex, currentLevelIndex), time);
+      var levelTitlesTimes = levelsConfig[currentBlockIndex][currentLevelIndex].titlesTime || [60, 60, 60];
+      var titleRate = 0;
+      if(time > levelTitlesTimes[1] && time <= levelTitlesTimes[2]){
+        titleRate = 1;
+      }else if(time > levelTitlesTimes[2]){
+        titleRate = 3;
+      }
+      var titleKey = 'LEVEL_TITLE_' + currentBlockIndex + '_' + currentLevelIndex + '_' + titleRate;
+
       successPopup = successPopupCreator.create(
         config.width / 2 - screenParams.offsetX,
         config.height / 2 - screenParams.offsetY,
-        time, savedChildren, initialChildrenCount,
+        l10n.get(titleKey), time, savedChildren, initialChildrenCount,
         this.returnToLevels,
         this.returnToLevels,
         this.restartLevel,
