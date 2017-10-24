@@ -5,6 +5,7 @@ var tileSprites = require('../tileSprites');
 var l10n = require('../modules/l10n');
 var utils = require('../modules/utils');
 var vis = require('../modules/vis');
+var storage = require('../modules/storage');
 
 var states = {
   normal: 0,
@@ -237,6 +238,7 @@ module.exports = function(game, Phaser){
       this.updateStatusText();
     },
     onSuccess: function(){
+      storage.setProgress(utils.levelNumber(currentBlockIndex, currentLevelIndex), time);
       successPopup = successPopupCreator.create(
         config.width / 2 - screenParams.offsetX,
         config.height / 2 - screenParams.offsetY,

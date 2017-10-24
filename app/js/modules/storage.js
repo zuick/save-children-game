@@ -26,14 +26,16 @@ function storageAvailable(type) {
 
 var localStorageAvailable = storageAvailable('localStorage');
 
-var defaultProgress = [];
+var defaultProgress = {};
 var settingsKey = 'beskman_settings';
-
+var progressKey = 'beskman_progress';
 module.exports = {
   getSettings: function(){
-    var settings = localStorage.getItem(settingsKey);
-    if(localStorageAvailable && settings){
-      return JSON.parse(settings);
+    if(localStorageAvailable){
+      var settings = localStorage.getItem(settingsKey);
+      if(settings){
+        return JSON.parse(settings);
+      }
     }
     return {
       language: config.defaultLanguage,
@@ -48,6 +50,24 @@ module.exports = {
       if(localStorageAvailable){
         localStorage.setItem(settingsKey, JSON.stringify(oldValue));
       }
+    }
+  },
+
+  getProgress: function(){
+    if(localStorageAvailable){
+      var progress = localStorage.getItem(progressKey);
+      if(progress){
+        return JSON.parse(progress);
+      }
+    }
+    return defaultProgress;
+  },
+
+  setProgress: function(id, time){
+    var oldValue = this.getProgress();
+    oldValue[id] = time;
+    if(localStorageAvailable){
+      localStorage.setItem(progressKey, JSON.stringify(oldValue));
     }
   }
 }

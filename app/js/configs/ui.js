@@ -45,6 +45,8 @@ module.exports = {
     levelItemTextShadow: { x: 8, y: 8, alpha: 0.7, style: { font: "70px KZSupercell", fill: "#111s", align: "center" } },
     levelItemTextOffsetY: 20,
     levelItemTextOffsetX: -5,
+    levelItemCheckOffsetY: 80,
+    levelItemCheckOffsetX: 50,
     headerTextStyle: { font: "36px KZSupercell", fill: "#fff", align: "center" },
     headerHeight: 100,
     backButton: {
