@@ -5,8 +5,8 @@ var l10n = require('../modules/l10n');
 
 module.exports = function(game, Phaser){
   var soundButtonSprite;
-  var languageButtonSprite;
-  var languageButtonText;
+  var languageButtonRU;
+  var languageButtonBA;
 
   return {
     preload: function(){
@@ -56,33 +56,43 @@ module.exports = function(game, Phaser){
       levelsSprite.frame = 1;
       levelsSprite.anchor.set(0.5);
 
+      languageButtonRU = this.drawLanguageButton(UI.menu.languageButtonRU, 'ru', 7);
+      languageButtonBA = this.drawLanguageButton(UI.menu.languageButtonBA, 'ba', 6);
+
+      this.updateLanguageButtons();
+    },
+    drawLanguageButton: function(options, code, flagFrame){
       var language = game.add.button(
-        config.width / 2 + UI.menu.languageButton.offsetX,
-        config.height / 2 + UI.menu.languageButton.offsetY,
+        config.width / 2 + options.offsetX,
+        config.height / 2 + options.offsetY,
         'languageButton',
-        this.onLanguage,
-        this
+        this.onLanguage.bind(this, code),
+        this,
+        0
       );
       language.anchor.set(0.5);
       language.setFrames(0,0,0);
 
-      languageButtonSprite =  game.add.sprite(
-        config.width / 2 + UI.menu.languageButton.offsetX + UI.menu.languageButton.flag.x,
-        config.height / 2 + UI.menu.languageButton.offsetY + UI.menu.languageButton.flag.y,
+      var languageButtonSprite =  game.add.sprite(
+        config.width / 2 + options.offsetX + options.flag.x,
+        config.height / 2 + options.offsetY + options.flag.y,
         'buttons'
       );
       languageButtonSprite.anchor.set(0.5);
 
-      languageButtonText = game.add.text(
-        config.width / 2 + UI.menu.languageButton.offsetX + UI.menu.languageButton.text.x,
-        config.height / 2 + UI.menu.languageButton.offsetY + UI.menu.languageButton.text.y,
+      var languageButtonText = game.add.text(
+        config.width / 2 + options.offsetX + options.text.x,
+        config.height / 2 + options.offsetY + options.text.y,
         'language',
-        UI.menu.languageButton.text.style
+        options.text.style
       );
       languageButtonText.anchor.set(0.5);
+      languageButtonSprite.frame = flagFrame;
+      languageButtonText.text = l10n.get('LANGUAGE_NAME', void 0, code)
 
-      this.updateLanguageButton();
+      return language;
     },
+
     updateSoundButtonSprite: function(){
       var settings = storage.getSettings();
       if(settings.audio){
@@ -91,14 +101,14 @@ module.exports = function(game, Phaser){
         soundButtonSprite.frame = 2;
       }
     },
-    updateLanguageButton: function(){
+    updateLanguageButtons: function(){
       var settings = storage.getSettings();
       if(settings.language === 'ru'){
-        languageButtonSprite.frame = 6;
-        languageButtonText.text = l10n.get('LANGUAGE_NAME', void 0, 'ba');
+        languageButtonRU.setFrames(1,1,1);
+        languageButtonBA.setFrames(0,0,0);
       }else{
-        languageButtonSprite.frame = 7;
-        languageButtonText.text = l10n.get('LANGUAGE_NAME', void 0, 'ru');
+        languageButtonRU.setFrames(0,0,0);
+        languageButtonBA.setFrames(1,1,1);
       }
     },
     onPlay: function(){
@@ -113,10 +123,10 @@ module.exports = function(game, Phaser){
     onLevels: function(){
       game.state.start('levels', true, false, config.defaultBlockIndex || 0);
     },
-    onLanguage: function(){
+    onLanguage: function(code){
       var settings = storage.getSettings();
-      storage.setSettings('language', settings.language === 'ru' ? 'ba' : 'ru');
-      this.updateLanguageButton();
+      storage.setSettings('language', code);
+      this.updateLanguageButtons();
     }
   }
 }

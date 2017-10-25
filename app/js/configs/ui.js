@@ -20,9 +20,22 @@ module.exports = {
       offsetX: 320,
       offsetY: 255
     },
-    languageButton: {
+    languageButtonRU: {
       offsetX: -710,
       offsetY: -420,
+      flag: {
+        x: 110,
+        y: -5
+      },
+      text: {
+        style: { font: "28px KZSupercell", fill: "#fff", align: "center" },
+        x: -50,
+        y: -2
+      }
+    },
+    languageButtonBA: {
+      offsetX: -710,
+      offsetY: -300,
       flag: {
         x: 110,
         y: -5
