@@ -2,6 +2,9 @@ var config = require('../configs/config');
 var UI = require('../configs/ui');
 var levelsConfig = require('../configs/levels');
 var l10n = require('../modules/l10n');
+var utils = require('../modules/utils');
+var storage = require('../modules/storage');
+var difficulty_titles = ['DIFFICULTY_LEVEL_EAZY', 'DIFFICULTY_LEVEL_MIDDLE', 'DIFFICULTY_LEVEL_HARD'];
 
 module.exports = function(game, Phaser){
   var blockWidth = config.width * UI.levels.blockWidthScale;
@@ -14,7 +17,7 @@ module.exports = function(game, Phaser){
   var currentBlockIndex = 0;
   var levelItems = [];
   var prevArrow, nextArrow, header, headerTint;
-
+  var shadowSettings = UI.levels.levelItemTextShadow;
   return {
     init: function(index){
       if(typeof(index) !== 'undefined'){
@@ -22,18 +25,42 @@ module.exports = function(game, Phaser){
       }
     },
 
-    drawLevelItem: function(x, y, index, key){
+    drawLevelItem: function(x, y, index, number, key, resolved){
       var item = game.add.button(x, y, key, function(){ game.state.start('game', true, false, currentBlockIndex, index);});
-      var text = game.add.text(item.width / 2 + UI.levels.levelItemTextOffsetX, item.height / 2 + UI.levels.levelItemTextOffsetY, index + 1, UI.levels.levelItemTextStyle);
-      text.anchor.x = 0.5;
-      text.anchor.y = 0.5;
-      text.fontWeight = 'bold';
-      text.setShadow(3, 3, 'rgba(0,0,0,0.5)', 0, true);
+      var shadow = game.add.text(
+        item.width / 2 + UI.levels.levelItemTextOffsetX + shadowSettings.x,
+        item.height / 2 + UI.levels.levelItemTextOffsetY + shadowSettings.y,
+        number, shadowSettings.style
+      );
+      shadow.anchor.set(0.5);
+      shadow.alpha = shadowSettings.alpha;
+
+      var text = game.add.text(
+        item.width / 2 + UI.levels.levelItemTextOffsetX,
+        item.height / 2 + UI.levels.levelItemTextOffsetY,
+        number, UI.levels.levelItemTextStyle
+      );
+      text.anchor.set(0.5);
+
+      item.addChild(shadow);
       item.addChild(text);
+
+      if(resolved){
+        var check = game.add.sprite(
+          item.width / 2 + UI.levels.levelItemCheckOffsetX,
+          item.height / 2 + UI.levels.levelItemCheckOffsetY,
+          'buttons'
+        );
+        check.anchor.set(0.5);
+        check.frame = 8;
+        item.addChild(check);
+      }
+
       return item;
     },
 
     drawBlock: function(){
+      var progress = storage.getProgress();
       //clear first
       levelItems.forEach(function(item){ item.destroy(); });
       if(header) header.destroy();
@@ -46,15 +73,18 @@ module.exports = function(game, Phaser){
 
         var row = Math.floor(index / maxLevelItems);
         var col = index % maxLevelItems;
+        var number = utils.levelNumber(currentBlockIndex, index);
         levelItems.push(this.drawLevelItem(
           blockX + marginLeft + col * levelItemFullWidth,
           blockY + row * levelItemFullHeight,
           index,
-          UI.levels.types[type]
+          number,
+          UI.levels.types[type],
+          typeof(progress[number]) !== 'undefined'
         ));
       }.bind(this))
 
-      header = game.add.text(config.width / 2, UI.levels.blockMarginTop / 2, l10n.get('DIFFICULTY_LEVEL', [currentBlockIndex + 1]), UI.levels.headerTextStyle);
+      header = game.add.text(config.width / 2, UI.levels.blockMarginTop / 2, l10n.get(difficulty_titles[currentBlockIndex]), UI.levels.headerTextStyle);
       header.anchor.x = 0.5;
       header.anchor.y = 0.5;
     },
@@ -90,6 +120,19 @@ module.exports = function(game, Phaser){
       headerTint.alpha = 0.5;
     },
 
+    drawBackButton: function(){
+      backButton = game.add.button(
+        config.width / 2  + UI.levels.backButton.offsetX,
+        config.height / 2  + UI.levels.backButton.offsetY,
+        'buttons',
+        this.onBack,
+        this,
+        2
+      );
+      backButton.anchor.set(0.5);
+      backButton.setFrames(2, 2, 2);
+    },
+
     onNextBlock: function(){
       if(currentBlockIndex + 1 < levelsConfig.length){
         currentBlockIndex++;
@@ -104,6 +147,10 @@ module.exports = function(game, Phaser){
       }
     },
 
+    onBack: function(){
+      game.state.start('start', true, false);
+    },
+
     redraw: function(){
       this.drawBlock();
       this.drawArrows();
@@ -112,6 +159,7 @@ module.exports = function(game, Phaser){
     create: function(){
       game.add.sprite(0, 0, 'levelsBackground');
       this.drawHeaderTint();
+      this.drawBackButton();
       game.stage.backgroundColor = UI.levels.backgroundColor;
       game.world.setBounds(0, 0, config.width, config.height);
       this.redraw();

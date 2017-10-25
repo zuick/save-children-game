@@ -120,6 +120,7 @@ module.exports = function(game, Phaser){
     }
 
     this.getTileWays = function(tile){
+      if(!tile) return [];
       return this.getTilesAround(tile)
         .filter(
           function(t){ return t.tile && !this.isWall(t.tile) }.bind(this)

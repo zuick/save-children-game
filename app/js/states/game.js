@@ -5,6 +5,7 @@ var tileSprites = require('../tileSprites');
 var l10n = require('../modules/l10n');
 var utils = require('../modules/utils');
 var vis = require('../modules/vis');
+var storage = require('../modules/storage');
 
 var states = {
   normal: 0,
@@ -183,6 +184,10 @@ module.exports = function(game, Phaser){
         text,
         options.style
       );
+      if(options.stroke){
+        t.stroke = options.stroke.color;
+        t.strokeThickness = options.stroke.thickness;
+      }
       t.anchor.set(anchor);
       return t;
     },
@@ -197,7 +202,7 @@ module.exports = function(game, Phaser){
       this.activateTraps();
 
       timerText = this.createText(UI.game.timerText, utils.formatTime(time), 0.5);
-      levelNumberText = this.createText(UI.game.levelNumberText, currentLevelIndex + 1, 0.5);
+      levelNumberText = this.createText(UI.game.levelNumberText, utils.levelNumber(currentBlockIndex, currentLevelIndex), 0.5);
       statusText = this.createText(UI.game.statusText, "", 0.5);
       backButton = game.add.button(
         config.width / 2 - screenParams.offsetX + UI.game.backButton.offsetX,
@@ -233,11 +238,21 @@ module.exports = function(game, Phaser){
       this.updateStatusText();
     },
     onSuccess: function(){
+      storage.setProgress(utils.levelNumber(currentBlockIndex, currentLevelIndex), time);
+      var levelTitlesTimes = levelsConfig[currentBlockIndex][currentLevelIndex].titlesTime || [60, 60, 60];
+      var titleRate = 0;
+      if(time > levelTitlesTimes[1] && time <= levelTitlesTimes[2]){
+        titleRate = 1;
+      }else if(time > levelTitlesTimes[2]){
+        titleRate = 2;
+      }
+      var titleKey = 'LEVEL_TITLE_' + currentBlockIndex + '_' + currentLevelIndex + '_' + titleRate;
+
       successPopup = successPopupCreator.create(
         config.width / 2 - screenParams.offsetX,
         config.height / 2 - screenParams.offsetY,
-        time, savedChildren, initialChildrenCount,
-        this.returnToLevels,
+        l10n.get(titleKey), time, savedChildren, initialChildrenCount,
+        this.returnToMenu,
         this.returnToLevels,
         this.restartLevel,
         this.nextLevel,
@@ -250,7 +265,7 @@ module.exports = function(game, Phaser){
         config.width / 2 - screenParams.offsetX,
         config.height / 2 - screenParams.offsetY,
         time, savedChildren, initialChildrenCount,
-        this.returnToLevels,
+        this.returnToMenu,
         this.returnToLevels,
         this.restartLevel,
         this
@@ -333,6 +348,7 @@ module.exports = function(game, Phaser){
         this.destroyFromLayer(middleLayer, s);
         s.destroy();
       }.bind(this));
+      sparksEffects = [];
     },
     activateTraps: function(){
       trapsActive = true;
@@ -342,7 +358,8 @@ module.exports = function(game, Phaser){
         this.destroyFromLayer(middleLayer, m);
         m.destroy()
       }.bind(this));
-
+      bonusesMarks = [];
+      
       traps.forEach(function(trap){
         var options = UI.game.sparks.simple;
         var basicFrames = [0,1,2,3,4,5,6,7,8,9,10,10,10];
@@ -398,6 +415,10 @@ module.exports = function(game, Phaser){
       this.destroyHero();
       game.state.start('levels', true, false, void 0);
     },
+    returnToMenu: function(){
+      this.destroyHero();
+      game.state.start('start', true, false);
+    },
     nextLevel: function(){
       this.destroyHero();
       var nextBlockIndex = currentLevelIndex + 1 >= levelsConfig[currentBlockIndex].length ? currentBlockIndex + 1 : currentBlockIndex;
@@ -415,7 +436,7 @@ module.exports = function(game, Phaser){
     },
     updateStatusText: function(){
       if(statusText){
-        statusText.text = savedChildren + " / " + initialChildrenCount;
+        statusText.text = savedChildren + "/" + initialChildrenCount;
       }
     },
     trapCollision: function(child, trap){

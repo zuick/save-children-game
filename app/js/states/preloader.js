@@ -5,7 +5,7 @@ module.exports = function(game, Phaser){
     text: void 0,
     preload: function() {
       var splash = game.add.sprite(0, 0, 'splash');
-      var loadingText = game.add.text( game.world.centerX, game.world.centerY + 300, "Loading...", { fill: "#fff", align: "center" } ).anchor.setTo( 0.5, 0.5 );
+      var loadingText = game.add.text( game.world.centerX, game.world.centerY + 300, "Loading...", { font: "32pt KZSupercell", fill: "#fff", align: "center" } ).anchor.setTo( 0.5, 0.5 );
       levelsConfig.forEach(function(levelsBlock, blockIndex){
         levelsBlock.forEach(function(level, index){
           game.load.tilemap('level' + blockIndex + '-' + index, level.src, null, Phaser.Tilemap.TILED_JSON);
@@ -59,15 +59,17 @@ module.exports = function(game, Phaser){
       game.load.image('iconFail', 'assets/UI/icon_fail.png');
       game.load.image('levelStatus', 'assets/UI/level_stat.png');
       game.load.image('timer', 'assets/UI/timer.png');
-      game.load.spritesheet('buttons', 'assets/UI/buttons.png', 80, 76, 6);
+      game.load.image('play', 'assets/UI/play.png');
+      game.load.spritesheet('languageButton', 'assets/UI/language_button.png', 370, 100, 2);
+      game.load.spritesheet('buttons', 'assets/UI/buttons.png', 80, 76, 9);
       game.load.spritesheet('buttonsLarge', 'assets/UI/buttons_large.png', 200, 80, 2);
+      game.load.spritesheet('buttonsMenu', 'assets/UI/menu_buttons.png', 256, 256, 4);
       game.load.spritesheet('popupTitle', 'assets/UI/popup_title.png', 391, 72, 2);
       game.load.spritesheet('sparks', 'assets/danger/sparks.png', 220, 180, 11);
       game.load.image('pixel', 'assets/UI/pixel.png');
     },
     create: function(){
-      //game.state.start('game', true, false, 0, 0);
-      game.state.start('levels', true, false, config.defaultBlockIndex || 0);
+      game.state.start('start', true, false);
     }
   }
 }
