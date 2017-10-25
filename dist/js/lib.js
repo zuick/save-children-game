@@ -53,7 +53,191 @@ module.exports = {
   "MENU": "МЕНЮ",
   "REPLAY": "Ҡабат уйнау",
   "LEVELS": "Кимәлдәр",
-  "NEXT": "Артабан"
+  "NEXT": "Артабан",
+  "LANGUAGE_NAME": 'Башкорт',
+  "DIFFICULTY_LEVEL_EAZY": "Яңы кеше",
+  "DIFFICULTY_LEVEL_MIDDLE": "Тәжрибәле кеше",
+  "DIFFICULTY_LEVEL_HARD": "Эксперт",
+  "LEVEL_TITLE_0_0_0": "Диңгеҙ бесәйе",
+  "LEVEL_TITLE_0_0_1": "Ата Бесәй",
+  "LEVEL_TITLE_0_0_2": "Бесәй балаһы",
+  "LEVEL_TITLE_0_1_0": "Уҡсы",
+  "LEVEL_TITLE_0_1_1": "Йәйәсе",
+  "LEVEL_TITLE_0_1_2": "Таш атыусы",
+  "LEVEL_TITLE_0_2_0": "Боцман",
+  "LEVEL_TITLE_0_2_1": "Матрос",
+  "LEVEL_TITLE_0_2_2": "Юнга",
+  "LEVEL_TITLE_0_3_0": "Питон",
+  "LEVEL_TITLE_0_3_1": "Быуар йылан",
+  "LEVEL_TITLE_0_3_2": "Туҙбаш йылан",
+  "LEVEL_TITLE_0_4_0": "Отличник",
+  "LEVEL_TITLE_0_4_1": "Яҡшы уҡыусы",
+  "LEVEL_TITLE_0_4_2": "Өскә уҡыусы",
+  "LEVEL_TITLE_0_5_0": "Сәйәхәтсе",
+  "LEVEL_TITLE_0_5_1": "Турист",
+  "LEVEL_TITLE_0_5_2": "Юлсы",
+  "LEVEL_TITLE_0_6_0": "Ағас эше оҫтаҺы",
+  "LEVEL_TITLE_0_6_1": "Балта оҫтаҺы",
+  "LEVEL_TITLE_0_6_2": "Урман ҡырҡыусы",
+  "LEVEL_TITLE_0_7_0": "Танк йөрөтөүсе",
+  "LEVEL_TITLE_0_7_1": "Трактор йөрөтөүсе",
+  "LEVEL_TITLE_0_7_2": "Машина йөтөрөүсе",
+  "LEVEL_TITLE_0_8_0": "Фокуссы",
+  "LEVEL_TITLE_0_8_1": "Жонглер",
+  "LEVEL_TITLE_0_8_2": "Клоун",
+  "LEVEL_TITLE_0_9_0": "Айыу",
+  "LEVEL_TITLE_0_9_1": "Бүре",
+  "LEVEL_TITLE_0_9_2": "Төлкө",
+  "LEVEL_TITLE_0_10_0": "Поручик",
+  "LEVEL_TITLE_0_10_1": "Корнет",
+  "LEVEL_TITLE_0_10_2": "Прапорщик",
+  "LEVEL_TITLE_0_11_0": "ҠаҺарман",
+  "LEVEL_TITLE_0_11_1": "Батыр",
+  "LEVEL_TITLE_0_11_2": "Ҡыйыу",
+  "LEVEL_TITLE_0_12_0": "Атаман",
+  "LEVEL_TITLE_0_12_1": "Есаул",
+  "LEVEL_TITLE_0_12_2": "Казак",
+  "LEVEL_TITLE_0_13_0": "Бөркөт",
+  "LEVEL_TITLE_0_13_1": "Ҡоҙғон",
+  "LEVEL_TITLE_0_13_2": "Турғай",
+  "LEVEL_TITLE_0_14_0": "Баш табип",
+  "LEVEL_TITLE_0_14_1": "Табип",
+  "LEVEL_TITLE_0_14_2": "Санитар",
+  "LEVEL_TITLE_0_15_0": "Йыраусы шағир",
+  "LEVEL_TITLE_0_15_1": "Ҡобайырсы",
+  "LEVEL_TITLE_0_15_2": "Йырсы",
+  "LEVEL_TITLE_0_16_0": "Мең башлығы",
+  "LEVEL_TITLE_0_16_1": "Сотник",
+  "LEVEL_TITLE_0_16_2": "Дисәтник",
+  "LEVEL_TITLE_0_17_0": "АждаҺа",
+  "LEVEL_TITLE_0_17_1": "Ҙур кеҫәртке",
+  "LEVEL_TITLE_0_17_2": "Һыу кеҫәрткеҺе",
+  "LEVEL_TITLE_0_18_0": "Атыусы",
+  "LEVEL_TITLE_0_18_1": "Каратист",
+  "LEVEL_TITLE_0_18_2": "Боксер",
+  "LEVEL_TITLE_0_19_0": "Егет",
+  "LEVEL_TITLE_0_19_1": "Үҫмер",
+  "LEVEL_TITLE_0_19_2": "Бәпес",
+  "LEVEL_TITLE_1_0_0": "Капитан",
+  "LEVEL_TITLE_1_0_1": "Детектив",
+  "LEVEL_TITLE_1_0_2": "Патрульный",
+  "LEVEL_TITLE_1_1_0": "БаҺадир",
+  "LEVEL_TITLE_1_1_1": "Дружинасы",
+  "LEVEL_TITLE_1_1_2": "Ратник",
+  "LEVEL_TITLE_1_2_0": "Архитектор",
+  "LEVEL_TITLE_1_2_1": "Прораб",
+  "LEVEL_TITLE_1_2_2": "Төҙөүсе",
+  "LEVEL_TITLE_1_3_0": "Наф-Наф",
+  "LEVEL_TITLE_1_3_1": "Нуф-Нуф",
+  "LEVEL_TITLE_1_3_2": "Ниф-Ниф",
+  "LEVEL_TITLE_1_4_0": "Спецназ хеҙмәтсеҺе",
+  "LEVEL_TITLE_1_4_1": "Десантсы",
+  "LEVEL_TITLE_1_4_2": "Йәйәүле Һалдат",
+  "LEVEL_TITLE_1_5_0": "Директор",
+  "LEVEL_TITLE_1_5_1": "Завуч",
+  "LEVEL_TITLE_1_5_2": "Уҡытыусы",
+  "LEVEL_TITLE_1_6_0": "Арыҫлан",
+  "LEVEL_TITLE_1_6_1": "Юлбарыҫ",
+  "LEVEL_TITLE_1_6_2": "Яғуар",
+  "LEVEL_TITLE_1_7_0": "Фәлсәфәсе",
+  "LEVEL_TITLE_1_7_1": "Аҡыл эйәҺе",
+  "LEVEL_TITLE_1_7_2": "Аҡыллы баш",
+  "LEVEL_TITLE_1_8_0": "Комсомолец",
+  "LEVEL_TITLE_1_8_1": "Пионер",
+  "LEVEL_TITLE_1_8_2": "Октябренок",
+  "LEVEL_TITLE_1_9_0": "Күрәҙәсе",
+  "LEVEL_TITLE_1_9_1": "Сихырсы",
+  "LEVEL_TITLE_1_9_2": "Тылсымсы",
+  "LEVEL_TITLE_1_10_0": "Мәргән",
+  "LEVEL_TITLE_1_10_1": "Атыусы",
+  "LEVEL_TITLE_1_10_2": "БулдыҡҺыҙ",
+  "LEVEL_TITLE_1_11_0": "Ҡанбаба",
+  "LEVEL_TITLE_1_11_1": "Һөлдә",
+  "LEVEL_TITLE_1_11_2": "Зомби",
+  "LEVEL_TITLE_1_12_0": "Корсар",
+  "LEVEL_TITLE_1_12_1": "Флибустьер",
+  "LEVEL_TITLE_1_12_2": "Пират",
+  "LEVEL_TITLE_1_13_0": "Лейтенант",
+  "LEVEL_TITLE_1_13_1": "Сержант",
+  "LEVEL_TITLE_1_13_2": "Рядовой",
+  "LEVEL_TITLE_1_14_0": "Алмас",
+  "LEVEL_TITLE_1_14_1": "Ҡыҙыл йәүҺәр",
+  "LEVEL_TITLE_1_14_2": "Яҡут",
+  "LEVEL_TITLE_1_15_0": "Карап командиры",
+  "LEVEL_TITLE_1_15_1": "Старпом",
+  "LEVEL_TITLE_1_15_2": "Шкипер",
+  "LEVEL_TITLE_1_16_0": "Ректор",
+  "LEVEL_TITLE_1_16_1": "Декан",
+  "LEVEL_TITLE_1_16_2": "Доцент",
+  "LEVEL_TITLE_1_17_0": "Батыр хәрби егет",
+  "LEVEL_TITLE_1_17_1": "Яугир",
+  "LEVEL_TITLE_1_17_2": "Ялланма Һалдат",
+  "LEVEL_TITLE_1_18_0": "Аҡбуҙ",
+  "LEVEL_TITLE_1_18_1": "Ат",
+  "LEVEL_TITLE_1_18_2": "Ҡолон",
+  "LEVEL_TITLE_1_19_0": "Хөкөм итеүсе",
+  "LEVEL_TITLE_1_19_1": "Һыбай көтөүсе",
+  "LEVEL_TITLE_1_19_2": "Хәйерсе",
+  "LEVEL_TITLE_2_0_0": "Кенәз",
+  "LEVEL_TITLE_2_0_1": "Граф",
+  "LEVEL_TITLE_2_0_2": "Барон",
+  "LEVEL_TITLE_2_1_0": "Марафонсы",
+  "LEVEL_TITLE_2_1_1": "Спринтер",
+  "LEVEL_TITLE_2_1_2": "Йүгереүсе",
+  "LEVEL_TITLE_2_2_0": "Бомбардир",
+  "LEVEL_TITLE_2_2_1": "Гренадер",
+  "LEVEL_TITLE_2_2_2": "Гусар",
+  "LEVEL_TITLE_2_3_0": "Космонавт",
+  "LEVEL_TITLE_2_3_1": "Летчик",
+  "LEVEL_TITLE_2_3_2": "Планёрсы",
+  "LEVEL_TITLE_2_4_0": "Преторианец",
+  "LEVEL_TITLE_2_4_1": "Триарий",
+  "LEVEL_TITLE_2_4_2": "Легионер",
+  "LEVEL_TITLE_2_5_0": "Ҡурайсы",
+  "LEVEL_TITLE_2_5_1": "Гармунсы",
+  "LEVEL_TITLE_2_5_2": "Гитарасы",
+  "LEVEL_TITLE_2_6_0": "Кардинал",
+  "LEVEL_TITLE_2_6_1": "Епископ",
+  "LEVEL_TITLE_2_6_2": "Монах",
+  "LEVEL_TITLE_2_7_0": "Ҡотҡарыусы",
+  "LEVEL_TITLE_2_7_1": "Һәләкәттән аралаусы",
+  "LEVEL_TITLE_2_7_2": "Ярҙамсы",
+  "LEVEL_TITLE_2_8_0": "Юлбашсы",
+  "LEVEL_TITLE_2_8_1": "Шаман",
+  "LEVEL_TITLE_2_8_2": "Ҡырағай",
+  "LEVEL_TITLE_2_9_0": "Полковник",
+  "LEVEL_TITLE_2_9_1": "Майор",
+  "LEVEL_TITLE_2_9_2": "Капитан",
+  "LEVEL_TITLE_2_10_0": "Арнольд",
+  "LEVEL_TITLE_2_10_1": "Ят кеше",
+  "LEVEL_TITLE_2_10_2": "Йыртҡыс",
+  "LEVEL_TITLE_2_11_0": "Король",
+  "LEVEL_TITLE_2_11_1": "Принц",
+  "LEVEL_TITLE_2_11_2": "Придворный",
+  "LEVEL_TITLE_2_12_0": "Джедай",
+  "LEVEL_TITLE_2_12_1": "Баш күтәреүсе",
+  "LEVEL_TITLE_2_12_2": "Мөртәт",
+  "LEVEL_TITLE_2_13_0": "Терминатор",
+  "LEVEL_TITLE_2_13_1": "Андроид",
+  "LEVEL_TITLE_2_13_2": "Робот",
+  "LEVEL_TITLE_2_14_0": "Батыр",
+  "LEVEL_TITLE_2_14_1": "Егет",
+  "LEVEL_TITLE_2_14_2": "Малай",
+  "LEVEL_TITLE_2_15_0": "Д'Артаньян",
+  "LEVEL_TITLE_2_15_1": "Мушкетер",
+  "LEVEL_TITLE_2_15_2": "Гвардеец",
+  "LEVEL_TITLE_2_16_0": "Батша",
+  "LEVEL_TITLE_2_16_1": "Батша улы",
+  "LEVEL_TITLE_2_16_2": "Баяр",
+  "LEVEL_TITLE_2_17_0": "Фельдмаршал",
+  "LEVEL_TITLE_2_17_1": "Маршал",
+  "LEVEL_TITLE_2_17_2": "Генерал",
+  "LEVEL_TITLE_2_18_0": "Император",
+  "LEVEL_TITLE_2_18_1": "Вариҫ",
+  "LEVEL_TITLE_2_18_2": "Дәғүәсе",
+  "LEVEL_TITLE_2_19_0": "БЭСКмен!",
+  "LEVEL_TITLE_2_19_1": "Супермен",
+  "LEVEL_TITLE_2_19_2": "Аквамен"
 }
 
 },{}],3:[function(require,module,exports){
@@ -68,7 +252,191 @@ module.exports = {
   "MENU": "МЕНЮ",
   "REPLAY": "Переиграть",
   "LEVELS": "Уровни",
-  "NEXT": "Далее"
+  "NEXT": "Далее",
+  "LANGUAGE_NAME": "Русский",
+  "DIFFICULTY_LEVEL_EAZY": "Новичок",
+  "DIFFICULTY_LEVEL_MIDDLE": "Опытный",
+  "DIFFICULTY_LEVEL_HARD": "Эксперт",
+  "LEVEL_TITLE_0_0_0": "Котище",
+  "LEVEL_TITLE_0_0_1": "Кот",
+  "LEVEL_TITLE_0_0_2": "Котенок",
+  "LEVEL_TITLE_0_1_0": "Арбалетчик",
+  "LEVEL_TITLE_0_1_1": "Лучник",
+  "LEVEL_TITLE_0_1_2": "Пращник",
+  "LEVEL_TITLE_0_2_0": "Боцман",
+  "LEVEL_TITLE_0_2_1": "Матрос",
+  "LEVEL_TITLE_0_2_2": "Юнга",
+  "LEVEL_TITLE_0_3_0": "Питон",
+  "LEVEL_TITLE_0_3_1": "Удав",
+  "LEVEL_TITLE_0_3_2": "Уж",
+  "LEVEL_TITLE_0_4_0": "Отличник",
+  "LEVEL_TITLE_0_4_1": "Хорошист",
+  "LEVEL_TITLE_0_4_2": "Троечник",
+  "LEVEL_TITLE_0_5_0": "Путешественник",
+  "LEVEL_TITLE_0_5_1": "Турист",
+  "LEVEL_TITLE_0_5_2": "Путник",
+  "LEVEL_TITLE_0_6_0": "Столяр",
+  "LEVEL_TITLE_0_6_1": "Плотник",
+  "LEVEL_TITLE_0_6_2": "Лесоруб",
+  "LEVEL_TITLE_0_7_0": "Танкист",
+  "LEVEL_TITLE_0_7_1": "Тракторист",
+  "LEVEL_TITLE_0_7_2": "Водитель",
+  "LEVEL_TITLE_0_8_0": "Укротитель",
+  "LEVEL_TITLE_0_8_1": "Жонглер",
+  "LEVEL_TITLE_0_8_2": "Клоун",
+  "LEVEL_TITLE_0_9_0": "Медведь",
+  "LEVEL_TITLE_0_9_1": "Волк",
+  "LEVEL_TITLE_0_9_2": "Лис",
+  "LEVEL_TITLE_0_10_0": "Поручик",
+  "LEVEL_TITLE_0_10_1": "Корнет",
+  "LEVEL_TITLE_0_10_2": "Прапорщик",
+  "LEVEL_TITLE_0_11_0": "Герой",
+  "LEVEL_TITLE_0_11_1": "Храбрец",
+  "LEVEL_TITLE_0_11_2": "Смельчак",
+  "LEVEL_TITLE_0_12_0": "Атаман",
+  "LEVEL_TITLE_0_12_1": "Есаул",
+  "LEVEL_TITLE_0_12_2": "Казак",
+  "LEVEL_TITLE_0_13_0": "Орёл",
+  "LEVEL_TITLE_0_13_1": "Ворон",
+  "LEVEL_TITLE_0_13_2": "Воробей",
+  "LEVEL_TITLE_0_14_0": "Главврач",
+  "LEVEL_TITLE_0_14_1": "Врач",
+  "LEVEL_TITLE_0_14_2": "Санитар",
+  "LEVEL_TITLE_0_15_0": "Бард",
+  "LEVEL_TITLE_0_15_1": "Менестрель",
+  "LEVEL_TITLE_0_15_2": "Певец",
+  "LEVEL_TITLE_0_16_0": "Тысячник",
+  "LEVEL_TITLE_0_16_1": "Сотник",
+  "LEVEL_TITLE_0_16_2": "Десятник",
+  "LEVEL_TITLE_0_17_0": "Дракон",
+  "LEVEL_TITLE_0_17_1": "Ящер",
+  "LEVEL_TITLE_0_17_2": "Тритон",
+  "LEVEL_TITLE_0_18_0": "Стрелок",
+  "LEVEL_TITLE_0_18_1": "Каратист",
+  "LEVEL_TITLE_0_18_2": "Боксер",
+  "LEVEL_TITLE_0_19_0": "Юноша",
+  "LEVEL_TITLE_0_19_1": "Отрок",
+  "LEVEL_TITLE_0_19_2": "Ребенок",
+  "LEVEL_TITLE_1_0_0": "Капитан",
+  "LEVEL_TITLE_1_0_1": "Детектив",
+  "LEVEL_TITLE_1_0_2": "Патрульный",
+  "LEVEL_TITLE_1_1_0": "Богатырь",
+  "LEVEL_TITLE_1_1_1": "Дружинник",
+  "LEVEL_TITLE_1_1_2": "Ратник",
+  "LEVEL_TITLE_1_2_0": "Архитектор",
+  "LEVEL_TITLE_1_2_1": "Прораб",
+  "LEVEL_TITLE_1_2_2": "Строитель",
+  "LEVEL_TITLE_1_3_0": "Наф-Наф",
+  "LEVEL_TITLE_1_3_1": "Нуф-Нуф",
+  "LEVEL_TITLE_1_3_2": "Ниф-Ниф",
+  "LEVEL_TITLE_1_4_0": "Спецназовец",
+  "LEVEL_TITLE_1_4_1": "Десантник",
+  "LEVEL_TITLE_1_4_2": "Пехотинец",
+  "LEVEL_TITLE_1_5_0": "Директор",
+  "LEVEL_TITLE_1_5_1": "Завуч",
+  "LEVEL_TITLE_1_5_2": "Учитель",
+  "LEVEL_TITLE_1_6_0": "Лев",
+  "LEVEL_TITLE_1_6_1": "Тигр",
+  "LEVEL_TITLE_1_6_2": "Ягуар",
+  "LEVEL_TITLE_1_7_0": "Философ",
+  "LEVEL_TITLE_1_7_1": "Мыслитель",
+  "LEVEL_TITLE_1_7_2": "Умник",
+  "LEVEL_TITLE_1_8_0": "Комсомолец",
+  "LEVEL_TITLE_1_8_1": "Пионер",
+  "LEVEL_TITLE_1_8_2": "Октябренок",
+  "LEVEL_TITLE_1_9_0": "Маг",
+  "LEVEL_TITLE_1_9_1": "Колдун",
+  "LEVEL_TITLE_1_9_2": "Волшебник",
+  "LEVEL_TITLE_1_10_0": "Снайпер",
+  "LEVEL_TITLE_1_10_1": "Стрелок",
+  "LEVEL_TITLE_1_10_2": "Мазила",
+  "LEVEL_TITLE_1_11_0": "Некромант",
+  "LEVEL_TITLE_1_11_1": "Скелет",
+  "LEVEL_TITLE_1_11_2": "Зомби",
+  "LEVEL_TITLE_1_12_0": "Корсар",
+  "LEVEL_TITLE_1_12_1": "Флибустьер",
+  "LEVEL_TITLE_1_12_2": "Пират",
+  "LEVEL_TITLE_1_13_0": "Лейтенант",
+  "LEVEL_TITLE_1_13_1": "Сержант",
+  "LEVEL_TITLE_1_13_2": "Рядовой",
+  "LEVEL_TITLE_1_14_0": "Алмаз",
+  "LEVEL_TITLE_1_14_1": "Рубин",
+  "LEVEL_TITLE_1_14_2": "Яхонт",
+  "LEVEL_TITLE_1_15_0": "Капитан",
+  "LEVEL_TITLE_1_15_1": "Старпом",
+  "LEVEL_TITLE_1_15_2": "Шкипер",
+  "LEVEL_TITLE_1_16_0": "Ректор",
+  "LEVEL_TITLE_1_16_1": "Декан",
+  "LEVEL_TITLE_1_16_2": "Доцент",
+  "LEVEL_TITLE_1_17_0": "Рыцарь",
+  "LEVEL_TITLE_1_17_1": "Воин",
+  "LEVEL_TITLE_1_17_2": "Наемник",
+  "LEVEL_TITLE_1_18_0": "Акбузат",
+  "LEVEL_TITLE_1_18_1": "Конь",
+  "LEVEL_TITLE_1_18_2": "Жеребенок",
+  "LEVEL_TITLE_1_19_0": "Шериф",
+  "LEVEL_TITLE_1_19_1": "Ковбой",
+  "LEVEL_TITLE_1_19_2": "Бродяга",
+  "LEVEL_TITLE_2_0_0": "Князь",
+  "LEVEL_TITLE_2_0_1": "Граф",
+  "LEVEL_TITLE_2_0_2": "Барон",
+  "LEVEL_TITLE_2_1_0": "Марафонец",
+  "LEVEL_TITLE_2_1_1": "Спринтер",
+  "LEVEL_TITLE_2_1_2": "Бегун",
+  "LEVEL_TITLE_2_2_0": "Бомбардир",
+  "LEVEL_TITLE_2_2_1": "Гренадер",
+  "LEVEL_TITLE_2_2_2": "Гусар",
+  "LEVEL_TITLE_2_3_0": "Космонавт",
+  "LEVEL_TITLE_2_3_1": "Летчик",
+  "LEVEL_TITLE_2_3_2": "Планерист",
+  "LEVEL_TITLE_2_4_0": "Преторианец",
+  "LEVEL_TITLE_2_4_1": "Триарий",
+  "LEVEL_TITLE_2_4_2": "Легионер",
+  "LEVEL_TITLE_2_5_0": "Кураист",
+  "LEVEL_TITLE_2_5_1": "Гармонист",
+  "LEVEL_TITLE_2_5_2": "Гитарист",
+  "LEVEL_TITLE_2_6_0": "Кардинал",
+  "LEVEL_TITLE_2_6_1": "Епископ",
+  "LEVEL_TITLE_2_6_2": "Монах",
+  "LEVEL_TITLE_2_7_0": "Спаситель",
+  "LEVEL_TITLE_2_7_1": "Спасатель",
+  "LEVEL_TITLE_2_7_2": "Помощник",
+  "LEVEL_TITLE_2_8_0": "Вождь",
+  "LEVEL_TITLE_2_8_1": "Шаман",
+  "LEVEL_TITLE_2_8_2": "Дикарь",
+  "LEVEL_TITLE_2_9_0": "Полковник",
+  "LEVEL_TITLE_2_9_1": "Майор",
+  "LEVEL_TITLE_2_9_2": "Капитан",
+  "LEVEL_TITLE_2_10_0": "Арнольд",
+  "LEVEL_TITLE_2_10_1": "Чужой",
+  "LEVEL_TITLE_2_10_2": "Хищник",
+  "LEVEL_TITLE_2_11_0": "Король",
+  "LEVEL_TITLE_2_11_1": "Принц",
+  "LEVEL_TITLE_2_11_2": "Придворный",
+  "LEVEL_TITLE_2_12_0": "Джедай",
+  "LEVEL_TITLE_2_12_1": "Повстанец",
+  "LEVEL_TITLE_2_12_2": "Изгой",
+  "LEVEL_TITLE_2_13_0": "Терминатор",
+  "LEVEL_TITLE_2_13_1": "Андроид",
+  "LEVEL_TITLE_2_13_2": "Робот",
+  "LEVEL_TITLE_2_14_0": "Батыр",
+  "LEVEL_TITLE_2_14_1": "Егет",
+  "LEVEL_TITLE_2_14_2": "Мальчишка",
+  "LEVEL_TITLE_2_15_0": "Д'Артаньян",
+  "LEVEL_TITLE_2_15_1": "Мушкетер",
+  "LEVEL_TITLE_2_15_2": "Гвардеец",
+  "LEVEL_TITLE_2_16_0": "Царь",
+  "LEVEL_TITLE_2_16_1": "Царевич",
+  "LEVEL_TITLE_2_16_2": "Боярин",
+  "LEVEL_TITLE_2_17_0": "Фельдмаршал",
+  "LEVEL_TITLE_2_17_1": "Маршал",
+  "LEVEL_TITLE_2_17_2": "Генерал",
+  "LEVEL_TITLE_2_18_0": "Император",
+  "LEVEL_TITLE_2_18_1": "Наследник",
+  "LEVEL_TITLE_2_18_2": "Претендент",
+  "LEVEL_TITLE_2_19_0": "БЭСКмен!",
+  "LEVEL_TITLE_2_19_1": "Супермен",
+  "LEVEL_TITLE_2_19_2": "Аквамен"
 }
 
 },{}],4:[function(require,module,exports){
@@ -77,324 +445,439 @@ module.exports = [
     {
       src: 'assets/levels/Level_1.json',
       type: 1,
-      bonusDelay: 10
+      bonusDelay: 10,
+      titlesTime: [1, 5, 8]
     },
     {
       src: 'assets/levels/Level_2.json',
       type: 1,
-      bonusDelay: 10
+      bonusDelay: 10,
+      titlesTime: [1, 7, 10]
     },
     {
       src: 'assets/levels/Level_3.json',
       type: 1,
-      bonusDelay: 10
+      bonusDelay: 10,
+      titlesTime: [6, 8, 12]
     },
     {
       src: 'assets/levels/Level_4.json',
       type: 1,
-      bonusDelay: 10
+      bonusDelay: 10,
+      titlesTime: [6, 8, 11]
     },
     {
       src: 'assets/levels/Level_5.json',
       type: 1,
-      bonusDelay: 13
+      bonusDelay: 13,
+      titlesTime: [8, 11, 14]
     },
     {
       src: 'assets/levels/Level_6.json',
       type: 1,
-      bonusDelay: 10
+      bonusDelay: 10,
+      titlesTime: [6, 9, 13]
     },
     {
       src: 'assets/levels/Level_7.json',
       type: 1,
-      bonusDelay: 14
+      bonusDelay: 14,
+      titlesTime: [8, 11, 14]
     },
     {
       src: 'assets/levels/Level_8.json',
       type: 0,
-      bonusDelay: 17
+      bonusDelay: 17,
+      titlesTime: [14, 17, 22]
     },
     {
       src: 'assets/levels/Level_9.json',
       type: 0,
-      bonusDelay: 13
+      bonusDelay: 13,
+      titlesTime: [10, 13, 17]
     },
     {
       src: 'assets/levels/Level_10.json',
       type: 0,
-      bonusDelay: 14
+      bonusDelay: 14,
+      titlesTime: [11, 14, 20]
     },
     {
       src: 'assets/levels/Level_11.json',
       type: 0,
-      bonusDelay: 18
+      bonusDelay: 18,
+      titlesTime: [10, 18, 25]
     },
     {
       src: 'assets/levels/Level_12.json',
       type: 0,
-      bonusDelay: 13
+      bonusDelay: 13,
+      titlesTime: [8, 13, 17]
     },
     {
       src: 'assets/levels/Level_13.json',
       type: 0,
-      bonusDelay: 14
+      bonusDelay: 14,
+      titlesTime: [11, 14, 19]
     },
     {
       src: 'assets/levels/Level_14.json',
       type: 0,
-      bonusDelay: 20
+      bonusDelay: 20,
+      titlesTime: [12, 20, 25]
     },
     {
       src: 'assets/levels/Level_15.json',
       type: 2,
-      bonusDelay: 15
+      bonusDelay: 15,
+      titlesTime: [12, 15, 19]
     },
     {
       src: 'assets/levels/Level_16.json',
       type: 2,
-      bonusDelay: 18
+      bonusDelay: 18,
+      titlesTime: [14, 18, 23]
     },
     {
       src: 'assets/levels/Level_17.json',
       type: 2,
-      bonusDelay: 22
+      bonusDelay: 22,
+      titlesTime: [18, 22, 26]
     },
     {
       src: 'assets/levels/Level_18.json',
       type: 2,
-      bonusDelay: 11
+      bonusDelay: 11,
+      titlesTime: [7, 11, 16]
     },
     {
       src: 'assets/levels/Level_19.json',
       type: 2,
-      bonusDelay: 12
+      bonusDelay: 12,
+      titlesTime: [11, 15, 21]
     },
     {
       src: 'assets/levels/Level_20.json',
       type: 2,
-      bonusDelay: 18
+      bonusDelay: 18,
+      titlesTime: [13, 19, 26]
     }
   ],
   [
     {
       src: 'assets/levels/Level_21.json',
       type: 1,
-      bonusDelay: 23
+      bonusDelay: 23,
+      titlesTime: [19, 23, 28]
     },
     {
       src: 'assets/levels/Level_22.json',
       type: 1,
-      bonusDelay: 21
+      bonusDelay: 21,
+      titlesTime: [18, 22, 28]
     },
     {
       src: 'assets/levels/Level_23.json',
       type: 1,
-      bonusDelay: 41
+      bonusDelay: 41,
+      titlesTime: [35, 41, 48]
     },
     {
       src: 'assets/levels/Level_24.json',
       type: 1,
-      bonusDelay: 35
+      bonusDelay: 35,
+      titlesTime: [30, 35, 41]
     },
     {
       src: 'assets/levels/Level_25.json',
       type: 1,
-      bonusDelay: 28
+      bonusDelay: 28,
+      titlesTime: [22, 28, 34]
     },
     {
       src: 'assets/levels/Level_26.json',
       type: 1,
-      bonusDelay: 25
+      bonusDelay: 25,
+      titlesTime: [20, 25, 31]
     },
     {
       src: 'assets/levels/Level_27.json',
       type: 1,
-      bonusDelay: 34
+      bonusDelay: 34,
+      titlesTime: [30, 34, 39]
     },
     {
       src: 'assets/levels/Level_28.json',
       type: 0,
-      bonusDelay: 17
+      bonusDelay: 17,
+      titlesTime: [13, 17, 21]
     },
     {
       src: 'assets/levels/Level_29.json',
       type: 0,
-      bonusDelay: 20
+      bonusDelay: 20,
+      titlesTime: [16, 21, 27]
     },
     {
       src: 'assets/levels/Level_30.json',
       type: 0,
-      bonusDelay: 22
+      bonusDelay: 22,
+      titlesTime: [18, 22, 27]
     },
     {
       src: 'assets/levels/Level_31.json',
       type: 0,
-      bonusDelay: 28
+      bonusDelay: 28,
+      titlesTime: [23, 28, 36]
     },
     {
       src: 'assets/levels/Level_32.json',
       type: 0,
-      bonusDelay: 26
+      bonusDelay: 26,
+      titlesTime: [18, 26, 38]
     },
     {
       src: 'assets/levels/Level_33.json',
       type: 0,
-      bonusDelay: 30
+      bonusDelay: 30,
+      titlesTime: [21, 30, 39]
     },
     {
       src: 'assets/levels/Level_34.json',
       type: 0,
-      bonusDelay: 32
+      bonusDelay: 32,
+      titlesTime: [18, 32, 42]
     },
     {
       src: 'assets/levels/Level_35.json',
       type: 2,
-      bonusDelay: 50
+      bonusDelay: 50,
+      titlesTime: [40, 50, 60]
     },
     {
       src: 'assets/levels/Level_36.json',
       type: 2,
-      bonusDelay: 28
+      bonusDelay: 28,
+      titlesTime: [23, 28, 33]
     },
     {
       src: 'assets/levels/Level_37.json',
       type: 2,
-      bonusDelay: 42
+      bonusDelay: 42,
+      titlesTime: [32, 42, 50]
     },
     {
       src: 'assets/levels/Level_38.json',
       type: 2,
-      bonusDelay: 20
+      bonusDelay: 20,
+      titlesTime: [14, 20, 25]
     },
     {
       src: 'assets/levels/Level_39.json',
       type: 2,
-      bonusDelay: 33
+      bonusDelay: 33,
+      titlesTime: [25, 33, 40]
     },
     {
       src: 'assets/levels/Level_40.json',
       type: 2,
-      bonusDelay: 23
+      bonusDelay: 23,
+      titlesTime: [18, 23, 28]
     }
   ],
   [
     {
       src: 'assets/levels/Level_41.json',
       type: 1,
-      bonusDelay: 50
+      bonusDelay: 50,
+      titlesTime: [43, 50, 56]
     },
     {
       src: 'assets/levels/Level_42.json',
       type: 1,
-      bonusDelay: 30
+      bonusDelay: 30,
+      titlesTime: [25, 30, 35]
     },
     {
       src: 'assets/levels/Level_43.json',
       type: 1,
-      bonusDelay: 42
+      bonusDelay: 42,
+      titlesTime: [30, 42, 50]
     },
     {
       src: 'assets/levels/Level_44.json',
       type: 1,
-      bonusDelay: 35
+      bonusDelay: 35,
+      titlesTime: [29, 35, 41]
     },
     {
       src: 'assets/levels/Level_45.json',
       type: 1,
-      bonusDelay: 40
+      bonusDelay: 40,
+      titlesTime: [33, 40, 46]
     },
     {
       src: 'assets/levels/Level_46.json',
       type: 1,
-      bonusDelay: 55
+      bonusDelay: 55,
+      titlesTime: [45, 55, 62]
     },
     {
       src: 'assets/levels/Level_47.json',
       type: 1,
-      bonusDelay: 68
+      bonusDelay: 68,
+      titlesTime: [58, 68, 75]
     },
     {
       src: 'assets/levels/Level_48.json',
       type: 0,
-      bonusDelay: 47
+      bonusDelay: 47,
+      titlesTime: [37, 47, 56]
     },
     {
       src: 'assets/levels/Level_49.json',
       type: 0,
-      bonusDelay: 46
+      bonusDelay: 46,
+      titlesTime: [34, 46, 54]
     },
     {
       src: 'assets/levels/Level_50.json',
       type: 0,
-      bonusDelay: 57
+      bonusDelay: 57,
+      titlesTime: [47, 57, 67]
     },
     {
       src: 'assets/levels/Level_51.json',
       type: 0,
-      bonusDelay: 45
+      bonusDelay: 45,
+      titlesTime: [35, 45, 54]
     },
     {
       src: 'assets/levels/Level_52.json',
       type: 0,
-      bonusDelay: 80
+      bonusDelay: 80,
+      titlesTime: [70, 80, 90]
     },
     {
       src: 'assets/levels/Level_53.json',
       type: 0,
-      bonusDelay: 41
+      bonusDelay: 41,
+      titlesTime: [29, 41, 50]
     },
     {
       src: 'assets/levels/Level_54.json',
       type: 0,
-      bonusDelay: 52
+      bonusDelay: 52,
+      titlesTime: [45, 52, 60]
     },
     {
       src: 'assets/levels/Level_55.json',
       type: 2,
-      bonusDelay: 42
+      bonusDelay: 42,
+      titlesTime: [31, 42, 50]
     },
     {
       src: 'assets/levels/Level_56.json',
       type: 2,
-      bonusDelay: 75
+      bonusDelay: 75,
+      titlesTime: [65, 75, 84]
     },
     {
       src: 'assets/levels/Level_57.json',
       type: 2,
-      bonusDelay: 80
+      bonusDelay: 80,
+      titlesTime: [70, 80, 89]
     },
     {
       src: 'assets/levels/Level_58.json',
       type: 2,
-      bonusDelay: 45
+      bonusDelay: 45,
+      titlesTime: [34, 45, 52]
     },
     {
       src: 'assets/levels/Level_59.json',
       type: 2,
-      bonusDelay: 45
+      bonusDelay: 45,
+      titlesTime: [34, 45, 52]
     },
     {
       src: 'assets/levels/Level_60.json',
       type: 2,
-      bonusDelay: 85
+      bonusDelay: 85,
+      titlesTime: [75, 85, 95]
     }
   ]
 ]
 
 },{}],5:[function(require,module,exports){
 module.exports = {
+  menu: {
+    playButton: {
+      offsetX: 0,
+      offsetY: 300
+    },
+    soundButton: {
+      offsetX: -320,
+      offsetY: 280
+    },
+    soundButtonSprite: {
+      offsetX: -320,
+      offsetY: 255
+    },
+    levelsButton: {
+      offsetX: 320,
+      offsetY: 280
+    },
+    levelsButtonSprite: {
+      offsetX: 320,
+      offsetY: 255
+    },
+    languageButtonRU: {
+      offsetX: -710,
+      offsetY: -420,
+      flag: {
+        x: 110,
+        y: -5
+      },
+      text: {
+        style: { font: "28px KZSupercell", fill: "#fff", align: "center" },
+        x: -50,
+        y: -2
+      }
+    },
+    languageButtonBA: {
+      offsetX: -710,
+      offsetY: -300,
+      flag: {
+        x: 110,
+        y: -5
+      },
+      text: {
+        style: { font: "28px KZSupercell", fill: "#fff", align: "center" },
+        x: -50,
+        y: -2
+      }
+    }
+  },
   levels: {
     backgroundColor: '#000',
     levelItem: { width: 215, height: 260 },
     levelItemsPadding: 0,
     blockWidthScale: 0.85,
-    blockMarginTop: 170,
+    blockMarginTop: 200,
     blockArrowMarginLeft: 50,
-    levelItemTextStyle: { font: "72px Arial", fill: "#fff", align: "center" },
+    levelItemTextStyle: { font: "64px KZSupercell", fill: "#fff", align: "center" },
+    levelItemTextShadow: { x: 8, y: 8, alpha: 0.7, style: { font: "70px KZSupercell", fill: "#111s", align: "center" } },
     levelItemTextOffsetY: 20,
     levelItemTextOffsetX: -5,
-    headerTextStyle: { font: "48px Arial", fill: "#fff", align: "center" },
-    headerHeight: 80,
+    levelItemCheckOffsetY: 80,
+    levelItemCheckOffsetX: 50,
+    headerTextStyle: { font: "36px KZSupercell", fill: "#fff", align: "center" },
+    headerHeight: 100,
+    backButton: {
+      offsetY: -440,
+      offsetX: -800, // from center
+    },
     types: {
       0: 'levelItemCity',
       1: 'levelItemCountrySide',
@@ -412,19 +895,21 @@ module.exports = {
       offsetX: 600, // from center
     },
     timerText: {
-      marginTop: 50,
+      marginTop: 47,
       offsetX: -90, // from center
-      style: { font: "35px Arial", fill: "#fff", align: "center" }
+      style: { font: "22px KZSupercell", fill: "#fff", align: "center" },
+      stroke: { color: '#111', thickness: 2 }
     },
     levelNumberText: {
-      marginTop: 55,
-      offsetX: 838, // from center
-      style: { font: "48px Arial", fill: "#fff", align: "center" }
+      marginTop: 50,
+      offsetX: 836, // from center
+      style: { font: "42px Bangers", fill: "#fff", align: "center" },
+      stroke: { color: '#111', thickness: 2 }
     },
     statusText: {
       marginTop: 55,
       offsetX: 735, // from center
-      style: { font: "40px Arial", fill: "#579D00", align: "center" }
+      style: { font: "28px KZSupercell", fill: "#579D00", align: "center" }
     },
     pauseButton: {
       marginTop: 48,
@@ -444,9 +929,9 @@ module.exports = {
     }
   },
   popups: {
-    textButtonStyle: { font: "36px Arial", fill: "#fff", align: "center" },
+    textButtonStyle: { font: "36px KZSupercell", fill: "#fff", align: "center" },
     pause: {
-      textStyle: { font: "64px Arial", fill: "#dd0", align: "center" },
+      textStyle: { font: "48px KZSupercell", fill: "#dd0", align: "center" },
       opacity: 0.5
     },
     success: {
@@ -454,7 +939,7 @@ module.exports = {
       height: 500,
       opacity: 0.5,
       header: {
-        style: { font: "40px Arial", fill: "#fff", align: "center" },
+        style: { font: "26px KZSupercell", fill: "#fff", align: "center" },
         offsetY: -265,
         titleOffsetY: -260,
         stroke: "#111",
@@ -465,11 +950,11 @@ module.exports = {
         offsetY: -100
       },
       stat: {
-        style: { font: "36px Arial", fill: "#B04E0D", align: "center" },
+        style: { font: "22px KZSupercell", fill: "#B04E0D", align: "center" },
         offsetY: 40
       },
       time: {
-        style: { font: "36px Arial", fill: "#B04E0D", align: "center" },
+        style: { font: "22px KZSupercell", fill: "#B04E0D", align: "center" },
         offsetY: 85
       },
       buttons: {
@@ -478,7 +963,7 @@ module.exports = {
         toLevelsOffsetX: -115,
         replayOffsetX: -40,
         nextOffsetX: 105,
-        nextTextStyle: { font: "36px Arial", fill: "#fff", align: "center" }
+        nextTextStyle: { font: "22px KZSupercell", fill: "#fff", align: "center" }
       }
     },
     gameover: {
@@ -486,7 +971,7 @@ module.exports = {
       height: 500,
       opacity: 0.5,
       header: {
-        style: { font: "40px Arial", fill: "#fff", align: "center" },
+        style: { font: "26px KZSupercell", fill: "#fff", align: "center" },
         offsetY: -235,
         titleOffsetY: -230,
         stroke: "#111",
@@ -497,11 +982,11 @@ module.exports = {
         offsetY: -75
       },
       stat: {
-        style: { font: "36px Arial", fill: "#B04E0D", align: "center" },
+        style: { font: "22px KZSupercell", fill: "#B04E0D", align: "center" },
         offsetY: 45
       },
       time: {
-        style: { font: "36px Arial", fill: "#B04E0D", align: "center" },
+        style: { font: "22px KZSupercell", fill: "#B04E0D", align: "center" },
         offsetY: 85
       },
       buttons: {
@@ -536,7 +1021,7 @@ module.exports = {
   game.state.start('boot');
 })();
 
-},{"./configs/config":1,"./states/boot":22,"./states/game":23,"./states/levels":24,"./states/preloader":25,"./states/start":26,"phaser/build/custom/p2":29,"phaser/build/custom/phaser-split":30,"phaser/build/custom/pixi":31}],7:[function(require,module,exports){
+},{"./configs/config":1,"./states/boot":23,"./states/game":24,"./states/levels":25,"./states/preloader":26,"./states/start":27,"phaser/build/custom/p2":30,"phaser/build/custom/phaser-split":31,"phaser/build/custom/pixi":32}],7:[function(require,module,exports){
 module.exports = function(game, Phaser){
   function Bonus(){
     this.sprite;
@@ -601,7 +1086,7 @@ module.exports = {
   }
 }
 
-},{"lodash.difference":28}],9:[function(require,module,exports){
+},{"lodash.difference":29}],9:[function(require,module,exports){
 module.exports = function(game, Phaser){
   function Escape(){
     var sprite;
@@ -665,24 +1150,26 @@ var config = require('../configs/config');
 var languages = {
   ba: require('../configs/languages/ba'),
   ru: require('../configs/languages/ru')
-}
+};
+var storage = require('../modules/storage');
 
 module.exports = {
-  get: function(key, params){
-    if(languages[config.defaultLanguage]){
-      if(languages[config.defaultLanguage][key]){
-        return format(languages[config.defaultLanguage][key], params || {});
+  get: function(key, params, language){
+    var code = language || storage.getSettings().language;
+    if(languages[code]){
+      if(languages[code][key]){
+        return format(languages[code][key], params || {});
       }else{
         console.log("Can't find key:" + key);
       }
     }else{
-      console.log("Can't find language: " + config.defaultLanguage);
+      console.log("Can't find language: " + code);
     }
     return key;
   }
 }
 
-},{"../configs/config":1,"../configs/languages/ba":2,"../configs/languages/ru":3,"../modules/stringFormat":18}],12:[function(require,module,exports){
+},{"../configs/config":1,"../configs/languages/ba":2,"../configs/languages/ru":3,"../modules/storage":17,"../modules/stringFormat":19}],12:[function(require,module,exports){
 var config = require('../configs/config');
 var directions = require('./directions');
 
@@ -805,6 +1292,7 @@ module.exports = function(game, Phaser){
     }
 
     this.getTileWays = function(tile){
+      if(!tile) return [];
       return this.getTilesAround(tile)
         .filter(
           function(t){ return t.tile && !this.isWall(t.tile) }.bind(this)
@@ -942,7 +1430,7 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../../configs/config":1,"../../configs/ui":5,"../l10n":11,"../popups/basic":13,"../utils":20}],15:[function(require,module,exports){
+},{"../../configs/config":1,"../../configs/ui":5,"../l10n":11,"../popups/basic":13,"../utils":21}],15:[function(require,module,exports){
 var config = require('../../configs/config');
 var l10n = require('../l10n');
 var UI = require('../../configs/ui');
@@ -969,7 +1457,7 @@ var utils = require('../utils');
 module.exports = function(game, Phaser){
   var basic = require('../popups/basic')(game, Phaser);
   return {
-    create: function(x, y, time, children, childrenTotal, onToMenu, onToLevels, onReplay, onNext, context){
+    create: function(x, y, titleText, time, children, childrenTotal, onToMenu, onToLevels, onReplay, onNext, context){
       var options = UI.popups.success;
       var base = basic.create(x, y, options.opacity);
       var win = basic.tint(x, y, options.width, options.height, 1, 0xc24729, 'popup');
@@ -979,7 +1467,7 @@ module.exports = function(game, Phaser){
       title.frame = 0;
       title.anchor.set(0.5);
 
-      var text = game.add.text(x, y + options.header.titleOffsetY, l10n.get('CONGRATULATIONS'), options.header.style);
+      var text = game.add.text(x, y + options.header.titleOffsetY, titleText, options.header.style);
       text.anchor.set(0.5);
       text.stroke = options.header.stroke;
       text.strokeThickness = options.header.strokeThickness;
@@ -1016,7 +1504,82 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../../configs/config":1,"../../configs/ui":5,"../l10n":11,"../popups/basic":13,"../utils":20}],17:[function(require,module,exports){
+},{"../../configs/config":1,"../../configs/ui":5,"../l10n":11,"../popups/basic":13,"../utils":21}],17:[function(require,module,exports){
+var config = require('../configs/config');
+
+function storageAvailable(type) {
+    try {
+        var storage = window[type],
+            x = '__storage_test__';
+        storage.setItem(x, x);
+        storage.removeItem(x);
+        return true;
+    }
+    catch(e) {
+        return e instanceof DOMException && (
+            // everything except Firefox
+            e.code === 22 ||
+            // Firefox
+            e.code === 1014 ||
+            // test name field too, because code might not be present
+            // everything except Firefox
+            e.name === 'QuotaExceededError' ||
+            // Firefox
+            e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+            // acknowledge QuotaExceededError only if there's something already stored
+            storage.length !== 0;
+    }
+}
+
+var localStorageAvailable = storageAvailable('localStorage');
+
+var defaultProgress = {};
+var settingsKey = 'beskman_settings';
+var progressKey = 'beskman_progress';
+module.exports = {
+  getSettings: function(){
+    if(localStorageAvailable){
+      var settings = localStorage.getItem(settingsKey);
+      if(settings){
+        return JSON.parse(settings);
+      }
+    }
+    return {
+      language: config.defaultLanguage,
+      audio: true
+    };
+  },
+
+  setSettings: function(key, value){
+    var oldValue = this.getSettings();
+    if(oldValue.hasOwnProperty(key)){
+      oldValue[key] = value;
+      if(localStorageAvailable){
+        localStorage.setItem(settingsKey, JSON.stringify(oldValue));
+      }
+    }
+  },
+
+  getProgress: function(){
+    if(localStorageAvailable){
+      var progress = localStorage.getItem(progressKey);
+      if(progress){
+        return JSON.parse(progress);
+      }
+    }
+    return defaultProgress;
+  },
+
+  setProgress: function(id, time){
+    var oldValue = this.getProgress();
+    oldValue[id] = time;
+    if(localStorageAvailable){
+      localStorage.setItem(progressKey, JSON.stringify(oldValue));
+    }
+  }
+}
+
+},{"../configs/config":1}],18:[function(require,module,exports){
 var directions = require('./directions');
 var difference = require('lodash.difference');
 
@@ -1232,7 +1795,7 @@ module.exports = function(game, Phaser){
   return Stray;
 }
 
-},{"./directions":8,"lodash.difference":28}],18:[function(require,module,exports){
+},{"./directions":8,"lodash.difference":29}],19:[function(require,module,exports){
 module.exports = function (string, params){
   var replaced = string;
   replaced = replaced.replace(/\·\{(.*?)\}\·/gmi,function(match,capture,index,all){
@@ -1272,7 +1835,7 @@ function contextEval($__context,$__evaluation){
   return eval($__evaluation);
 }
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 module.exports = function(game, Phaser){
   function Trap(){
     var sprite;
@@ -1303,7 +1866,9 @@ module.exports = function(game, Phaser){
   return Trap;
 }
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
+var levelsConfig = require('../configs/levels');
+
 module.exports = {
   formatTime: function(timeInSeconds){
     var minutes = (Math.floor(timeInSeconds / 60)).toString();
@@ -1311,10 +1876,13 @@ module.exports = {
     if(minutes.length == 1) minutes = '0' + minutes;
     if(seconds.length == 1) seconds = '0' + seconds;
     return minutes + ":" + seconds;
+  },
+  levelNumber: function(block, level){
+    return levelsConfig.slice(0, block).reduce(function(acc, curr){ return acc + curr.length; }, 0) + level + 1;
   }
 }
 
-},{}],21:[function(require,module,exports){
+},{"../configs/levels":4}],22:[function(require,module,exports){
 var stateKey, eventKey, keys = {
   hidden: "visibilitychange",
   webkitHidden: "webkitvisibilitychange",
@@ -1339,7 +1907,7 @@ module.exports = {
   }
 }
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 var config = require('../configs/config');
 
 module.exports = function(game, Phaser){
@@ -1357,12 +1925,14 @@ module.exports = function(game, Phaser){
 
     },
     create: function(){
+      game.add.text( 0, 0, ".", { font: "1pt Bangers" } );
+      game.add.text( 0, 0, ".", { font: "1pt KZSupercell" } );
       game.state.start('preloader', true, false);
     }
   }
 }
 
-},{"../configs/config":1}],23:[function(require,module,exports){
+},{"../configs/config":1}],24:[function(require,module,exports){
 var config = require('../configs/config');
 var UI = require('../configs/ui');
 var levelsConfig = require('../configs/levels');
@@ -1370,6 +1940,7 @@ var tileSprites = require('../tileSprites');
 var l10n = require('../modules/l10n');
 var utils = require('../modules/utils');
 var vis = require('../modules/vis');
+var storage = require('../modules/storage');
 
 var states = {
   normal: 0,
@@ -1548,6 +2119,10 @@ module.exports = function(game, Phaser){
         text,
         options.style
       );
+      if(options.stroke){
+        t.stroke = options.stroke.color;
+        t.strokeThickness = options.stroke.thickness;
+      }
       t.anchor.set(anchor);
       return t;
     },
@@ -1562,7 +2137,7 @@ module.exports = function(game, Phaser){
       this.activateTraps();
 
       timerText = this.createText(UI.game.timerText, utils.formatTime(time), 0.5);
-      levelNumberText = this.createText(UI.game.levelNumberText, currentLevelIndex + 1, 0.5);
+      levelNumberText = this.createText(UI.game.levelNumberText, utils.levelNumber(currentBlockIndex, currentLevelIndex), 0.5);
       statusText = this.createText(UI.game.statusText, "", 0.5);
       backButton = game.add.button(
         config.width / 2 - screenParams.offsetX + UI.game.backButton.offsetX,
@@ -1598,11 +2173,21 @@ module.exports = function(game, Phaser){
       this.updateStatusText();
     },
     onSuccess: function(){
+      storage.setProgress(utils.levelNumber(currentBlockIndex, currentLevelIndex), time);
+      var levelTitlesTimes = levelsConfig[currentBlockIndex][currentLevelIndex].titlesTime || [60, 60, 60];
+      var titleRate = 0;
+      if(time > levelTitlesTimes[1] && time <= levelTitlesTimes[2]){
+        titleRate = 1;
+      }else if(time > levelTitlesTimes[2]){
+        titleRate = 2;
+      }
+      var titleKey = 'LEVEL_TITLE_' + currentBlockIndex + '_' + currentLevelIndex + '_' + titleRate;
+
       successPopup = successPopupCreator.create(
         config.width / 2 - screenParams.offsetX,
         config.height / 2 - screenParams.offsetY,
-        time, savedChildren, initialChildrenCount,
-        this.returnToLevels,
+        l10n.get(titleKey), time, savedChildren, initialChildrenCount,
+        this.returnToMenu,
         this.returnToLevels,
         this.restartLevel,
         this.nextLevel,
@@ -1615,7 +2200,7 @@ module.exports = function(game, Phaser){
         config.width / 2 - screenParams.offsetX,
         config.height / 2 - screenParams.offsetY,
         time, savedChildren, initialChildrenCount,
-        this.returnToLevels,
+        this.returnToMenu,
         this.returnToLevels,
         this.restartLevel,
         this
@@ -1698,6 +2283,7 @@ module.exports = function(game, Phaser){
         this.destroyFromLayer(middleLayer, s);
         s.destroy();
       }.bind(this));
+      sparksEffects = [];
     },
     activateTraps: function(){
       trapsActive = true;
@@ -1707,7 +2293,8 @@ module.exports = function(game, Phaser){
         this.destroyFromLayer(middleLayer, m);
         m.destroy()
       }.bind(this));
-
+      bonusesMarks = [];
+      
       traps.forEach(function(trap){
         var options = UI.game.sparks.simple;
         var basicFrames = [0,1,2,3,4,5,6,7,8,9,10,10,10];
@@ -1763,6 +2350,10 @@ module.exports = function(game, Phaser){
       this.destroyHero();
       game.state.start('levels', true, false, void 0);
     },
+    returnToMenu: function(){
+      this.destroyHero();
+      game.state.start('start', true, false);
+    },
     nextLevel: function(){
       this.destroyHero();
       var nextBlockIndex = currentLevelIndex + 1 >= levelsConfig[currentBlockIndex].length ? currentBlockIndex + 1 : currentBlockIndex;
@@ -1780,7 +2371,7 @@ module.exports = function(game, Phaser){
     },
     updateStatusText: function(){
       if(statusText){
-        statusText.text = savedChildren + " / " + initialChildrenCount;
+        statusText.text = savedChildren + "/" + initialChildrenCount;
       }
     },
     trapCollision: function(child, trap){
@@ -1868,11 +2459,14 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../configs/config":1,"../configs/levels":4,"../configs/ui":5,"../modules/bonus":7,"../modules/escape":9,"../modules/hero":10,"../modules/l10n":11,"../modules/map":12,"../modules/popups/gameover":14,"../modules/popups/pause":15,"../modules/popups/success":16,"../modules/stray":17,"../modules/trap":19,"../modules/utils":20,"../modules/vis":21,"../tileSprites":27}],24:[function(require,module,exports){
+},{"../configs/config":1,"../configs/levels":4,"../configs/ui":5,"../modules/bonus":7,"../modules/escape":9,"../modules/hero":10,"../modules/l10n":11,"../modules/map":12,"../modules/popups/gameover":14,"../modules/popups/pause":15,"../modules/popups/success":16,"../modules/storage":17,"../modules/stray":18,"../modules/trap":20,"../modules/utils":21,"../modules/vis":22,"../tileSprites":28}],25:[function(require,module,exports){
 var config = require('../configs/config');
 var UI = require('../configs/ui');
 var levelsConfig = require('../configs/levels');
 var l10n = require('../modules/l10n');
+var utils = require('../modules/utils');
+var storage = require('../modules/storage');
+var difficulty_titles = ['DIFFICULTY_LEVEL_EAZY', 'DIFFICULTY_LEVEL_MIDDLE', 'DIFFICULTY_LEVEL_HARD'];
 
 module.exports = function(game, Phaser){
   var blockWidth = config.width * UI.levels.blockWidthScale;
@@ -1885,7 +2479,7 @@ module.exports = function(game, Phaser){
   var currentBlockIndex = 0;
   var levelItems = [];
   var prevArrow, nextArrow, header, headerTint;
-
+  var shadowSettings = UI.levels.levelItemTextShadow;
   return {
     init: function(index){
       if(typeof(index) !== 'undefined'){
@@ -1893,18 +2487,42 @@ module.exports = function(game, Phaser){
       }
     },
 
-    drawLevelItem: function(x, y, index, key){
+    drawLevelItem: function(x, y, index, number, key, resolved){
       var item = game.add.button(x, y, key, function(){ game.state.start('game', true, false, currentBlockIndex, index);});
-      var text = game.add.text(item.width / 2 + UI.levels.levelItemTextOffsetX, item.height / 2 + UI.levels.levelItemTextOffsetY, index + 1, UI.levels.levelItemTextStyle);
-      text.anchor.x = 0.5;
-      text.anchor.y = 0.5;
-      text.fontWeight = 'bold';
-      text.setShadow(3, 3, 'rgba(0,0,0,0.5)', 0, true);
+      var shadow = game.add.text(
+        item.width / 2 + UI.levels.levelItemTextOffsetX + shadowSettings.x,
+        item.height / 2 + UI.levels.levelItemTextOffsetY + shadowSettings.y,
+        number, shadowSettings.style
+      );
+      shadow.anchor.set(0.5);
+      shadow.alpha = shadowSettings.alpha;
+
+      var text = game.add.text(
+        item.width / 2 + UI.levels.levelItemTextOffsetX,
+        item.height / 2 + UI.levels.levelItemTextOffsetY,
+        number, UI.levels.levelItemTextStyle
+      );
+      text.anchor.set(0.5);
+
+      item.addChild(shadow);
       item.addChild(text);
+
+      if(resolved){
+        var check = game.add.sprite(
+          item.width / 2 + UI.levels.levelItemCheckOffsetX,
+          item.height / 2 + UI.levels.levelItemCheckOffsetY,
+          'buttons'
+        );
+        check.anchor.set(0.5);
+        check.frame = 8;
+        item.addChild(check);
+      }
+
       return item;
     },
 
     drawBlock: function(){
+      var progress = storage.getProgress();
       //clear first
       levelItems.forEach(function(item){ item.destroy(); });
       if(header) header.destroy();
@@ -1917,15 +2535,18 @@ module.exports = function(game, Phaser){
 
         var row = Math.floor(index / maxLevelItems);
         var col = index % maxLevelItems;
+        var number = utils.levelNumber(currentBlockIndex, index);
         levelItems.push(this.drawLevelItem(
           blockX + marginLeft + col * levelItemFullWidth,
           blockY + row * levelItemFullHeight,
           index,
-          UI.levels.types[type]
+          number,
+          UI.levels.types[type],
+          typeof(progress[number]) !== 'undefined'
         ));
       }.bind(this))
 
-      header = game.add.text(config.width / 2, UI.levels.blockMarginTop / 2, l10n.get('DIFFICULTY_LEVEL', [currentBlockIndex + 1]), UI.levels.headerTextStyle);
+      header = game.add.text(config.width / 2, UI.levels.blockMarginTop / 2, l10n.get(difficulty_titles[currentBlockIndex]), UI.levels.headerTextStyle);
       header.anchor.x = 0.5;
       header.anchor.y = 0.5;
     },
@@ -1961,6 +2582,19 @@ module.exports = function(game, Phaser){
       headerTint.alpha = 0.5;
     },
 
+    drawBackButton: function(){
+      backButton = game.add.button(
+        config.width / 2  + UI.levels.backButton.offsetX,
+        config.height / 2  + UI.levels.backButton.offsetY,
+        'buttons',
+        this.onBack,
+        this,
+        2
+      );
+      backButton.anchor.set(0.5);
+      backButton.setFrames(2, 2, 2);
+    },
+
     onNextBlock: function(){
       if(currentBlockIndex + 1 < levelsConfig.length){
         currentBlockIndex++;
@@ -1975,6 +2609,10 @@ module.exports = function(game, Phaser){
       }
     },
 
+    onBack: function(){
+      game.state.start('start', true, false);
+    },
+
     redraw: function(){
       this.drawBlock();
       this.drawArrows();
@@ -1983,6 +2621,7 @@ module.exports = function(game, Phaser){
     create: function(){
       game.add.sprite(0, 0, 'levelsBackground');
       this.drawHeaderTint();
+      this.drawBackButton();
       game.stage.backgroundColor = UI.levels.backgroundColor;
       game.world.setBounds(0, 0, config.width, config.height);
       this.redraw();
@@ -1990,7 +2629,7 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../configs/config":1,"../configs/levels":4,"../configs/ui":5,"../modules/l10n":11}],25:[function(require,module,exports){
+},{"../configs/config":1,"../configs/levels":4,"../configs/ui":5,"../modules/l10n":11,"../modules/storage":17,"../modules/utils":21}],26:[function(require,module,exports){
 var config = require('../configs/config');
 var levelsConfig = require('../configs/levels');
 module.exports = function(game, Phaser){
@@ -1998,7 +2637,7 @@ module.exports = function(game, Phaser){
     text: void 0,
     preload: function() {
       var splash = game.add.sprite(0, 0, 'splash');
-      var loadingText = game.add.text( game.world.centerX, game.world.centerY + 300, "Loading...", { fill: "#fff", align: "center" } ).anchor.setTo( 0.5, 0.5 );
+      var loadingText = game.add.text( game.world.centerX, game.world.centerY + 300, "Loading...", { font: "32pt KZSupercell", fill: "#fff", align: "center" } ).anchor.setTo( 0.5, 0.5 );
       levelsConfig.forEach(function(levelsBlock, blockIndex){
         levelsBlock.forEach(function(level, index){
           game.load.tilemap('level' + blockIndex + '-' + index, level.src, null, Phaser.Tilemap.TILED_JSON);
@@ -2052,38 +2691,159 @@ module.exports = function(game, Phaser){
       game.load.image('iconFail', 'assets/UI/icon_fail.png');
       game.load.image('levelStatus', 'assets/UI/level_stat.png');
       game.load.image('timer', 'assets/UI/timer.png');
-      game.load.spritesheet('buttons', 'assets/UI/buttons.png', 80, 76, 6);
+      game.load.image('play', 'assets/UI/play.png');
+      game.load.spritesheet('languageButton', 'assets/UI/language_button.png', 370, 100, 2);
+      game.load.spritesheet('buttons', 'assets/UI/buttons.png', 80, 76, 9);
       game.load.spritesheet('buttonsLarge', 'assets/UI/buttons_large.png', 200, 80, 2);
+      game.load.spritesheet('buttonsMenu', 'assets/UI/menu_buttons.png', 256, 256, 4);
       game.load.spritesheet('popupTitle', 'assets/UI/popup_title.png', 391, 72, 2);
       game.load.spritesheet('sparks', 'assets/danger/sparks.png', 220, 180, 11);
       game.load.image('pixel', 'assets/UI/pixel.png');
     },
     create: function(){
-      //game.state.start('game', true, false, 0, 0);
-      game.state.start('levels', true, false, config.defaultBlockIndex || 0);
+      game.state.start('start', true, false);
     }
   }
 }
 
-},{"../configs/config":1,"../configs/levels":4}],26:[function(require,module,exports){
+},{"../configs/config":1,"../configs/levels":4}],27:[function(require,module,exports){
 var config = require('../configs/config');
+var UI = require('../configs/ui');
+var storage = require('../modules/storage');
+var l10n = require('../modules/l10n');
+
 module.exports = function(game, Phaser){
+  var soundButtonSprite;
+  var languageButtonRU;
+  var languageButtonBA;
+
   return {
     preload: function(){
-      this.game.add.text( game.world.centerX, game.world.centerY - config.height / 6, "SAVE CHILDREN PROTOTYPE", { fill: "#FFF" } ).anchor.setTo( 0.5, 0.5 );
-      this.game.add.text( game.world.centerX, game.world.centerY + config.height / 6, "click to start", { fill: "#DDD" } ).anchor.setTo( 0.5, 0.5 );
-      game.input.onDown.add(this.startGame, this);
-      game.stage.backgroundColor = '#4b692f';
+      var splash = game.add.sprite(0, 0, 'splash');
+      var play = game.add.button(
+        config.width / 2 + UI.menu.playButton.offsetX,
+        config.height / 2 + UI.menu.playButton.offsetY,
+        'play',
+        this.onPlay,
+        this
+      );
+      play.anchor.set(0.5);
+
+      var sound = game.add.button(
+        config.width / 2 + UI.menu.soundButton.offsetX,
+        config.height / 2 + UI.menu.soundButton.offsetY,
+        'buttonsMenu',
+        this.onSound,
+        this,
+        1
+      );
+      sound.anchor.set(0.5);
+      sound.setFrames(0,0,0);
+      soundButtonSprite = game.add.sprite(
+        config.width / 2 + UI.menu.soundButtonSprite.offsetX,
+        config.height / 2 + UI.menu.soundButtonSprite.offsetY,
+        'buttonsMenu'
+      );
+      soundButtonSprite.anchor.set(0.5);
+      this.updateSoundButtonSprite();
+
+      var levels = game.add.button(
+        config.width / 2 + UI.menu.levelsButton.offsetX,
+        config.height / 2 + UI.menu.levelsButton.offsetY,
+        'buttonsMenu',
+        this.onLevels,
+        this,
+        1
+      );
+      levels.anchor.set(0.5);
+      levels.setFrames(0,0,0);
+      var levelsSprite = game.add.sprite(
+        config.width / 2 + UI.menu.levelsButtonSprite.offsetX,
+        config.height / 2 + UI.menu.levelsButtonSprite.offsetY,
+        'buttonsMenu'
+      );
+      levelsSprite.frame = 1;
+      levelsSprite.anchor.set(0.5);
+
+      languageButtonRU = this.drawLanguageButton(UI.menu.languageButtonRU, 'ru', 7);
+      languageButtonBA = this.drawLanguageButton(UI.menu.languageButtonBA, 'ba', 6);
+
+      this.updateLanguageButtons();
     },
-    startGame: function(){
-      if(config.levels.length > 0){
-        game.state.start('game', true, false, 0);
+    drawLanguageButton: function(options, code, flagFrame){
+      var language = game.add.button(
+        config.width / 2 + options.offsetX,
+        config.height / 2 + options.offsetY,
+        'languageButton',
+        this.onLanguage.bind(this, code),
+        this,
+        0
+      );
+      language.anchor.set(0.5);
+      language.setFrames(0,0,0);
+
+      var languageButtonSprite =  game.add.sprite(
+        config.width / 2 + options.offsetX + options.flag.x,
+        config.height / 2 + options.offsetY + options.flag.y,
+        'buttons'
+      );
+      languageButtonSprite.anchor.set(0.5);
+
+      var languageButtonText = game.add.text(
+        config.width / 2 + options.offsetX + options.text.x,
+        config.height / 2 + options.offsetY + options.text.y,
+        'language',
+        options.text.style
+      );
+      languageButtonText.anchor.set(0.5);
+      languageButtonSprite.frame = flagFrame;
+      languageButtonText.text = l10n.get('LANGUAGE_NAME', void 0, code)
+
+      return language;
+    },
+
+    updateSoundButtonSprite: function(){
+      var settings = storage.getSettings();
+      if(settings.audio){
+        soundButtonSprite.frame = 3;
+      }else{
+        soundButtonSprite.frame = 2;
       }
+    },
+    updateLanguageButtons: function(){
+      var settings = storage.getSettings();
+      if(settings.language === 'ru'){
+        languageButtonRU.setFrames(1,1,1);
+        languageButtonBA.setFrames(0,0,0);
+      }else{
+        languageButtonRU.setFrames(0,0,0);
+        languageButtonBA.setFrames(1,1,1);
+      }
+    },
+    onPlay: function(){
+      // load from progress
+      game.state.start('game', true, false, config.defaultBlockIndex || 0, 0);
+    },
+    onSound: function(){
+      var settings = storage.getSettings();
+      storage.setSettings('audio', !settings.audio);
+      this.updateSoundButtonSprite();
+    },
+    onLevels: function(){
+      game.state.start('levels', true, false, config.defaultBlockIndex || 0);
+    },
+    onLanguage: function(code){
+      var settings = storage.getSettings();
+      storage.setSettings('language', code);
+      this.updateLanguageButtons();
+    },
+    create: function(){
+      game.world.setBounds(0, 0, config.width, config.height);
     }
   }
 }
 
-},{"../configs/config":1}],27:[function(require,module,exports){
+},{"../configs/config":1,"../configs/ui":5,"../modules/l10n":11,"../modules/storage":17}],28:[function(require,module,exports){
 function tileSprite(key, offsetX, offsetY, shadow){
   return {
     key: key,
@@ -2128,7 +2888,7 @@ module.exports = {
   35: tileSprite('bonus')
 }
 
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 (function (global){
 /**
  * lodash (Custom Build) <https://lodash.com/>
@@ -3302,7 +4062,7 @@ function isObjectLike(value) {
 module.exports = difference;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 (function (global){
 /**
  * The MIT License (MIT)
@@ -16918,7 +17678,7 @@ World.prototype.raycast = function(result, ray){
 (36)
 });
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 (function (process){
 /**
 * @author       Richard Davey <rich@photonstorm.com>
@@ -97282,7 +98042,7 @@ PIXI.TextureSilentFail = true;
 */
 
 }).call(this,require('_process'))
-},{"_process":32}],31:[function(require,module,exports){
+},{"_process":33}],32:[function(require,module,exports){
 /**
 * @author       Richard Davey <rich@photonstorm.com>
 * @copyright    2016 Photon Storm Ltd.
@@ -106404,7 +107164,7 @@ Object.defineProperty(PIXI.TilingSprite.prototype, 'height', {
 
     return PIXI;
 }).call(this);
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
