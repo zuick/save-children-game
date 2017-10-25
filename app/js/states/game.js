@@ -244,7 +244,7 @@ module.exports = function(game, Phaser){
       if(time > levelTitlesTimes[1] && time <= levelTitlesTimes[2]){
         titleRate = 1;
       }else if(time > levelTitlesTimes[2]){
-        titleRate = 3;
+        titleRate = 2;
       }
       var titleKey = 'LEVEL_TITLE_' + currentBlockIndex + '_' + currentLevelIndex + '_' + titleRate;
 
