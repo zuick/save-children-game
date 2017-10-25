@@ -127,6 +127,9 @@ module.exports = function(game, Phaser){
       var settings = storage.getSettings();
       storage.setSettings('language', code);
       this.updateLanguageButtons();
+    },
+    create: function(){
+      game.world.setBounds(0, 0, config.width, config.height);
     }
   }
 }

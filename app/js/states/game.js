@@ -252,7 +252,7 @@ module.exports = function(game, Phaser){
         config.width / 2 - screenParams.offsetX,
         config.height / 2 - screenParams.offsetY,
         l10n.get(titleKey), time, savedChildren, initialChildrenCount,
-        this.returnToLevels,
+        this.returnToMenu,
         this.returnToLevels,
         this.restartLevel,
         this.nextLevel,
@@ -265,7 +265,7 @@ module.exports = function(game, Phaser){
         config.width / 2 - screenParams.offsetX,
         config.height / 2 - screenParams.offsetY,
         time, savedChildren, initialChildrenCount,
-        this.returnToLevels,
+        this.returnToMenu,
         this.returnToLevels,
         this.restartLevel,
         this
@@ -348,6 +348,7 @@ module.exports = function(game, Phaser){
         this.destroyFromLayer(middleLayer, s);
         s.destroy();
       }.bind(this));
+      sparksEffects = [];
     },
     activateTraps: function(){
       trapsActive = true;
@@ -357,7 +358,8 @@ module.exports = function(game, Phaser){
         this.destroyFromLayer(middleLayer, m);
         m.destroy()
       }.bind(this));
-
+      bonusesMarks = [];
+      
       traps.forEach(function(trap){
         var options = UI.game.sparks.simple;
         var basicFrames = [0,1,2,3,4,5,6,7,8,9,10,10,10];
@@ -412,6 +414,10 @@ module.exports = function(game, Phaser){
     returnToLevels: function(){
       this.destroyHero();
       game.state.start('levels', true, false, void 0);
+    },
+    returnToMenu: function(){
+      this.destroyHero();
+      game.state.start('start', true, false);
     },
     nextLevel: function(){
       this.destroyHero();
