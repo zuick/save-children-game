@@ -25,12 +25,13 @@ module.exports = function(game, Phaser){
   var successPopupCreator = require('../modules/popups/success')(game, Phaser);
   var gameoverPopupCreator = require('../modules/popups/gameover')(game, Phaser);
   var confirmPopupCreator = require('../modules/popups/confirm')(game, Phaser);
+  var quizPopupCreator = require('../modules/popups/quiz')(game, Phaser);
 
   var children, traps, escapes, savedChildren, hero, sparksEffects,
-    currentLevelIndex, currentBlockIndex, initialChildrenCount,
+    currentLevelIndex, currentBlockIndex, initialChildrenCount, numberOfFails, slowMode,
     middleLayer, backLayer, UILayer,
     timerText, state, pauseButton, statusText, levelNumberText, backButton,
-    pausePopup, successPopup, gameoverPopup, confirmPopup,
+    pausePopup, successPopup, gameoverPopup, confirmPopup, quizPopup,
     bonusDelay, bonusPlaces, bonuses, trapsActive, bonusesMarks;
 
   var screenParams = {
@@ -40,13 +41,16 @@ module.exports = function(game, Phaser){
   }
   var time = 0;
   return {
-    init: function(blockIndex, levelIndex){
+    init: function(blockIndex, levelIndex, isSlowMode){
       children = [];
       traps = [];
       escapes = [];
       sparksEffects = [];
       savedChildren = 0;
       initialChildrenCount = 0;
+      if(currentBlockIndex !== blockIndex || currentLevelIndex !== levelIndex){
+        numberOfFails = 0;
+      }
       currentBlockIndex = blockIndex;
       currentLevelIndex = levelIndex;
       bonusDelay = config.defaultBonusDelay;
@@ -61,7 +65,7 @@ module.exports = function(game, Phaser){
       levelNumberText = void 0;
       pauseButton = void 0;
       backButton = void 0;
-
+      slowMode = !!isSlowMode;
       if(pausePopup) pausePopup.destroy();
       pausePopup = void 0;
 
@@ -71,11 +75,16 @@ module.exports = function(game, Phaser){
       if(gameoverPopup) gameoverPopup.destroy();
       gameoverPopup = void 0;
 
+      if(quizPopup) quizPopup.destroy();
+      quizPopup = void 0;
+
       this.closeConfrim();
       this.loadMap();
 
       vis.unsubscribe(this.onWindowVisibleChanged.bind(this));
       vis.subsribe(this.onWindowVisibleChanged.bind(this));
+
+      console.log("init: " + slowMode);
     },
     onWindowVisibleChanged: function(){
       if(!vis.state()){
@@ -88,7 +97,10 @@ module.exports = function(game, Phaser){
       middleLayer = game.add.group();
       UILayer = game.add.group();
 
-      var childSpeed = (levelsConfig[currentBlockIndex][currentLevelIndex].childrenSpeed || config.children.defaultSpeed ) - Math.round(Math.random() * config.children.speedAccuracy);
+      var childSpeed = slowMode
+        ? config.children.slowModeSpeed
+        : (levelsConfig[currentBlockIndex][currentLevelIndex].childrenSpeed || config.children.defaultSpeed ) - Math.round(Math.random() * config.children.speedAccuracy);
+
       var type = levelsConfig[currentBlockIndex][currentLevelIndex].type || 0;
 
       bonusDelay = levelsConfig[currentBlockIndex][currentLevelIndex].bonusDelay || config.defaultBonusDelay;
@@ -262,17 +274,29 @@ module.exports = function(game, Phaser){
         this
       );
       state = states.success;
+      numberOfFails = 0;
     },
     onFail: function(){
-      gameoverPopup = gameoverPopupCreator.create(
-        config.width / 2 - screenParams.offsetX,
-        config.height / 2 - screenParams.offsetY,
-        time, savedChildren, initialChildrenCount,
-        this.returnToMenu,
-        this.returnToLevels,
-        this.restartLevel,
-        this
-      );
+      numberOfFails++;
+      if(numberOfFails >= config.failsToStartQuiz){
+        quizPopup = quizPopupCreator.create(
+          config.width / 2 - screenParams.offsetX,
+          config.height / 2 - screenParams.offsetY,
+          function(){ this.restartLevel(true); }.bind(this, true),
+          () => {},
+          this
+        );
+      }else{
+        gameoverPopup = gameoverPopupCreator.create(
+          config.width / 2 - screenParams.offsetX,
+          config.height / 2 - screenParams.offsetY,
+          time, savedChildren, initialChildrenCount,
+          this.returnToMenu,
+          this.returnToLevels,
+          this.restartLevel,
+          this
+        );
+      }
       state = states.gameover;
     },
     onPauseClicked: function(){
@@ -448,9 +472,9 @@ module.exports = function(game, Phaser){
 
       game.state.restart(true, false, nextBlockIndex, nextLevelIndex);
     },
-    restartLevel: function(){
+    restartLevel: function(isSlowMode){
       this.destroyHero();
-      game.state.restart(true, false, currentBlockIndex, currentLevelIndex);
+      game.state.restart(true, false, currentBlockIndex, currentLevelIndex, isSlowMode === true);
     },
     escapeCollision: function(child, esc){
       this.removeChild(child, function(){ savedChildren++; this.updateStatusText() }.bind(this));

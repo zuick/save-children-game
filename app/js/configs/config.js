@@ -8,6 +8,7 @@ module.exports = {
   bonusActiveTime: 7,
   bonusMarkScale: 0.9,
   failDelay: 800,
+  failsToStartQuiz: 5,
   map: {
     main: {
       name: "main",
@@ -33,7 +34,8 @@ module.exports = {
   children: {
     bodyScale: 0.5, // 1 - full tile, 0 - no body
     defaultSpeed: 110,
-    speedAccuracy: 10
+    speedAccuracy: 10,
+    slowModeSpeed: 70
   },
   hero: {
     bodyScale: 0.35 // 1 - full tile, 0 - no body

@@ -135,6 +135,11 @@ module.exports = {
         style: { font: "22px KZSupercell", fill: "#fff", align: "center" }
       }
     },
+    quiz: {
+      opacity: 0.5,
+      scale: 1.2,
+      style: { font: "16px KZSupercell", fill: "#fff", align: "center" }
+    },
     success: {
       opacity: 0.5,
       header: {
