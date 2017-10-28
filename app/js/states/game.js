@@ -24,12 +24,13 @@ module.exports = function(game, Phaser){
   var pausePopupCreator = require('../modules/popups/pause')(game, Phaser);
   var successPopupCreator = require('../modules/popups/success')(game, Phaser);
   var gameoverPopupCreator = require('../modules/popups/gameover')(game, Phaser);
+  var confirmPopupCreator = require('../modules/popups/confirm')(game, Phaser);
 
   var children, traps, escapes, savedChildren, hero, sparksEffects,
     currentLevelIndex, currentBlockIndex, initialChildrenCount,
     middleLayer, backLayer, UILayer,
     timerText, state, pauseButton, statusText, levelNumberText, backButton,
-    pausePopup, successPopup, gameoverPopup,
+    pausePopup, successPopup, gameoverPopup, confirmPopup,
     bonusDelay, bonusPlaces, bonuses, trapsActive, bonusesMarks;
 
   var screenParams = {
@@ -69,6 +70,8 @@ module.exports = function(game, Phaser){
 
       if(gameoverPopup) gameoverPopup.destroy();
       gameoverPopup = void 0;
+
+      this.closeConfrim();
       this.loadMap();
 
       vis.unsubscribe(this.onWindowVisibleChanged.bind(this));
@@ -284,10 +287,28 @@ module.exports = function(game, Phaser){
       }
     },
     onBackClicked: function(){
-      this.returnToLevels();
+      if(state === states.normal){
+        state = states.paused;
+
+        confirmPopup = confirmPopupCreator.create(
+          config.width / 2 - screenParams.offsetX,
+          config.height / 2 - screenParams.offsetY,
+          l10n.get('CONFIRM_TO_LEVELS'),
+          this.returnToLevels,
+          this.closeConfrim,
+          this
+        );
+      }
+    },
+    closeConfrim: function(){
+      if(confirmPopup){
+        confirmPopup.destroy();
+        confirmPopup = void 0;
+      }
+      state = states.normal;
     },
     onContinueClicked: function(){
-      if(state === states.paused){
+      if(state === states.paused && pausePopup){
         game.paused = false;
         state = states.normal;
         if(pauseButton){
@@ -359,7 +380,7 @@ module.exports = function(game, Phaser){
         m.destroy()
       }.bind(this));
       bonusesMarks = [];
-      
+
       traps.forEach(function(trap){
         var options = UI.game.sparks.simple;
         var basicFrames = [0,1,2,3,4,5,6,7,8,9,10,10,10];
@@ -407,7 +428,7 @@ module.exports = function(game, Phaser){
         middleLayer.sort('y', Phaser.Group.SORT_ASCENDING);
 
         if (game.input.keyboard.isDown(Phaser.Keyboard.ESC)){
-          this.returnToLevels();
+          this.onBackClicked();
         }
       }
     },

@@ -122,9 +122,20 @@ module.exports = {
       textStyle: { font: "48px KZSupercell", fill: "#dd0", align: "center" },
       opacity: 0.5
     },
+    confirm: {
+      opacity: 0.5,
+      description: {
+        style: { font: "24px KZSupercell", fill: "#B04E0D", align: "center" },
+        offsetY: -40
+      },
+      buttons: {
+        offsetY: 85,
+        acceptOffsetX: -105,
+        cancelOffsetX: 105,
+        style: { font: "22px KZSupercell", fill: "#fff", align: "center" }
+      }
+    },
     success: {
-      width: 900,
-      height: 500,
       opacity: 0.5,
       header: {
         style: { font: "26px KZSupercell", fill: "#fff", align: "center" },
@@ -155,8 +166,6 @@ module.exports = {
       }
     },
     gameover: {
-      width: 900,
-      height: 500,
       opacity: 0.5,
       header: {
         style: { font: "26px KZSupercell", fill: "#fff", align: "center" },
