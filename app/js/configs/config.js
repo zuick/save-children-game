@@ -8,7 +8,7 @@ module.exports = {
   bonusActiveTime: 7,
   bonusMarkScale: 0.9,
   failDelay: 800,
-  failsToStartQuiz: 5,
+  failsToStartQuiz: 1,
   map: {
     main: {
       name: "main",
@@ -39,5 +39,31 @@ module.exports = {
   },
   hero: {
     bodyScale: 0.35 // 1 - full tile, 0 - no body
-  }
+  },
+  quiz: [
+    {
+      question: 0,
+      answers: [0, 1, 2],
+      correct: 2,
+      key: 'QUIZ_TITLE_1'
+    },
+    {
+      question: 1,
+      answers: [3, 4, 5],
+      correct: 5,
+      key: 'QUIZ_TITLE_2'
+    },
+    {
+      question: 2,
+      answers: [6, 7, 8],
+      correct: 8,
+      key: 'QUIZ_TITLE_3'
+    },
+    {
+      question: 3,
+      answers: [9, 10, 11],
+      correct: 10,
+      key: 'QUIZ_TITLE_4'
+    }
+  ]
 }

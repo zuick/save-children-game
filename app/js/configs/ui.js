@@ -137,8 +137,22 @@ module.exports = {
     },
     quiz: {
       opacity: 0.5,
-      scale: 1.2,
-      style: { font: "16px KZSupercell", fill: "#fff", align: "center" }
+      scale: 1,
+      question: {
+        offsetY: -220,
+        text: {
+          style: { font: "22px KZSupercell", fill: "#EEFFB2", align: "center" },
+          offsetY: 30
+        }
+      },
+      answers: {
+        offsetY: 210,
+        tweenY: 20,
+        tweenDuration: 750,
+        w: 250,
+        h: 251,
+        padding: 20
+      }
     },
     success: {
       opacity: 0.5,

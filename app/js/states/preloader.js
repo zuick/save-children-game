@@ -47,10 +47,11 @@ module.exports = function(game, Phaser){
       game.load.image('danger06', 'assets/danger/06.png');
       game.load.image('danger07', 'assets/danger/07.png');
       game.load.image('houseShadow', 'assets/walls/shadow.png');
-      
+
       game.load.image('levelsBackground', 'assets/UI/bkg.jpg');
       game.load.image('popup', 'assets/UI/popup.png');
       game.load.image('popupSmall', 'assets/UI/popup_small.png');
+      game.load.image('popupQuiz', 'assets/UI/popup_quiz.png');
       game.load.image('iconSuccess', 'assets/UI/icon_success.png');
       game.load.image('iconFail', 'assets/UI/icon_fail.png');
       game.load.image('levelStatus', 'assets/UI/level_stat.png');
@@ -58,6 +59,7 @@ module.exports = function(game, Phaser){
       game.load.image('play', 'assets/UI/play.png');
       game.load.image('pixel', 'assets/UI/pixel.png');
       game.load.image('quizCorrect', 'assets/UI/quiz_correct.png');
+      game.load.image('quizQuestionBackground', 'assets/UI/quiz_question_bkg.png');
 
       game.load.spritesheet('levelsItems', 'assets/UI/levels_items.png', 230, 260, 3);
       game.load.spritesheet('levelsBlockArrows', 'assets/UI/levels_navigation.png', 108, 112, 2);
@@ -67,9 +69,9 @@ module.exports = function(game, Phaser){
       game.load.spritesheet('buttonsMenu', 'assets/UI/menu_buttons.png', 256, 256, 4);
       game.load.spritesheet('popupTitle', 'assets/UI/popup_title.png', 391, 72, 2);
       game.load.spritesheet('sparks', 'assets/danger/sparks.png', 220, 180, 11);
-      game.load.spritesheet('quizMarkers', 'assets/danger/quiz_markers.png', 94, 102, 2);
-      game.load.spritesheet('quizQuestions', 'assets/danger/quiz_questions.png', 500, 390, 4);
-      game.load.spritesheet('quizAnswers', 'assets/danger/quiz_answers.png', 250, 251, 12);
+      game.load.spritesheet('quizMarkers', 'assets/UI/quiz_markers.png', 94, 102, 2);
+      game.load.spritesheet('quizQuestions', 'assets/UI/quiz_questions.png', 500, 390, 4);
+      game.load.spritesheet('quizAnswers', 'assets/UI/quiz_answers.png', 250, 251, 12);
     },
     create: function(){
       game.state.start('start', true, false);

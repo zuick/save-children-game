@@ -83,8 +83,6 @@ module.exports = function(game, Phaser){
 
       vis.unsubscribe(this.onWindowVisibleChanged.bind(this));
       vis.subsribe(this.onWindowVisibleChanged.bind(this));
-
-      console.log("init: " + slowMode);
     },
     onWindowVisibleChanged: function(){
       if(!vis.state()){
