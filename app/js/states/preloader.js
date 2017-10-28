@@ -47,12 +47,7 @@ module.exports = function(game, Phaser){
       game.load.image('danger06', 'assets/danger/06.png');
       game.load.image('danger07', 'assets/danger/07.png');
       game.load.image('houseShadow', 'assets/walls/shadow.png');
-
-      game.load.image('levelItemCity', 'assets/UI/level_item_city.png');
-      game.load.image('levelItemCountrySide', 'assets/UI/level_item_countryside.png');
-      game.load.image('levelItemHouse', 'assets/UI/level_item_house.png');
-      game.load.image('levelsBlockArrowLeft', 'assets/UI/prev.png');
-      game.load.image('levelsBlockArrowRight', 'assets/UI/next.png');
+      
       game.load.image('levelsBackground', 'assets/UI/bkg.jpg');
       game.load.image('popup', 'assets/UI/popup.png');
       game.load.image('popupSmall', 'assets/UI/popup_small.png');
@@ -61,13 +56,20 @@ module.exports = function(game, Phaser){
       game.load.image('levelStatus', 'assets/UI/level_stat.png');
       game.load.image('timer', 'assets/UI/timer.png');
       game.load.image('play', 'assets/UI/play.png');
+      game.load.image('pixel', 'assets/UI/pixel.png');
+      game.load.image('quizCorrect', 'assets/UI/quiz_correct.png');
+
+      game.load.spritesheet('levelsItems', 'assets/UI/levels_items.png', 230, 260, 3);
+      game.load.spritesheet('levelsBlockArrows', 'assets/UI/levels_navigation.png', 108, 112, 2);
       game.load.spritesheet('languageButton', 'assets/UI/language_button.png', 370, 100, 2);
       game.load.spritesheet('buttons', 'assets/UI/buttons.png', 80, 76, 9);
       game.load.spritesheet('buttonsLarge', 'assets/UI/buttons_large.png', 200, 80, 3);
       game.load.spritesheet('buttonsMenu', 'assets/UI/menu_buttons.png', 256, 256, 4);
       game.load.spritesheet('popupTitle', 'assets/UI/popup_title.png', 391, 72, 2);
       game.load.spritesheet('sparks', 'assets/danger/sparks.png', 220, 180, 11);
-      game.load.image('pixel', 'assets/UI/pixel.png');
+      game.load.spritesheet('quizMarkers', 'assets/danger/quiz_markers.png', 94, 102, 2);
+      game.load.spritesheet('quizQuestions', 'assets/danger/quiz_questions.png', 500, 390, 4);
+      game.load.spritesheet('quizAnswers', 'assets/danger/quiz_answers.png', 250, 251, 12);
     },
     create: function(){
       game.state.start('start', true, false);
