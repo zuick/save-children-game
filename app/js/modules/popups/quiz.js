@@ -31,26 +31,78 @@ module.exports = function(game, Phaser){
 
       var answerMinOffset = (options.answers.w * quizOptions.answers.length + options.answers.padding * (quizOptions.answers.length - 1)) / 2;
       var shuffled = utils.shuffle(utils.copyArray(quizOptions.answers));
+      var buttons = [];
+
       shuffled.forEach(function(frame, index){
-        var answer = basic.button(
-          x - answerMinOffset + index * (options.answers.w + options.answers.padding) + options.answers.w / 2 - options.answers.padding / 2,
-          y + options.answers.offsetY, 'quizAnswers',
-          frame,
-          function(){
-            if(frame === quizOptions.correct){
-              onAccept();
-            }
-          },
-          context
-        );
+        var isCorrect = frame === quizOptions.correct;
+        var buttonX = x - answerMinOffset + index * (options.answers.w + options.answers.padding) + options.answers.w / 2 - options.answers.padding / 2;
+        var buttonY = y + options.answers.offsetY;
+
+        var answer = basic.button( buttonX, buttonY, 'quizAnswers', frame );
         answer.anchor.set(0.5);
-        game.add.tween(answer).to(
+
+        var answerBorder;
+        if(isCorrect){
+          answerBorder = game.add.sprite( buttonX, buttonY, 'quizCorrect' );
+          answerBorder.anchor.set(0.5);
+          answerBorder.alpha = 0;
+        }
+
+        var icon = game.add.sprite( buttonX + options.answers.iconOffsetX , buttonY + options.answers.iconOffsetY, 'quizMarkers' );
+        icon.anchor.set(0.5);
+        icon.alpha = 0;
+        icon.frame = isCorrect ? 0 : 1;
+
+        var waveTween = game.add.tween(answer).to(
           { y: y + options.answers.offsetY - options.answers.tweenY },
           options.answers.tweenDuration, "Linear",
           true,
-          index * options.answers.tweenDuration / 2, -1, true
+          index * options.answers.waveTweenDuration / 2, -1, true
         );
+
+        answer.onInputDown.add(function(){
+          buttons.forEach(function(btn){
+            btn.waveTween.pause();
+            var normalPositionTween = game.add.tween(btn.button).to({ y: buttonY }, options.answers.waveTweenDuration / 3, "Linear", true );
+            normalPositionTween.onComplete.add(function(){
+              if(btn.isCorrect){
+                var zoomTween = game.add.tween(btn.button.scale).to(
+                  { x: options.answers.scaleCorrectTween, y: options.answers.scaleCorrectTween },
+                  options.answers.scaleTweenDuration, Phaser.Easing.Exponential.Out,
+                  true
+                );
+                var borderZoomTween = game.add.tween(btn.border.scale).to(
+                  { x: options.answers.scaleCorrectTween, y: options.answers.scaleCorrectTween },
+                  options.answers.scaleTweenDuration, Phaser.Easing.Exponential.Out,
+                  true
+                );
+                var borderAlphaTween = game.add.tween(btn.border).to(
+                  { alpha: 1 },
+                  options.answers.scaleTweenDuration, Phaser.Easing.Exponential.Out,
+                  true
+                );
+              }else{
+                var zoomTween = game.add.tween(btn.button.scale).to(
+                  { x: options.answers.scaleIncorrectTween, y: options.answers.scaleIncorrectTween },
+                  options.answers.scaleTweenDuration, Phaser.Easing.Exponential.Out,
+                  true
+                );
+              }
+              var iconAlphaTween = game.add.tween(btn.icon).to(
+                { alpha: 1 },
+                options.answers.iconAlphaTweenDuration, Phaser.Easing.Exponential.Out,
+                true, options.answers.iconAlphaTweenDelay
+              );
+            });
+          });
+          setTimeout(isCorrect ? onAccept.bind(context) : onCancel.bind(context), options.answers.closeDelay);
+        }, context);
+
         base.add(answer);
+        if(answerBorder){
+          base.add(answerBorder);
+        }
+        buttons.push({ isCorrect: isCorrect, button: answer, border: answerBorder, waveTween: waveTween, icon: icon });
       }.bind(this));
 
       return base;

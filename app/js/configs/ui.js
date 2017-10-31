@@ -148,10 +148,18 @@ module.exports = {
       answers: {
         offsetY: 210,
         tweenY: 20,
-        tweenDuration: 750,
+        waveTweenDuration: 750,
+        scaleTweenDuration: 750,
+        scaleCorrectTween: 1.2,
+        scaleIncorrectTween: 0.9,
+        closeDelay: 2500,
         w: 250,
         h: 251,
-        padding: 20
+        padding: 20,
+        iconOffsetX: 80,
+        iconOffsetY: 80,
+        iconAlphaTweenDuration: 500,
+        iconAlphaTweenDelay: 200
       }
     },
     success: {

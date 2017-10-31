@@ -281,7 +281,7 @@ module.exports = function(game, Phaser){
           config.width / 2 - screenParams.offsetX,
           config.height / 2 - screenParams.offsetY,
           function(){ this.restartLevel(true); }.bind(this, true),
-          () => {},
+          this.restartLevel,
           this
         );
       }else{
