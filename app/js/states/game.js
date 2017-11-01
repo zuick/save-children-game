@@ -284,8 +284,8 @@ module.exports = function(game, Phaser){
         quizPopup = quizPopupCreator.create(
           config.width / 2 - screenParams.offsetX,
           config.height / 2 - screenParams.offsetY,
-          function(){ this.restartLevel(true); }.bind(this, true),
-          this.restartLevel,
+          function(){ this.restartLevel(true, true); }.bind(this),
+          function(){ this.restartLevel(false, true); }.bind(this),
           this
         );
       }else{
@@ -336,10 +336,10 @@ module.exports = function(game, Phaser){
       if(confirmPopup){
         confirmPopup.destroy();
         confirmPopup = void 0;
+        audioManager.playSound();
       }
       state = states.normal;
 
-      audioManager.playSound();
     },
     onContinueClicked: function(){
       if(state === states.paused && pausePopup){
@@ -487,14 +487,14 @@ module.exports = function(game, Phaser){
       var nextLevelIndex = currentLevelIndex + 1 >= levelsConfig[nextBlockIndex].length || nextBlockIndex !== currentBlockIndex ? 0 : currentLevelIndex + 1;
 
       game.state.restart(true, false, nextBlockIndex, nextLevelIndex);
-      
+
       audioManager.playSound();
     },
-    restartLevel: function(isSlowMode){
+    restartLevel: function(isSlowMode, quite){
       this.destroyHero();
       game.state.restart(true, false, currentBlockIndex, currentLevelIndex, isSlowMode === true);
 
-      audioManager.playSound();
+      if(!quite) audioManager.playSound();
     },
     escapeCollision: function(child, esc){
       this.removeChild(child, function(){ savedChildren++; this.updateStatusText() }.bind(this));
