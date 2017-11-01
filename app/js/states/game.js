@@ -26,6 +26,7 @@ module.exports = function(game, Phaser){
   var gameoverPopupCreator = require('../modules/popups/gameover')(game, Phaser);
   var confirmPopupCreator = require('../modules/popups/confirm')(game, Phaser);
   var quizPopupCreator = require('../modules/popups/quiz')(game, Phaser);
+  var audioManager = require('../modules/audio').manager();
 
   var children, traps, escapes, savedChildren, hero, sparksEffects,
     currentLevelIndex, currentBlockIndex, initialChildrenCount, numberOfFails, slowMode,
@@ -249,6 +250,7 @@ module.exports = function(game, Phaser){
       UILayer.add(pauseButton);
 
       this.updateStatusText();
+      audioManager.playMusic(config.musicByDifficulty[currentBlockIndex]);
     },
     onSuccess: function(){
       storage.setProgress(utils.levelNumber(currentBlockIndex, currentLevelIndex), time);

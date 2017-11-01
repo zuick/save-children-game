@@ -7,6 +7,7 @@ module.exports = function(game, Phaser){
   var soundButtonSprite;
   var languageButtonRU;
   var languageButtonBA;
+  var audioManager = require('../modules/audio').manager();
 
   return {
     preload: function(){
@@ -130,6 +131,7 @@ module.exports = function(game, Phaser){
     },
     create: function(){
       game.world.setBounds(0, 0, config.width, config.height);
+      audioManager.playMusic('musicMenu');
     }
   }
 }

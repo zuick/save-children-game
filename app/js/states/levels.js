@@ -7,6 +7,7 @@ var storage = require('../modules/storage');
 var difficulty_titles = ['DIFFICULTY_LEVEL_EAZY', 'DIFFICULTY_LEVEL_MIDDLE', 'DIFFICULTY_LEVEL_HARD'];
 
 module.exports = function(game, Phaser){
+  var audioManager = require('../modules/audio').manager();
   var blockWidth = config.width * UI.levels.blockWidthScale;
   var levelItemFullWidth = UI.levels.levelItem.width + UI.levels.levelItemsPadding;
   var levelItemFullHeight = UI.levels.levelItem.height + UI.levels.levelItemsPadding;
@@ -166,6 +167,7 @@ module.exports = function(game, Phaser){
       game.stage.backgroundColor = UI.levels.backgroundColor;
       game.world.setBounds(0, 0, config.width, config.height);
       this.redraw();
+      audioManager.playMusic('musicMenu');
     }
   }
 }

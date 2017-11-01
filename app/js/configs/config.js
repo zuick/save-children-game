@@ -9,6 +9,11 @@ module.exports = {
   bonusMarkScale: 0.9,
   failDelay: 800,
   failsToStartQuiz: 5,
+  musicByDifficulty: {
+    0: 'musicEasy',
+    1: 'musicMedium',
+    2: 'musicHard'
+  },
   map: {
     main: {
       name: "main",

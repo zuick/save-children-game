@@ -29,7 +29,12 @@ var localStorageAvailable = storageAvailable('localStorage');
 var defaultProgress = {};
 var settingsKey = 'beskman_settings';
 var progressKey = 'beskman_progress';
+var listeners = [];
+
 module.exports = {
+  addListener: function(callback){
+    listeners.push(callback);
+  },
   getSettings: function(){
     if(localStorageAvailable){
       var settings = localStorage.getItem(settingsKey);
@@ -51,6 +56,12 @@ module.exports = {
         localStorage.setItem(settingsKey, JSON.stringify(oldValue));
       }
     }
+
+    listeners.forEach(function(callback){
+      if(typeof(callback) === 'function'){
+        callback(oldValue);
+      }
+    })
   },
 
   getProgress: function(){

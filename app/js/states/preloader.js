@@ -72,6 +72,11 @@ module.exports = function(game, Phaser){
       game.load.spritesheet('quizMarkers', 'assets/UI/quiz_markers.png', 94, 102, 2);
       game.load.spritesheet('quizQuestions', 'assets/UI/quiz_questions.png', 500, 390, 4);
       game.load.spritesheet('quizAnswers', 'assets/UI/quiz_answers.png', 250, 251, 12);
+
+      game.load.audio('musicEasy', 'assets/music/easy.mp3');
+      game.load.audio('musicMedium', 'assets/music/medium.mp3');
+      game.load.audio('musicHard', 'assets/music/hard.mp3');
+      game.load.audio('musicMenu', 'assets/music/menu.mp3');
     },
     create: function(){
       game.state.start('start', true, false);
