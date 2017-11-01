@@ -8,7 +8,7 @@ module.exports = {
   bonusActiveTime: 7,
   bonusMarkScale: 0.9,
   failDelay: 800,
-  failsToStartQuiz: 1,
+  failsToStartQuiz: 5,
   musicByDifficulty: {
     0: 'musicEasy',
     1: 'musicMedium',

@@ -81,6 +81,8 @@ module.exports = function(game, Phaser){
       game.load.audio('audioButton', 'assets/sfx/button.mp3');
       game.load.audio('audioWin', 'assets/sfx/win.mp3');
       game.load.audio('audioLose', 'assets/sfx/lose.mp3');
+      game.load.audio('audioBonus', 'assets/sfx/bonus.mp3');
+      game.load.audio('audioSpark', 'assets/sfx/spark.mp3');
     },
     create: function(){
       game.state.start('start', true, false);

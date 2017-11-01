@@ -382,6 +382,7 @@ module.exports = function(game, Phaser){
           b.destroy();
         }.bind(this));
         bonuses = [];
+        audioManager.playSound('audioBonus');
       }
     },
     deactivateTraps: function(){
@@ -512,6 +513,7 @@ module.exports = function(game, Phaser){
       }
       state = states.gameover;
       setTimeout(this.onFail.bind(this), config.failDelay);
+      audioManager.playSound('audioSpark');
     },
     heroCollision: function(child, hero){
       var index = children.map(function(c){ return c.getCollider() }).indexOf(child);
