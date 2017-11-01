@@ -142,6 +142,8 @@ module.exports = function(game, Phaser){
         currentBlockIndex++;
         this.redraw();
       }
+
+      audioManager.playSound();
     },
 
     onPrevBlock: function(){
@@ -149,10 +151,14 @@ module.exports = function(game, Phaser){
         currentBlockIndex--;
         this.redraw();
       }
+
+      audioManager.playSound();
     },
 
     onBack: function(){
       game.state.start('start', true, false);
+
+      audioManager.playSound();
     },
 
     redraw: function(){

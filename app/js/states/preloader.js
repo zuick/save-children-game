@@ -77,6 +77,10 @@ module.exports = function(game, Phaser){
       game.load.audio('musicMedium', 'assets/music/medium.mp3');
       game.load.audio('musicHard', 'assets/music/hard.mp3');
       game.load.audio('musicMenu', 'assets/music/menu.mp3');
+
+      game.load.audio('audioButton', 'assets/sfx/button.mp3');
+      game.load.audio('audioWin', 'assets/sfx/win.mp3');
+      game.load.audio('audioLose', 'assets/sfx/lose.mp3');
     },
     create: function(){
       game.state.start('start', true, false);

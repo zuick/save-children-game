@@ -275,6 +275,8 @@ module.exports = function(game, Phaser){
       );
       state = states.success;
       numberOfFails = 0;
+
+      audioManager.playSound('audioWin');
     },
     onFail: function(){
       numberOfFails++;
@@ -298,8 +300,11 @@ module.exports = function(game, Phaser){
         );
       }
       state = states.gameover;
+
+      audioManager.playSound('audioLose');
     },
     onPauseClicked: function(){
+      audioManager.playSound();
       if(state === states.normal){
         game.paused = true;
         state = states.paused;
@@ -309,6 +314,7 @@ module.exports = function(game, Phaser){
         }
         pausePopup = pausePopupCreator.create(config.width / 2 - screenParams.offsetX, config.height / 2 - screenParams.offsetY);
       }
+
     },
     onBackClicked: function(){
       if(state === states.normal){
@@ -323,6 +329,8 @@ module.exports = function(game, Phaser){
           this
         );
       }
+
+      audioManager.playSound();
     },
     closeConfrim: function(){
       if(confirmPopup){
@@ -330,6 +338,8 @@ module.exports = function(game, Phaser){
         confirmPopup = void 0;
       }
       state = states.normal;
+
+      audioManager.playSound();
     },
     onContinueClicked: function(){
       if(state === states.paused && pausePopup){
@@ -341,6 +351,8 @@ module.exports = function(game, Phaser){
         }
         if(pausePopup) pausePopup.destroy();
       }
+
+      audioManager.playSound();
     },
     updateTime: function(){
       if(state === states.normal){
@@ -459,10 +471,14 @@ module.exports = function(game, Phaser){
     returnToLevels: function(){
       this.destroyHero();
       game.state.start('levels', true, false, void 0);
+
+      audioManager.playSound();
     },
     returnToMenu: function(){
       this.destroyHero();
       game.state.start('start', true, false);
+
+      audioManager.playSound();
     },
     nextLevel: function(){
       this.destroyHero();
@@ -471,10 +487,14 @@ module.exports = function(game, Phaser){
       var nextLevelIndex = currentLevelIndex + 1 >= levelsConfig[nextBlockIndex].length || nextBlockIndex !== currentBlockIndex ? 0 : currentLevelIndex + 1;
 
       game.state.restart(true, false, nextBlockIndex, nextLevelIndex);
+      
+      audioManager.playSound();
     },
     restartLevel: function(isSlowMode){
       this.destroyHero();
       game.state.restart(true, false, currentBlockIndex, currentLevelIndex, isSlowMode === true);
+
+      audioManager.playSound();
     },
     escapeCollision: function(child, esc){
       this.removeChild(child, function(){ savedChildren++; this.updateStatusText() }.bind(this));

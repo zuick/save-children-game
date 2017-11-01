@@ -115,19 +115,27 @@ module.exports = function(game, Phaser){
     onPlay: function(){
       // load from progress
       game.state.start('game', true, false, config.defaultBlockIndex || 0, 0);
+
+      audioManager.playSound();
     },
     onSound: function(){
       var settings = storage.getSettings();
       storage.setSettings('audio', !settings.audio);
       this.updateSoundButtonSprite();
+
+      audioManager.playSound();
     },
     onLevels: function(){
       game.state.start('levels', true, false, config.defaultBlockIndex || 0);
+
+      audioManager.playSound();
     },
     onLanguage: function(code){
       var settings = storage.getSettings();
       storage.setSettings('language', code);
       this.updateLanguageButtons();
+
+      audioManager.playSound();
     },
     create: function(){
       game.world.setBounds(0, 0, config.width, config.height);

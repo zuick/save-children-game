@@ -14,6 +14,8 @@ module.exports = {
     1: 'musicMedium',
     2: 'musicHard'
   },
+  musicVolume: 1,
+  audioVolume: 1,
   map: {
     main: {
       name: "main",

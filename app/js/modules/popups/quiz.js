@@ -5,6 +5,7 @@ var utils = require('../utils');
 
 module.exports = function(game, Phaser){
   var basic = require('../popups/basic')(game, Phaser);
+  var audioManager = require('../../modules/audio').manager();
   return {
     create: function(x, y, onAccept, onCancel, context){
       var options = UI.popups.quiz;
@@ -61,6 +62,7 @@ module.exports = function(game, Phaser){
         );
 
         answer.onInputDown.add(function(){
+          audioManager.playSound();
           buttons.forEach(function(btn){
             btn.waveTween.pause();
             var normalPositionTween = game.add.tween(btn.button).to({ y: buttonY }, options.answers.waveTweenDuration / 3, "Linear", true );
