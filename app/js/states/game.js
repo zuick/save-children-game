@@ -24,12 +24,15 @@ module.exports = function(game, Phaser){
   var pausePopupCreator = require('../modules/popups/pause')(game, Phaser);
   var successPopupCreator = require('../modules/popups/success')(game, Phaser);
   var gameoverPopupCreator = require('../modules/popups/gameover')(game, Phaser);
+  var confirmPopupCreator = require('../modules/popups/confirm')(game, Phaser);
+  var quizPopupCreator = require('../modules/popups/quiz')(game, Phaser);
+  var audioManager = require('../modules/audio').manager();
 
   var children, traps, escapes, savedChildren, hero, sparksEffects,
-    currentLevelIndex, currentBlockIndex, initialChildrenCount,
+    currentLevelIndex, currentBlockIndex, initialChildrenCount, numberOfFails, slowMode,
     middleLayer, backLayer, UILayer,
     timerText, state, pauseButton, statusText, levelNumberText, backButton,
-    pausePopup, successPopup, gameoverPopup,
+    pausePopup, successPopup, gameoverPopup, confirmPopup, quizPopup,
     bonusDelay, bonusPlaces, bonuses, trapsActive, bonusesMarks;
 
   var screenParams = {
@@ -39,13 +42,16 @@ module.exports = function(game, Phaser){
   }
   var time = 0;
   return {
-    init: function(blockIndex, levelIndex){
+    init: function(blockIndex, levelIndex, isSlowMode){
       children = [];
       traps = [];
       escapes = [];
       sparksEffects = [];
       savedChildren = 0;
       initialChildrenCount = 0;
+      if(currentBlockIndex !== blockIndex || currentLevelIndex !== levelIndex){
+        numberOfFails = 0;
+      }
       currentBlockIndex = blockIndex;
       currentLevelIndex = levelIndex;
       bonusDelay = config.defaultBonusDelay;
@@ -60,7 +66,7 @@ module.exports = function(game, Phaser){
       levelNumberText = void 0;
       pauseButton = void 0;
       backButton = void 0;
-
+      slowMode = !!isSlowMode;
       if(pausePopup) pausePopup.destroy();
       pausePopup = void 0;
 
@@ -69,6 +75,11 @@ module.exports = function(game, Phaser){
 
       if(gameoverPopup) gameoverPopup.destroy();
       gameoverPopup = void 0;
+
+      if(quizPopup) quizPopup.destroy();
+      quizPopup = void 0;
+
+      this.closeConfrim();
       this.loadMap();
 
       vis.unsubscribe(this.onWindowVisibleChanged.bind(this));
@@ -85,7 +96,10 @@ module.exports = function(game, Phaser){
       middleLayer = game.add.group();
       UILayer = game.add.group();
 
-      var childSpeed = (levelsConfig[currentBlockIndex][currentLevelIndex].childrenSpeed || config.children.defaultSpeed ) - Math.round(Math.random() * config.children.speedAccuracy);
+      var childSpeed = slowMode
+        ? config.children.slowModeSpeed
+        : (levelsConfig[currentBlockIndex][currentLevelIndex].childrenSpeed || config.children.defaultSpeed ) - Math.round(Math.random() * config.children.speedAccuracy);
+
       var type = levelsConfig[currentBlockIndex][currentLevelIndex].type || 0;
 
       bonusDelay = levelsConfig[currentBlockIndex][currentLevelIndex].bonusDelay || config.defaultBonusDelay;
@@ -199,6 +213,7 @@ module.exports = function(game, Phaser){
       game.input.keyboard.addKey(Phaser.Keyboard.N).onUp.add(this.nextLevel, this);
       game.input.keyboard.addKey(Phaser.Keyboard.S).onUp.add(this.onSuccess, this);
       game.time.events.loop(Phaser.Timer.SECOND, this.updateTime, this);
+      game.time.events.loop(Phaser.Timer.SECOND * config.audio.buzzInterval, this.buzzSound, this);
       this.activateTraps();
 
       timerText = this.createText(UI.game.timerText, utils.formatTime(time), 0.5);
@@ -236,6 +251,13 @@ module.exports = function(game, Phaser){
       UILayer.add(pauseButton);
 
       this.updateStatusText();
+      audioManager.playMusic(config.audio.musicByDifficulty[currentBlockIndex]);
+      this.buzzSound();
+    },
+    buzzSound: function(){
+      if(state === states.normal){
+        audioManager.playSound(config.audio.buzz[Math.floor(Math.random() * config.audio.buzz.length)], config.audio.buzzVolume);
+      }
     },
     onSuccess: function(){
       storage.setProgress(utils.levelNumber(currentBlockIndex, currentLevelIndex), time);
@@ -259,20 +281,37 @@ module.exports = function(game, Phaser){
         this
       );
       state = states.success;
+      numberOfFails = 0;
+
+      audioManager.playSound('audioWin');
     },
     onFail: function(){
-      gameoverPopup = gameoverPopupCreator.create(
-        config.width / 2 - screenParams.offsetX,
-        config.height / 2 - screenParams.offsetY,
-        time, savedChildren, initialChildrenCount,
-        this.returnToMenu,
-        this.returnToLevels,
-        this.restartLevel,
-        this
-      );
+      numberOfFails++;
+      if(numberOfFails >= config.failsToStartQuiz){
+        quizPopup = quizPopupCreator.create(
+          config.width / 2 - screenParams.offsetX,
+          config.height / 2 - screenParams.offsetY,
+          function(){ this.restartLevel(true, true); }.bind(this),
+          function(){ this.restartLevel(false, true); }.bind(this),
+          this
+        );
+      }else{
+        gameoverPopup = gameoverPopupCreator.create(
+          config.width / 2 - screenParams.offsetX,
+          config.height / 2 - screenParams.offsetY,
+          time, savedChildren, initialChildrenCount,
+          this.returnToMenu,
+          this.returnToLevels,
+          this.restartLevel,
+          this
+        );
+      }
       state = states.gameover;
+
+      audioManager.playSound('audioLose');
     },
     onPauseClicked: function(){
+      audioManager.playSound();
       if(state === states.normal){
         game.paused = true;
         state = states.paused;
@@ -282,12 +321,35 @@ module.exports = function(game, Phaser){
         }
         pausePopup = pausePopupCreator.create(config.width / 2 - screenParams.offsetX, config.height / 2 - screenParams.offsetY);
       }
+
     },
     onBackClicked: function(){
-      this.returnToLevels();
+      if(state === states.normal){
+        state = states.paused;
+
+        confirmPopup = confirmPopupCreator.create(
+          config.width / 2 - screenParams.offsetX,
+          config.height / 2 - screenParams.offsetY,
+          l10n.get('CONFIRM_TO_LEVELS'),
+          this.returnToLevels,
+          this.closeConfrim,
+          this
+        );
+      }
+
+      audioManager.playSound();
+    },
+    closeConfrim: function(){
+      if(confirmPopup){
+        confirmPopup.destroy();
+        confirmPopup = void 0;
+        audioManager.playSound();
+      }
+      state = states.normal;
+
     },
     onContinueClicked: function(){
-      if(state === states.paused){
+      if(state === states.paused && pausePopup){
         game.paused = false;
         state = states.normal;
         if(pauseButton){
@@ -296,6 +358,8 @@ module.exports = function(game, Phaser){
         }
         if(pausePopup) pausePopup.destroy();
       }
+
+      audioManager.playSound();
     },
     updateTime: function(){
       if(state === states.normal){
@@ -325,6 +389,7 @@ module.exports = function(game, Phaser){
           b.destroy();
         }.bind(this));
         bonuses = [];
+        audioManager.playSound('audioBonus');
       }
     },
     deactivateTraps: function(){
@@ -359,7 +424,7 @@ module.exports = function(game, Phaser){
         m.destroy()
       }.bind(this));
       bonusesMarks = [];
-      
+
       traps.forEach(function(trap){
         var options = UI.game.sparks.simple;
         var basicFrames = [0,1,2,3,4,5,6,7,8,9,10,10,10];
@@ -407,17 +472,21 @@ module.exports = function(game, Phaser){
         middleLayer.sort('y', Phaser.Group.SORT_ASCENDING);
 
         if (game.input.keyboard.isDown(Phaser.Keyboard.ESC)){
-          this.returnToLevels();
+          this.onBackClicked();
         }
       }
     },
     returnToLevels: function(){
       this.destroyHero();
       game.state.start('levels', true, false, void 0);
+
+      audioManager.playSound();
     },
     returnToMenu: function(){
       this.destroyHero();
       game.state.start('start', true, false);
+
+      audioManager.playSound();
     },
     nextLevel: function(){
       this.destroyHero();
@@ -426,13 +495,18 @@ module.exports = function(game, Phaser){
       var nextLevelIndex = currentLevelIndex + 1 >= levelsConfig[nextBlockIndex].length || nextBlockIndex !== currentBlockIndex ? 0 : currentLevelIndex + 1;
 
       game.state.restart(true, false, nextBlockIndex, nextLevelIndex);
+
+      audioManager.playSound();
     },
-    restartLevel: function(){
+    restartLevel: function(isSlowMode, quite){
       this.destroyHero();
-      game.state.restart(true, false, currentBlockIndex, currentLevelIndex);
+      game.state.restart(true, false, currentBlockIndex, currentLevelIndex, isSlowMode === true);
+
+      if(!quite) audioManager.playSound();
     },
     escapeCollision: function(child, esc){
       this.removeChild(child, function(){ savedChildren++; this.updateStatusText() }.bind(this));
+      audioManager.playSound('audioTarget');
     },
     updateStatusText: function(){
       if(statusText){
@@ -447,11 +521,13 @@ module.exports = function(game, Phaser){
       }
       state = states.gameover;
       setTimeout(this.onFail.bind(this), config.failDelay);
+      audioManager.playSound(config.audio.sparks[Math.floor(Math.random() * config.audio.sparks.length)]);
     },
     heroCollision: function(child, hero){
       var index = children.map(function(c){ return c.getCollider() }).indexOf(child);
       if(index !== -1){
         children[index].onHero();
+        audioManager.playSound('audioClash');
       }
     },
     removeChild: function(child, onRemove){

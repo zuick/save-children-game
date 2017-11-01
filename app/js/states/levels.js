@@ -7,6 +7,7 @@ var storage = require('../modules/storage');
 var difficulty_titles = ['DIFFICULTY_LEVEL_EAZY', 'DIFFICULTY_LEVEL_MIDDLE', 'DIFFICULTY_LEVEL_HARD'];
 
 module.exports = function(game, Phaser){
+  var audioManager = require('../modules/audio').manager();
   var blockWidth = config.width * UI.levels.blockWidthScale;
   var levelItemFullWidth = UI.levels.levelItem.width + UI.levels.levelItemsPadding;
   var levelItemFullHeight = UI.levels.levelItem.height + UI.levels.levelItemsPadding;
@@ -25,8 +26,9 @@ module.exports = function(game, Phaser){
       }
     },
 
-    drawLevelItem: function(x, y, index, number, key, resolved){
-      var item = game.add.button(x, y, key, function(){ game.state.start('game', true, false, currentBlockIndex, index);});
+    drawLevelItem: function(x, y, index, number, type, resolved){
+      var item = game.add.button(x, y, 'levelsItems', function(){ game.state.start('game', true, false, currentBlockIndex, index);}, this, type);
+      item.setFrames(type, type, type);
       var shadow = game.add.text(
         item.width / 2 + UI.levels.levelItemTextOffsetX + shadowSettings.x,
         item.height / 2 + UI.levels.levelItemTextOffsetY + shadowSettings.y,
@@ -79,7 +81,7 @@ module.exports = function(game, Phaser){
           blockY + row * levelItemFullHeight,
           index,
           number,
-          UI.levels.types[type],
+          type,
           typeof(progress[number]) !== 'undefined'
         ));
       }.bind(this))
@@ -98,13 +100,15 @@ module.exports = function(game, Phaser){
       var maxLevelsRows = Math.ceil(levelsConfig[currentBlockIndex].length / maxLevelItems);
       var y = blockY + (maxLevelsRows * levelItemFullHeight) / 2
       if(currentBlockIndex < levelsConfig.length - 1){
-        nextArrow = game.add.button(blockX + blockWidth + UI.levels.blockArrowMarginLeft, y, 'levelsBlockArrowRight', this.onNextBlock, this);
+        nextArrow = game.add.button(blockX + blockWidth + UI.levels.blockArrowMarginLeft, y, 'levelsBlockArrows', this.onNextBlock, this, 1);
+        nextArrow.setFrames(1,1,1);
         nextArrow.anchor.x = 0.5;
         nextArrow.anchor.y = 0.5;
       }
       // draw prev
       if(currentBlockIndex > 0){
-        prevArrow = game.add.button(blockX - UI.levels.blockArrowMarginLeft, y, 'levelsBlockArrowLeft', this.onPrevBlock, this);
+        prevArrow = game.add.button(blockX - UI.levels.blockArrowMarginLeft, y, 'levelsBlockArrows', this.onPrevBlock, this, 0);
+        prevArrow.setFrames(0,0,0);
         prevArrow.anchor.x = 0.5;
         prevArrow.anchor.y = 0.5;
       }
@@ -138,6 +142,8 @@ module.exports = function(game, Phaser){
         currentBlockIndex++;
         this.redraw();
       }
+
+      audioManager.playSound();
     },
 
     onPrevBlock: function(){
@@ -145,10 +151,14 @@ module.exports = function(game, Phaser){
         currentBlockIndex--;
         this.redraw();
       }
+
+      audioManager.playSound();
     },
 
     onBack: function(){
       game.state.start('start', true, false);
+
+      audioManager.playSound();
     },
 
     redraw: function(){
@@ -163,6 +173,7 @@ module.exports = function(game, Phaser){
       game.stage.backgroundColor = UI.levels.backgroundColor;
       game.world.setBounds(0, 0, config.width, config.height);
       this.redraw();
+      audioManager.playMusic('musicMenu');
     }
   }
 }
