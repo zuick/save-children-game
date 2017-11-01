@@ -213,6 +213,7 @@ module.exports = function(game, Phaser){
       game.input.keyboard.addKey(Phaser.Keyboard.N).onUp.add(this.nextLevel, this);
       game.input.keyboard.addKey(Phaser.Keyboard.S).onUp.add(this.onSuccess, this);
       game.time.events.loop(Phaser.Timer.SECOND, this.updateTime, this);
+      game.time.events.loop(Phaser.Timer.SECOND * config.audio.buzzInterval, this.buzzSound, this);
       this.activateTraps();
 
       timerText = this.createText(UI.game.timerText, utils.formatTime(time), 0.5);
@@ -250,7 +251,13 @@ module.exports = function(game, Phaser){
       UILayer.add(pauseButton);
 
       this.updateStatusText();
-      audioManager.playMusic(config.musicByDifficulty[currentBlockIndex]);
+      audioManager.playMusic(config.audio.musicByDifficulty[currentBlockIndex]);
+      this.buzzSound();
+    },
+    buzzSound: function(){
+      if(state === states.normal){
+        audioManager.playSound(config.audio.buzz[Math.floor(Math.random() * config.audio.buzz.length)], config.audio.buzzVolume);
+      }
     },
     onSuccess: function(){
       storage.setProgress(utils.levelNumber(currentBlockIndex, currentLevelIndex), time);
@@ -499,6 +506,7 @@ module.exports = function(game, Phaser){
     },
     escapeCollision: function(child, esc){
       this.removeChild(child, function(){ savedChildren++; this.updateStatusText() }.bind(this));
+      audioManager.playSound('audioTarget');
     },
     updateStatusText: function(){
       if(statusText){
@@ -513,12 +521,13 @@ module.exports = function(game, Phaser){
       }
       state = states.gameover;
       setTimeout(this.onFail.bind(this), config.failDelay);
-      audioManager.playSound('audioSpark');
+      audioManager.playSound(config.audio.sparks[Math.floor(Math.random() * config.audio.sparks.length)]);
     },
     heroCollision: function(child, hero){
       var index = children.map(function(c){ return c.getCollider() }).indexOf(child);
       if(index !== -1){
         children[index].onHero();
+        audioManager.playSound('audioClash');
       }
     },
     removeChild: function(child, onRemove){

@@ -9,13 +9,19 @@ module.exports = {
   bonusMarkScale: 0.9,
   failDelay: 800,
   failsToStartQuiz: 5,
-  musicByDifficulty: {
-    0: 'musicEasy',
-    1: 'musicMedium',
-    2: 'musicHard'
+  audio: {
+    musicByDifficulty: {
+      0: 'musicEasy',
+      1: 'musicMedium',
+      2: 'musicHard'
+    },
+    sparks: ['audioSpark1', 'audioSpark2', 'audioSpark3', 'audioSpark4'],
+    buzz: ['audioBuzz1', 'audioBuzz2', 'audioBuzz3', 'audioBuzz4'],
+    buzzInterval: 8,
+    musicVolume: 1,
+    sfxVolume: 1,
+    buzzVolume: 0.8
   },
-  musicVolume: 1,
-  audioVolume: 1,
   map: {
     main: {
       name: "main",

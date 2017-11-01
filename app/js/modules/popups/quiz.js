@@ -62,7 +62,7 @@ module.exports = function(game, Phaser){
         );
 
         answer.onInputDown.add(function(){
-          audioManager.playSound();
+          audioManager.playSound(isCorrect ? 'audioWin' : 'audioLose');        
           buttons.forEach(function(btn){
             btn.waveTween.pause();
             var normalPositionTween = game.add.tween(btn.button).to({ y: buttonY }, options.answers.waveTweenDuration / 3, "Linear", true );

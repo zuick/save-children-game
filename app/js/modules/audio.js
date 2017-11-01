@@ -13,13 +13,13 @@ var AudioManager = function(game, Phaser){
   this.playMusic = function(key){
     if(!this.currentMusic || this.currentMusic.key !== key){
       if(this.currentMusic) this.currentMusic.stop();
-      this.currentMusic = game.add.audio(key, config.musicVolume, true);
+      this.currentMusic = game.add.audio(key, config.audio.musicVolume, true);
       this.play(this.currentMusic);
     }
   }
-  this.playSound = function(key){
+  this.playSound = function(key, volume){
     key = key || 'audioButton';
-    var sfx = game.add.audio(key, config.audioVolume);
+    var sfx = game.add.audio(key, volume || config.audio.sfxVolume);
     sfx.play();
   }
   this.onSettingsChanged = function(settings){
