@@ -20,10 +20,10 @@ var AudioManager = function(game, Phaser){
   this.playSound = function(key, volume){
     key = key || 'audioButton';
     var sfx = game.add.audio(key, volume || config.audio.sfxVolume);
-    sfx.play();
+    this.play(sfx);
   }
   this.onSettingsChanged = function(settings){
-    if(this.currentMusic){
+    if(this.currentMusic && this.enabled !== settings.audio){
       this.enabled = settings.audio;
       if(settings.audio){
         this.play(this.currentMusic);
