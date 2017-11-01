@@ -9,6 +9,20 @@ module.exports = {
   bonusActiveTime: 7,
   bonusMarkScale: 0.9,
   failDelay: 800,
+  failsToStartQuiz: 5,
+  audio: {
+    musicByDifficulty: {
+      0: 'musicEasy',
+      1: 'musicMedium',
+      2: 'musicHard'
+    },
+    sparks: ['audioSpark1', 'audioSpark2', 'audioSpark3', 'audioSpark4'],
+    buzz: ['audioBuzz1', 'audioBuzz2', 'audioBuzz3', 'audioBuzz4'],
+    buzzInterval: 8,
+    musicVolume: 1,
+    sfxVolume: 1,
+    buzzVolume: 0.8
+  },
   map: {
     main: {
       name: "main",
@@ -34,11 +48,38 @@ module.exports = {
   children: {
     bodyScale: 0.5, // 1 - full tile, 0 - no body
     defaultSpeed: 110,
-    speedAccuracy: 10
+    speedAccuracy: 10,
+    slowModeSpeed: 70
   },
   hero: {
     bodyScale: 0.35 // 1 - full tile, 0 - no body
-  }
+  },
+  quiz: [
+    {
+      question: 0,
+      answers: [0, 1, 2],
+      correct: 2,
+      key: 'QUIZ_TITLE_1'
+    },
+    {
+      question: 1,
+      answers: [3, 4, 5],
+      correct: 5,
+      key: 'QUIZ_TITLE_2'
+    },
+    {
+      question: 2,
+      answers: [6, 7, 8],
+      correct: 8,
+      key: 'QUIZ_TITLE_3'
+    },
+    {
+      question: 3,
+      answers: [9, 10, 11],
+      correct: 10,
+      key: 'QUIZ_TITLE_4'
+    }
+  ]
 }
 
 },{}],2:[function(require,module,exports){
@@ -54,10 +95,17 @@ module.exports = {
   "REPLAY": "Ҡабат уйнау",
   "LEVELS": "Кимәлдәр",
   "NEXT": "Артабан",
+  "ACCEPT": "Эйе",
+  "CANCEL": "Юҡ",
+  "CONFIRM_TO_LEVELS": "Киренән һайлау?",
   "LANGUAGE_NAME": 'Башкорт',
   "DIFFICULTY_LEVEL_EAZY": "Яңы кеше",
   "DIFFICULTY_LEVEL_MIDDLE": "Тәжрибәле кеше",
   "DIFFICULTY_LEVEL_HARD": "Эксперт",
+  "QUIZ_TITLE_1": "Бесәй балаһын нисек ҡотҡарырға?",
+  "QUIZ_TITLE_2": "Зыян күргәнгә нисек ярҙам итергә?",
+  "QUIZ_TITLE_3": "Ванна бүлмәһендә нимә хәүефһеҙ?",
+  "QUIZ_TITLE_4": "Эшләмәгән телевизор менән нишләргә?",
   "LEVEL_TITLE_0_0_0": "Диңгеҙ бесәйе",
   "LEVEL_TITLE_0_0_1": "Ата Бесәй",
   "LEVEL_TITLE_0_0_2": "Бесәй балаһы",
@@ -253,10 +301,17 @@ module.exports = {
   "REPLAY": "Переиграть",
   "LEVELS": "Уровни",
   "NEXT": "Далее",
+  "ACCEPT": "Да",
+  "CANCEL": "Нет",
+  "CONFIRM_TO_LEVELS": "Вернуться к\n выбору уровней?",
   "LANGUAGE_NAME": "Русский",
   "DIFFICULTY_LEVEL_EAZY": "Новичок",
   "DIFFICULTY_LEVEL_MIDDLE": "Опытный",
   "DIFFICULTY_LEVEL_HARD": "Эксперт",
+  "QUIZ_TITLE_1": "Как спасти котенка?",
+  "QUIZ_TITLE_2": "Как помочь пострадавшему?",
+  "QUIZ_TITLE_3": "Что безопасно в ванной?",
+  "QUIZ_TITLE_4": "Что делать с неисправным телевизором?",
   "LEVEL_TITLE_0_0_0": "Котище",
   "LEVEL_TITLE_0_0_1": "Кот",
   "LEVEL_TITLE_0_0_2": "Котенок",
@@ -934,9 +989,47 @@ module.exports = {
       textStyle: { font: "48px KZSupercell", fill: "#dd0", align: "center" },
       opacity: 0.5
     },
+    confirm: {
+      opacity: 0.5,
+      description: {
+        style: { font: "24px KZSupercell", fill: "#B04E0D", align: "center" },
+        offsetY: -40
+      },
+      buttons: {
+        offsetY: 85,
+        acceptOffsetX: -105,
+        cancelOffsetX: 105,
+        style: { font: "22px KZSupercell", fill: "#fff", align: "center" }
+      }
+    },
+    quiz: {
+      opacity: 0.5,
+      scale: 1,
+      question: {
+        offsetY: -220,
+        text: {
+          style: { font: "22px KZSupercell", fill: "#EEFFB2", align: "center" },
+          offsetY: 30
+        }
+      },
+      answers: {
+        offsetY: 210,
+        tweenY: 20,
+        waveTweenDuration: 750,
+        scaleTweenDuration: 750,
+        scaleCorrectTween: 1.2,
+        scaleIncorrectTween: 0.9,
+        closeDelay: 2500,
+        w: 250,
+        h: 251,
+        padding: 20,
+        iconOffsetX: 80,
+        iconOffsetY: 80,
+        iconAlphaTweenDuration: 500,
+        iconAlphaTweenDelay: 200
+      }
+    },
     success: {
-      width: 900,
-      height: 500,
       opacity: 0.5,
       header: {
         style: { font: "26px KZSupercell", fill: "#fff", align: "center" },
@@ -967,8 +1060,6 @@ module.exports = {
       }
     },
     gameover: {
-      width: 900,
-      height: 500,
       opacity: 0.5,
       header: {
         style: { font: "26px KZSupercell", fill: "#fff", align: "center" },
@@ -1006,22 +1097,72 @@ module.exports = {
   window.Phaser = require('phaser/build/custom/phaser-split');
   var config = require('./configs/config');
   var game = new Phaser.Game(config.width, config.height, window.Phaser.AUTO);
+  
+  require('./modules/audio').init(game, window.Phaser);
   var gameState = require('./states/game')(game, window.Phaser);
   var preloaderState = require('./states/preloader')(game, window.Phaser);
   var startState = require('./states/start')(game, window.Phaser);
   var levelsState = require('./states/levels')(game, window.Phaser);
   var bootState = require('./states/boot')(game, window.Phaser);
-
   game.state.add('preloader', preloaderState);
   game.state.add('levels', levelsState);
   game.state.add('start', startState);
   game.state.add('game', gameState);
   game.state.add('boot', bootState);
 
+
   game.state.start('boot');
 })();
 
-},{"./configs/config":1,"./states/boot":23,"./states/game":24,"./states/levels":25,"./states/preloader":26,"./states/start":27,"phaser/build/custom/p2":30,"phaser/build/custom/phaser-split":31,"phaser/build/custom/pixi":32}],7:[function(require,module,exports){
+},{"./configs/config":1,"./modules/audio":7,"./states/boot":26,"./states/game":27,"./states/levels":28,"./states/preloader":29,"./states/start":30,"phaser/build/custom/p2":33,"phaser/build/custom/phaser-split":34,"phaser/build/custom/pixi":35}],7:[function(require,module,exports){
+var config = require('../configs/config');
+var storage = require('../modules/storage');
+var _manager;
+
+var AudioManager = function(game, Phaser){
+  this.enabled = storage.getSettings().audio;
+  this.currentMusic;
+  this.play = function(sound){
+    if(this.enabled){
+      sound.play();
+    }
+  }
+  this.playMusic = function(key){
+    if(!this.currentMusic || this.currentMusic.key !== key){
+      if(this.currentMusic) this.currentMusic.stop();
+      this.currentMusic = game.add.audio(key, config.audio.musicVolume, true);
+      this.play(this.currentMusic);
+    }
+  }
+  this.playSound = function(key, volume){
+    key = key || 'audioButton';
+    var sfx = game.add.audio(key, volume || config.audio.sfxVolume);
+    sfx.play();
+  }
+  this.onSettingsChanged = function(settings){
+    if(this.currentMusic){
+      this.enabled = settings.audio;
+      if(settings.audio){
+        this.play(this.currentMusic);
+      }else{
+        this.currentMusic.stop();
+      }
+    }
+  }
+
+  storage.addListener(this.onSettingsChanged.bind(this))
+}
+
+module.exports = {
+  init: function(game, Phaser){
+    _manager = new AudioManager(game, Phaser);
+  },
+  manager: function(){
+    return _manager;
+  }
+}
+
+},{"../configs/config":1,"../modules/storage":20}],8:[function(require,module,exports){
 module.exports = function(game, Phaser){
   function Bonus(){
     this.sprite;
@@ -1050,7 +1191,7 @@ module.exports = function(game, Phaser){
   return Bonus;
 }
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 var difference = require('lodash.difference');
 
 module.exports = {
@@ -1086,7 +1227,7 @@ module.exports = {
   }
 }
 
-},{"lodash.difference":29}],9:[function(require,module,exports){
+},{"lodash.difference":32}],10:[function(require,module,exports){
 module.exports = function(game, Phaser){
   function Escape(){
     var sprite;
@@ -1105,7 +1246,7 @@ module.exports = function(game, Phaser){
   return Escape;
 }
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 module.exports = function(game, Phaser){
   function Hero(){
     var sprite;
@@ -1144,7 +1285,7 @@ module.exports = function(game, Phaser){
   return Hero;
 }
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 var format = require("../modules/stringFormat");
 var config = require('../configs/config');
 var languages = {
@@ -1169,7 +1310,7 @@ module.exports = {
   }
 }
 
-},{"../configs/config":1,"../configs/languages/ba":2,"../configs/languages/ru":3,"../modules/storage":17,"../modules/stringFormat":19}],12:[function(require,module,exports){
+},{"../configs/config":1,"../configs/languages/ba":2,"../configs/languages/ru":3,"../modules/storage":20,"../modules/stringFormat":22}],13:[function(require,module,exports){
 var config = require('../configs/config');
 var directions = require('./directions');
 
@@ -1329,7 +1470,7 @@ module.exports = function(game, Phaser){
   return new Map();
 }
 
-},{"../configs/config":1,"./directions":8}],13:[function(require,module,exports){
+},{"../configs/config":1,"./directions":9}],14:[function(require,module,exports){
 var config = require('../../configs/config');
 var UI = require('../../configs/ui');
 
@@ -1379,7 +1520,43 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../../configs/config":1,"../../configs/ui":5}],14:[function(require,module,exports){
+},{"../../configs/config":1,"../../configs/ui":5}],15:[function(require,module,exports){
+var config = require('../../configs/config');
+var UI = require('../../configs/ui');
+var l10n = require('../l10n');
+var utils = require('../utils');
+
+module.exports = function(game, Phaser){
+  var basic = require('../popups/basic')(game, Phaser);
+  return {
+    create: function(x, y, description, onAccept, onCancel, context){
+      var options = UI.popups.confirm;
+      var base = basic.create(x, y, options.opacity);
+      var win = basic.tint(x, y, options.width, options.height, 1, 0xc24729, 'popupSmall');
+
+      var descriptionText = game.add.text(x, y + options.description.offsetY, description, options.description.style);
+      descriptionText.anchor.set(0.5);
+
+      var acceptButton = basic.button(x + options.buttons.acceptOffsetX, y + options.buttons.offsetY, 'buttonsLarge', 0, onAccept, context);
+      var acceptButtonText = game.add.text(x + options.buttons.acceptOffsetX, y + options.buttons.offsetY, l10n.get('ACCEPT'), options.buttons.style );
+      acceptButtonText.anchor.set(0.5);
+      var cancelButton = basic.button(x + options.buttons.cancelOffsetX, y + options.buttons.offsetY, 'buttonsLarge', 2, onCancel, context);
+      var cancelButtonText = game.add.text(x + options.buttons.cancelOffsetX, y + options.buttons.offsetY, l10n.get('CANCEL'), options.buttons.style );
+      cancelButtonText.anchor.set(0.5);
+
+      base.add(win);
+      base.add(descriptionText);
+
+      base.add(acceptButton);
+      base.add(acceptButtonText);
+      base.add(cancelButton);
+      base.add(cancelButtonText);
+      return base;
+    }
+  }
+}
+
+},{"../../configs/config":1,"../../configs/ui":5,"../l10n":12,"../popups/basic":14,"../utils":24}],16:[function(require,module,exports){
 var config = require('../../configs/config');
 var UI = require('../../configs/ui');
 var l10n = require('../l10n');
@@ -1430,7 +1607,7 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../../configs/config":1,"../../configs/ui":5,"../l10n":11,"../popups/basic":13,"../utils":21}],15:[function(require,module,exports){
+},{"../../configs/config":1,"../../configs/ui":5,"../l10n":12,"../popups/basic":14,"../utils":24}],17:[function(require,module,exports){
 var config = require('../../configs/config');
 var l10n = require('../l10n');
 var UI = require('../../configs/ui');
@@ -1448,7 +1625,122 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../../configs/config":1,"../../configs/ui":5,"../l10n":11,"../popups/basic":13}],16:[function(require,module,exports){
+},{"../../configs/config":1,"../../configs/ui":5,"../l10n":12,"../popups/basic":14}],18:[function(require,module,exports){
+var config = require('../../configs/config');
+var UI = require('../../configs/ui');
+var l10n = require('../l10n');
+var utils = require('../utils');
+
+module.exports = function(game, Phaser){
+  var basic = require('../popups/basic')(game, Phaser);
+  var audioManager = require('../../modules/audio').manager();
+  return {
+    create: function(x, y, onAccept, onCancel, context){
+      var options = UI.popups.quiz;
+      var quizOptions = config.quiz[Math.floor(Math.random() * config.quiz.length)];
+      var base = basic.create(x, y, options.opacity);
+      var win = basic.tint(x, y, options.width, options.height, 1, 0xc24729, 'popupQuiz');
+      win.scale.set(options.scale);
+
+      var question = game.add.sprite(x, y + options.question.offsetY, 'quizQuestions');
+      question.anchor.set(0.5);
+      question.frame = quizOptions.question;
+
+      var questionTextBackground = game.add.sprite(x, y + options.question.text.offsetY, 'quizQuestionBackground');
+      questionTextBackground.anchor.set(0.5);
+
+      var questionText = game.add.text(x, y + options.question.text.offsetY, l10n.get(quizOptions.key), options.question.text.style);
+      questionText.anchor.set(0.5);
+
+
+      base.add(win);
+      base.add(question);
+      base.add(questionTextBackground);
+      base.add(questionText);
+
+      var answerMinOffset = (options.answers.w * quizOptions.answers.length + options.answers.padding * (quizOptions.answers.length - 1)) / 2;
+      var shuffled = utils.shuffle(utils.copyArray(quizOptions.answers));
+      var buttons = [];
+
+      shuffled.forEach(function(frame, index){
+        var isCorrect = frame === quizOptions.correct;
+        var buttonX = x - answerMinOffset + index * (options.answers.w + options.answers.padding) + options.answers.w / 2 - options.answers.padding / 2;
+        var buttonY = y + options.answers.offsetY;
+
+        var answer = basic.button( buttonX, buttonY, 'quizAnswers', frame );
+        answer.anchor.set(0.5);
+
+        var answerBorder;
+        if(isCorrect){
+          answerBorder = game.add.sprite( buttonX, buttonY, 'quizCorrect' );
+          answerBorder.anchor.set(0.5);
+          answerBorder.alpha = 0;
+        }
+
+        var icon = game.add.sprite( buttonX + options.answers.iconOffsetX , buttonY + options.answers.iconOffsetY, 'quizMarkers' );
+        icon.anchor.set(0.5);
+        icon.alpha = 0;
+        icon.frame = isCorrect ? 0 : 1;
+
+        var waveTween = game.add.tween(answer).to(
+          { y: y + options.answers.offsetY - options.answers.tweenY },
+          options.answers.tweenDuration, "Linear",
+          true,
+          index * options.answers.waveTweenDuration / 2, -1, true
+        );
+
+        answer.onInputDown.add(function(){
+          audioManager.playSound(isCorrect ? 'audioWin' : 'audioLose');        
+          buttons.forEach(function(btn){
+            btn.waveTween.pause();
+            var normalPositionTween = game.add.tween(btn.button).to({ y: buttonY }, options.answers.waveTweenDuration / 3, "Linear", true );
+            normalPositionTween.onComplete.add(function(){
+              if(btn.isCorrect){
+                var zoomTween = game.add.tween(btn.button.scale).to(
+                  { x: options.answers.scaleCorrectTween, y: options.answers.scaleCorrectTween },
+                  options.answers.scaleTweenDuration, Phaser.Easing.Exponential.Out,
+                  true
+                );
+                var borderZoomTween = game.add.tween(btn.border.scale).to(
+                  { x: options.answers.scaleCorrectTween, y: options.answers.scaleCorrectTween },
+                  options.answers.scaleTweenDuration, Phaser.Easing.Exponential.Out,
+                  true
+                );
+                var borderAlphaTween = game.add.tween(btn.border).to(
+                  { alpha: 1 },
+                  options.answers.scaleTweenDuration, Phaser.Easing.Exponential.Out,
+                  true
+                );
+              }else{
+                var zoomTween = game.add.tween(btn.button.scale).to(
+                  { x: options.answers.scaleIncorrectTween, y: options.answers.scaleIncorrectTween },
+                  options.answers.scaleTweenDuration, Phaser.Easing.Exponential.Out,
+                  true
+                );
+              }
+              var iconAlphaTween = game.add.tween(btn.icon).to(
+                { alpha: 1 },
+                options.answers.iconAlphaTweenDuration, Phaser.Easing.Exponential.Out,
+                true, options.answers.iconAlphaTweenDelay
+              );
+            });
+          });
+          setTimeout(isCorrect ? onAccept.bind(context) : onCancel.bind(context), options.answers.closeDelay);
+        }, context);
+
+        base.add(answer);
+        if(answerBorder){
+          base.add(answerBorder);
+        }
+        buttons.push({ isCorrect: isCorrect, button: answer, border: answerBorder, waveTween: waveTween, icon: icon });
+      }.bind(this));
+
+      return base;
+    }
+  }
+}
+
+},{"../../configs/config":1,"../../configs/ui":5,"../../modules/audio":7,"../l10n":12,"../popups/basic":14,"../utils":24}],19:[function(require,module,exports){
 var config = require('../../configs/config');
 var UI = require('../../configs/ui');
 var l10n = require('../l10n');
@@ -1504,7 +1796,7 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../../configs/config":1,"../../configs/ui":5,"../l10n":11,"../popups/basic":13,"../utils":21}],17:[function(require,module,exports){
+},{"../../configs/config":1,"../../configs/ui":5,"../l10n":12,"../popups/basic":14,"../utils":24}],20:[function(require,module,exports){
 var config = require('../configs/config');
 
 function storageAvailable(type) {
@@ -1536,7 +1828,12 @@ var localStorageAvailable = storageAvailable('localStorage');
 var defaultProgress = {};
 var settingsKey = 'beskman_settings';
 var progressKey = 'beskman_progress';
+var listeners = [];
+
 module.exports = {
+  addListener: function(callback){
+    listeners.push(callback);
+  },
   getSettings: function(){
     if(localStorageAvailable){
       var settings = localStorage.getItem(settingsKey);
@@ -1558,6 +1855,12 @@ module.exports = {
         localStorage.setItem(settingsKey, JSON.stringify(oldValue));
       }
     }
+
+    listeners.forEach(function(callback){
+      if(typeof(callback) === 'function'){
+        callback(oldValue);
+      }
+    })
   },
 
   getProgress: function(){
@@ -1579,7 +1882,7 @@ module.exports = {
   }
 }
 
-},{"../configs/config":1}],18:[function(require,module,exports){
+},{"../configs/config":1}],21:[function(require,module,exports){
 var directions = require('./directions');
 var difference = require('lodash.difference');
 
@@ -1795,7 +2098,7 @@ module.exports = function(game, Phaser){
   return Stray;
 }
 
-},{"./directions":8,"lodash.difference":29}],19:[function(require,module,exports){
+},{"./directions":9,"lodash.difference":32}],22:[function(require,module,exports){
 module.exports = function (string, params){
   var replaced = string;
   replaced = replaced.replace(/\·\{(.*?)\}\·/gmi,function(match,capture,index,all){
@@ -1835,7 +2138,7 @@ function contextEval($__context,$__evaluation){
   return eval($__evaluation);
 }
 
-},{}],20:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 module.exports = function(game, Phaser){
   function Trap(){
     var sprite;
@@ -1866,7 +2169,7 @@ module.exports = function(game, Phaser){
   return Trap;
 }
 
-},{}],21:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 var levelsConfig = require('../configs/levels');
 
 module.exports = {
@@ -1879,10 +2182,25 @@ module.exports = {
   },
   levelNumber: function(block, level){
     return levelsConfig.slice(0, block).reduce(function(acc, curr){ return acc + curr.length; }, 0) + level + 1;
+  },
+  shuffle: function(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+    return a;
+  },
+  copyArray: function(a){
+    var newArray = [];
+    a.forEach(function(i){ newArray.push(i)});
+    return newArray;
   }
 }
 
-},{"../configs/levels":4}],22:[function(require,module,exports){
+},{"../configs/levels":4}],25:[function(require,module,exports){
 var stateKey, eventKey, keys = {
   hidden: "visibilitychange",
   webkitHidden: "webkitvisibilitychange",
@@ -1907,7 +2225,7 @@ module.exports = {
   }
 }
 
-},{}],23:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 var config = require('../configs/config');
 
 module.exports = function(game, Phaser){
@@ -1932,7 +2250,7 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../configs/config":1}],24:[function(require,module,exports){
+},{"../configs/config":1}],27:[function(require,module,exports){
 var config = require('../configs/config');
 var UI = require('../configs/ui');
 var levelsConfig = require('../configs/levels');
@@ -1959,12 +2277,15 @@ module.exports = function(game, Phaser){
   var pausePopupCreator = require('../modules/popups/pause')(game, Phaser);
   var successPopupCreator = require('../modules/popups/success')(game, Phaser);
   var gameoverPopupCreator = require('../modules/popups/gameover')(game, Phaser);
+  var confirmPopupCreator = require('../modules/popups/confirm')(game, Phaser);
+  var quizPopupCreator = require('../modules/popups/quiz')(game, Phaser);
+  var audioManager = require('../modules/audio').manager();
 
   var children, traps, escapes, savedChildren, hero, sparksEffects,
-    currentLevelIndex, currentBlockIndex, initialChildrenCount,
+    currentLevelIndex, currentBlockIndex, initialChildrenCount, numberOfFails, slowMode,
     middleLayer, backLayer, UILayer,
     timerText, state, pauseButton, statusText, levelNumberText, backButton,
-    pausePopup, successPopup, gameoverPopup,
+    pausePopup, successPopup, gameoverPopup, confirmPopup, quizPopup,
     bonusDelay, bonusPlaces, bonuses, trapsActive, bonusesMarks;
 
   var screenParams = {
@@ -1974,13 +2295,16 @@ module.exports = function(game, Phaser){
   }
   var time = 0;
   return {
-    init: function(blockIndex, levelIndex){
+    init: function(blockIndex, levelIndex, isSlowMode){
       children = [];
       traps = [];
       escapes = [];
       sparksEffects = [];
       savedChildren = 0;
       initialChildrenCount = 0;
+      if(currentBlockIndex !== blockIndex || currentLevelIndex !== levelIndex){
+        numberOfFails = 0;
+      }
       currentBlockIndex = blockIndex;
       currentLevelIndex = levelIndex;
       bonusDelay = config.defaultBonusDelay;
@@ -1995,7 +2319,7 @@ module.exports = function(game, Phaser){
       levelNumberText = void 0;
       pauseButton = void 0;
       backButton = void 0;
-
+      slowMode = !!isSlowMode;
       if(pausePopup) pausePopup.destroy();
       pausePopup = void 0;
 
@@ -2004,6 +2328,11 @@ module.exports = function(game, Phaser){
 
       if(gameoverPopup) gameoverPopup.destroy();
       gameoverPopup = void 0;
+
+      if(quizPopup) quizPopup.destroy();
+      quizPopup = void 0;
+
+      this.closeConfrim();
       this.loadMap();
 
       vis.unsubscribe(this.onWindowVisibleChanged.bind(this));
@@ -2020,7 +2349,10 @@ module.exports = function(game, Phaser){
       middleLayer = game.add.group();
       UILayer = game.add.group();
 
-      var childSpeed = (levelsConfig[currentBlockIndex][currentLevelIndex].childrenSpeed || config.children.defaultSpeed ) - Math.round(Math.random() * config.children.speedAccuracy);
+      var childSpeed = slowMode
+        ? config.children.slowModeSpeed
+        : (levelsConfig[currentBlockIndex][currentLevelIndex].childrenSpeed || config.children.defaultSpeed ) - Math.round(Math.random() * config.children.speedAccuracy);
+
       var type = levelsConfig[currentBlockIndex][currentLevelIndex].type || 0;
 
       bonusDelay = levelsConfig[currentBlockIndex][currentLevelIndex].bonusDelay || config.defaultBonusDelay;
@@ -2134,6 +2466,7 @@ module.exports = function(game, Phaser){
       game.input.keyboard.addKey(Phaser.Keyboard.N).onUp.add(this.nextLevel, this);
       game.input.keyboard.addKey(Phaser.Keyboard.S).onUp.add(this.onSuccess, this);
       game.time.events.loop(Phaser.Timer.SECOND, this.updateTime, this);
+      game.time.events.loop(Phaser.Timer.SECOND * config.audio.buzzInterval, this.buzzSound, this);
       this.activateTraps();
 
       timerText = this.createText(UI.game.timerText, utils.formatTime(time), 0.5);
@@ -2171,6 +2504,13 @@ module.exports = function(game, Phaser){
       UILayer.add(pauseButton);
 
       this.updateStatusText();
+      audioManager.playMusic(config.audio.musicByDifficulty[currentBlockIndex]);
+      this.buzzSound();
+    },
+    buzzSound: function(){
+      if(state === states.normal){
+        audioManager.playSound(config.audio.buzz[Math.floor(Math.random() * config.audio.buzz.length)], config.audio.buzzVolume);
+      }
     },
     onSuccess: function(){
       storage.setProgress(utils.levelNumber(currentBlockIndex, currentLevelIndex), time);
@@ -2194,20 +2534,37 @@ module.exports = function(game, Phaser){
         this
       );
       state = states.success;
+      numberOfFails = 0;
+
+      audioManager.playSound('audioWin');
     },
     onFail: function(){
-      gameoverPopup = gameoverPopupCreator.create(
-        config.width / 2 - screenParams.offsetX,
-        config.height / 2 - screenParams.offsetY,
-        time, savedChildren, initialChildrenCount,
-        this.returnToMenu,
-        this.returnToLevels,
-        this.restartLevel,
-        this
-      );
+      numberOfFails++;
+      if(numberOfFails >= config.failsToStartQuiz){
+        quizPopup = quizPopupCreator.create(
+          config.width / 2 - screenParams.offsetX,
+          config.height / 2 - screenParams.offsetY,
+          function(){ this.restartLevel(true, true); }.bind(this),
+          function(){ this.restartLevel(false, true); }.bind(this),
+          this
+        );
+      }else{
+        gameoverPopup = gameoverPopupCreator.create(
+          config.width / 2 - screenParams.offsetX,
+          config.height / 2 - screenParams.offsetY,
+          time, savedChildren, initialChildrenCount,
+          this.returnToMenu,
+          this.returnToLevels,
+          this.restartLevel,
+          this
+        );
+      }
       state = states.gameover;
+
+      audioManager.playSound('audioLose');
     },
     onPauseClicked: function(){
+      audioManager.playSound();
       if(state === states.normal){
         game.paused = true;
         state = states.paused;
@@ -2217,12 +2574,35 @@ module.exports = function(game, Phaser){
         }
         pausePopup = pausePopupCreator.create(config.width / 2 - screenParams.offsetX, config.height / 2 - screenParams.offsetY);
       }
+
     },
     onBackClicked: function(){
-      this.returnToLevels();
+      if(state === states.normal){
+        state = states.paused;
+
+        confirmPopup = confirmPopupCreator.create(
+          config.width / 2 - screenParams.offsetX,
+          config.height / 2 - screenParams.offsetY,
+          l10n.get('CONFIRM_TO_LEVELS'),
+          this.returnToLevels,
+          this.closeConfrim,
+          this
+        );
+      }
+
+      audioManager.playSound();
+    },
+    closeConfrim: function(){
+      if(confirmPopup){
+        confirmPopup.destroy();
+        confirmPopup = void 0;
+        audioManager.playSound();
+      }
+      state = states.normal;
+
     },
     onContinueClicked: function(){
-      if(state === states.paused){
+      if(state === states.paused && pausePopup){
         game.paused = false;
         state = states.normal;
         if(pauseButton){
@@ -2231,6 +2611,8 @@ module.exports = function(game, Phaser){
         }
         if(pausePopup) pausePopup.destroy();
       }
+
+      audioManager.playSound();
     },
     updateTime: function(){
       if(state === states.normal){
@@ -2260,6 +2642,7 @@ module.exports = function(game, Phaser){
           b.destroy();
         }.bind(this));
         bonuses = [];
+        audioManager.playSound('audioBonus');
       }
     },
     deactivateTraps: function(){
@@ -2294,7 +2677,7 @@ module.exports = function(game, Phaser){
         m.destroy()
       }.bind(this));
       bonusesMarks = [];
-      
+
       traps.forEach(function(trap){
         var options = UI.game.sparks.simple;
         var basicFrames = [0,1,2,3,4,5,6,7,8,9,10,10,10];
@@ -2342,17 +2725,21 @@ module.exports = function(game, Phaser){
         middleLayer.sort('y', Phaser.Group.SORT_ASCENDING);
 
         if (game.input.keyboard.isDown(Phaser.Keyboard.ESC)){
-          this.returnToLevels();
+          this.onBackClicked();
         }
       }
     },
     returnToLevels: function(){
       this.destroyHero();
       game.state.start('levels', true, false, void 0);
+
+      audioManager.playSound();
     },
     returnToMenu: function(){
       this.destroyHero();
       game.state.start('start', true, false);
+
+      audioManager.playSound();
     },
     nextLevel: function(){
       this.destroyHero();
@@ -2361,13 +2748,18 @@ module.exports = function(game, Phaser){
       var nextLevelIndex = currentLevelIndex + 1 >= levelsConfig[nextBlockIndex].length || nextBlockIndex !== currentBlockIndex ? 0 : currentLevelIndex + 1;
 
       game.state.restart(true, false, nextBlockIndex, nextLevelIndex);
+
+      audioManager.playSound();
     },
-    restartLevel: function(){
+    restartLevel: function(isSlowMode, quite){
       this.destroyHero();
-      game.state.restart(true, false, currentBlockIndex, currentLevelIndex);
+      game.state.restart(true, false, currentBlockIndex, currentLevelIndex, isSlowMode === true);
+
+      if(!quite) audioManager.playSound();
     },
     escapeCollision: function(child, esc){
       this.removeChild(child, function(){ savedChildren++; this.updateStatusText() }.bind(this));
+      audioManager.playSound('audioTarget');
     },
     updateStatusText: function(){
       if(statusText){
@@ -2382,11 +2774,13 @@ module.exports = function(game, Phaser){
       }
       state = states.gameover;
       setTimeout(this.onFail.bind(this), config.failDelay);
+      audioManager.playSound(config.audio.sparks[Math.floor(Math.random() * config.audio.sparks.length)]);
     },
     heroCollision: function(child, hero){
       var index = children.map(function(c){ return c.getCollider() }).indexOf(child);
       if(index !== -1){
         children[index].onHero();
+        audioManager.playSound('audioClash');
       }
     },
     removeChild: function(child, onRemove){
@@ -2459,7 +2853,7 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../configs/config":1,"../configs/levels":4,"../configs/ui":5,"../modules/bonus":7,"../modules/escape":9,"../modules/hero":10,"../modules/l10n":11,"../modules/map":12,"../modules/popups/gameover":14,"../modules/popups/pause":15,"../modules/popups/success":16,"../modules/storage":17,"../modules/stray":18,"../modules/trap":20,"../modules/utils":21,"../modules/vis":22,"../tileSprites":28}],25:[function(require,module,exports){
+},{"../configs/config":1,"../configs/levels":4,"../configs/ui":5,"../modules/audio":7,"../modules/bonus":8,"../modules/escape":10,"../modules/hero":11,"../modules/l10n":12,"../modules/map":13,"../modules/popups/confirm":15,"../modules/popups/gameover":16,"../modules/popups/pause":17,"../modules/popups/quiz":18,"../modules/popups/success":19,"../modules/storage":20,"../modules/stray":21,"../modules/trap":23,"../modules/utils":24,"../modules/vis":25,"../tileSprites":31}],28:[function(require,module,exports){
 var config = require('../configs/config');
 var UI = require('../configs/ui');
 var levelsConfig = require('../configs/levels');
@@ -2469,6 +2863,7 @@ var storage = require('../modules/storage');
 var difficulty_titles = ['DIFFICULTY_LEVEL_EAZY', 'DIFFICULTY_LEVEL_MIDDLE', 'DIFFICULTY_LEVEL_HARD'];
 
 module.exports = function(game, Phaser){
+  var audioManager = require('../modules/audio').manager();
   var blockWidth = config.width * UI.levels.blockWidthScale;
   var levelItemFullWidth = UI.levels.levelItem.width + UI.levels.levelItemsPadding;
   var levelItemFullHeight = UI.levels.levelItem.height + UI.levels.levelItemsPadding;
@@ -2487,8 +2882,9 @@ module.exports = function(game, Phaser){
       }
     },
 
-    drawLevelItem: function(x, y, index, number, key, resolved){
-      var item = game.add.button(x, y, key, function(){ game.state.start('game', true, false, currentBlockIndex, index);});
+    drawLevelItem: function(x, y, index, number, type, resolved){
+      var item = game.add.button(x, y, 'levelsItems', function(){ game.state.start('game', true, false, currentBlockIndex, index);}, this, type);
+      item.setFrames(type, type, type);
       var shadow = game.add.text(
         item.width / 2 + UI.levels.levelItemTextOffsetX + shadowSettings.x,
         item.height / 2 + UI.levels.levelItemTextOffsetY + shadowSettings.y,
@@ -2541,7 +2937,7 @@ module.exports = function(game, Phaser){
           blockY + row * levelItemFullHeight,
           index,
           number,
-          UI.levels.types[type],
+          type,
           typeof(progress[number]) !== 'undefined'
         ));
       }.bind(this))
@@ -2560,13 +2956,15 @@ module.exports = function(game, Phaser){
       var maxLevelsRows = Math.ceil(levelsConfig[currentBlockIndex].length / maxLevelItems);
       var y = blockY + (maxLevelsRows * levelItemFullHeight) / 2
       if(currentBlockIndex < levelsConfig.length - 1){
-        nextArrow = game.add.button(blockX + blockWidth + UI.levels.blockArrowMarginLeft, y, 'levelsBlockArrowRight', this.onNextBlock, this);
+        nextArrow = game.add.button(blockX + blockWidth + UI.levels.blockArrowMarginLeft, y, 'levelsBlockArrows', this.onNextBlock, this, 1);
+        nextArrow.setFrames(1,1,1);
         nextArrow.anchor.x = 0.5;
         nextArrow.anchor.y = 0.5;
       }
       // draw prev
       if(currentBlockIndex > 0){
-        prevArrow = game.add.button(blockX - UI.levels.blockArrowMarginLeft, y, 'levelsBlockArrowLeft', this.onPrevBlock, this);
+        prevArrow = game.add.button(blockX - UI.levels.blockArrowMarginLeft, y, 'levelsBlockArrows', this.onPrevBlock, this, 0);
+        prevArrow.setFrames(0,0,0);
         prevArrow.anchor.x = 0.5;
         prevArrow.anchor.y = 0.5;
       }
@@ -2600,6 +2998,8 @@ module.exports = function(game, Phaser){
         currentBlockIndex++;
         this.redraw();
       }
+
+      audioManager.playSound();
     },
 
     onPrevBlock: function(){
@@ -2607,10 +3007,14 @@ module.exports = function(game, Phaser){
         currentBlockIndex--;
         this.redraw();
       }
+
+      audioManager.playSound();
     },
 
     onBack: function(){
       game.state.start('start', true, false);
+
+      audioManager.playSound();
     },
 
     redraw: function(){
@@ -2625,11 +3029,12 @@ module.exports = function(game, Phaser){
       game.stage.backgroundColor = UI.levels.backgroundColor;
       game.world.setBounds(0, 0, config.width, config.height);
       this.redraw();
+      audioManager.playMusic('musicMenu');
     }
   }
 }
 
-},{"../configs/config":1,"../configs/levels":4,"../configs/ui":5,"../modules/l10n":11,"../modules/storage":17,"../modules/utils":21}],26:[function(require,module,exports){
+},{"../configs/config":1,"../configs/levels":4,"../configs/ui":5,"../modules/audio":7,"../modules/l10n":12,"../modules/storage":20,"../modules/utils":24}],29:[function(require,module,exports){
 var config = require('../configs/config');
 var levelsConfig = require('../configs/levels');
 module.exports = function(game, Phaser){
@@ -2680,25 +3085,60 @@ module.exports = function(game, Phaser){
       game.load.image('danger07', 'assets/danger/07.png');
       game.load.image('houseShadow', 'assets/walls/shadow.png');
 
-      game.load.image('levelItemCity', 'assets/UI/level_item_city.png');
-      game.load.image('levelItemCountrySide', 'assets/UI/level_item_countryside.png');
-      game.load.image('levelItemHouse', 'assets/UI/level_item_house.png');
-      game.load.image('levelsBlockArrowLeft', 'assets/UI/prev.png');
-      game.load.image('levelsBlockArrowRight', 'assets/UI/next.png');
       game.load.image('levelsBackground', 'assets/UI/bkg.jpg');
       game.load.image('popup', 'assets/UI/popup.png');
+      game.load.image('popupSmall', 'assets/UI/popup_small.png');
+      game.load.image('popupQuiz', 'assets/UI/popup_quiz.png');
       game.load.image('iconSuccess', 'assets/UI/icon_success.png');
       game.load.image('iconFail', 'assets/UI/icon_fail.png');
       game.load.image('levelStatus', 'assets/UI/level_stat.png');
       game.load.image('timer', 'assets/UI/timer.png');
       game.load.image('play', 'assets/UI/play.png');
+      game.load.image('pixel', 'assets/UI/pixel.png');
+      game.load.image('quizCorrect', 'assets/UI/quiz_correct.png');
+      game.load.image('quizQuestionBackground', 'assets/UI/quiz_question_bkg.png');
+
+      game.load.image('borderA1', 'assets/borders/A1.png');
+      game.load.image('borderA2', 'assets/borders/A2.png');
+      game.load.image('borderA3', 'assets/borders/A3.png');
+      game.load.image('borderB1', 'assets/borders/B1.png');
+      game.load.image('borderB2', 'assets/borders/B1.png');
+      game.load.image('borderB3', 'assets/borders/B3.png');
+      game.load.image('borderC1', 'assets/borders/C1.png');
+      game.load.image('borderC2', 'assets/borders/C2.png');
+
+
+      game.load.spritesheet('levelsItems', 'assets/UI/levels_items.png', 230, 260, 3);
+      game.load.spritesheet('levelsBlockArrows', 'assets/UI/levels_navigation.png', 108, 112, 2);
       game.load.spritesheet('languageButton', 'assets/UI/language_button.png', 370, 100, 2);
       game.load.spritesheet('buttons', 'assets/UI/buttons.png', 80, 76, 9);
-      game.load.spritesheet('buttonsLarge', 'assets/UI/buttons_large.png', 200, 80, 2);
+      game.load.spritesheet('buttonsLarge', 'assets/UI/buttons_large.png', 200, 80, 3);
       game.load.spritesheet('buttonsMenu', 'assets/UI/menu_buttons.png', 256, 256, 4);
       game.load.spritesheet('popupTitle', 'assets/UI/popup_title.png', 391, 72, 2);
       game.load.spritesheet('sparks', 'assets/danger/sparks.png', 220, 180, 11);
-      game.load.image('pixel', 'assets/UI/pixel.png');
+      game.load.spritesheet('quizMarkers', 'assets/UI/quiz_markers.png', 94, 102, 2);
+      game.load.spritesheet('quizQuestions', 'assets/UI/quiz_questions.png', 500, 390, 4);
+      game.load.spritesheet('quizAnswers', 'assets/UI/quiz_answers.png', 250, 251, 12);
+
+      game.load.audio('musicEasy', 'assets/music/easy.mp3');
+      game.load.audio('musicMedium', 'assets/music/medium.mp3');
+      game.load.audio('musicHard', 'assets/music/hard.mp3');
+      game.load.audio('musicMenu', 'assets/music/menu.mp3');
+
+      game.load.audio('audioButton', 'assets/sfx/button.mp3');
+      game.load.audio('audioWin', 'assets/sfx/win.mp3');
+      game.load.audio('audioLose', 'assets/sfx/lose.mp3');
+      game.load.audio('audioBonus', 'assets/sfx/bonus.mp3');
+      game.load.audio('audioSpark1', 'assets/sfx/spark1.mp3');
+      game.load.audio('audioSpark2', 'assets/sfx/spark2.mp3');
+      game.load.audio('audioSpark3', 'assets/sfx/spark3.mp3');
+      game.load.audio('audioSpark4', 'assets/sfx/spark4.mp3');
+      game.load.audio('audioBuzz1', 'assets/sfx/buzz1.mp3');
+      game.load.audio('audioBuzz2', 'assets/sfx/buzz2.mp3');
+      game.load.audio('audioBuzz3', 'assets/sfx/buzz3.mp3');
+      game.load.audio('audioBuzz4', 'assets/sfx/buzz4.mp3');
+      game.load.audio('audioTarget', 'assets/sfx/target.mp3');
+      game.load.audio('audioClash', 'assets/sfx/clash.mp3');
     },
     create: function(){
       game.state.start('start', true, false);
@@ -2706,7 +3146,7 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../configs/config":1,"../configs/levels":4}],27:[function(require,module,exports){
+},{"../configs/config":1,"../configs/levels":4}],30:[function(require,module,exports){
 var config = require('../configs/config');
 var UI = require('../configs/ui');
 var storage = require('../modules/storage');
@@ -2716,6 +3156,7 @@ module.exports = function(game, Phaser){
   var soundButtonSprite;
   var languageButtonRU;
   var languageButtonBA;
+  var audioManager = require('../modules/audio').manager();
 
   return {
     preload: function(){
@@ -2823,27 +3264,36 @@ module.exports = function(game, Phaser){
     onPlay: function(){
       // load from progress
       game.state.start('game', true, false, config.defaultBlockIndex || 0, 0);
+
+      audioManager.playSound();
     },
     onSound: function(){
       var settings = storage.getSettings();
       storage.setSettings('audio', !settings.audio);
       this.updateSoundButtonSprite();
+
+      audioManager.playSound();
     },
     onLevels: function(){
       game.state.start('levels', true, false, config.defaultBlockIndex || 0);
+
+      audioManager.playSound();
     },
     onLanguage: function(code){
       var settings = storage.getSettings();
       storage.setSettings('language', code);
       this.updateLanguageButtons();
+
+      audioManager.playSound();
     },
     create: function(){
       game.world.setBounds(0, 0, config.width, config.height);
+      audioManager.playMusic('musicMenu');
     }
   }
 }
 
-},{"../configs/config":1,"../configs/ui":5,"../modules/l10n":11,"../modules/storage":17}],28:[function(require,module,exports){
+},{"../configs/config":1,"../configs/ui":5,"../modules/audio":7,"../modules/l10n":12,"../modules/storage":20}],31:[function(require,module,exports){
 function tileSprite(key, offsetX, offsetY, shadow){
   return {
     key: key,
@@ -2888,7 +3338,7 @@ module.exports = {
   35: tileSprite('bonus')
 }
 
-},{}],29:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 (function (global){
 /**
  * lodash (Custom Build) <https://lodash.com/>
@@ -4062,7 +4512,7 @@ function isObjectLike(value) {
 module.exports = difference;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],30:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 (function (global){
 /**
  * The MIT License (MIT)
@@ -17678,7 +18128,7 @@ World.prototype.raycast = function(result, ray){
 (36)
 });
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],31:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 (function (process){
 /**
 * @author       Richard Davey <rich@photonstorm.com>
@@ -98042,7 +98492,7 @@ PIXI.TextureSilentFail = true;
 */
 
 }).call(this,require('_process'))
-},{"_process":33}],32:[function(require,module,exports){
+},{"_process":36}],35:[function(require,module,exports){
 /**
 * @author       Richard Davey <rich@photonstorm.com>
 * @copyright    2016 Photon Storm Ltd.
@@ -107164,7 +107614,7 @@ Object.defineProperty(PIXI.TilingSprite.prototype, 'height', {
 
     return PIXI;
 }).call(this);
-},{}],33:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
