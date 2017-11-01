@@ -61,6 +61,16 @@ module.exports = function(game, Phaser){
       game.load.image('quizCorrect', 'assets/UI/quiz_correct.png');
       game.load.image('quizQuestionBackground', 'assets/UI/quiz_question_bkg.png');
 
+      game.load.image('borderA1', 'assets/borders/A1.png');
+      game.load.image('borderA2', 'assets/borders/A2.png');
+      game.load.image('borderA3', 'assets/borders/A3.png');
+      game.load.image('borderB1', 'assets/borders/B1.png');
+      game.load.image('borderB2', 'assets/borders/B1.png');
+      game.load.image('borderB3', 'assets/borders/B3.png');
+      game.load.image('borderC1', 'assets/borders/C1.png');
+      game.load.image('borderC2', 'assets/borders/C2.png');
+
+
       game.load.spritesheet('levelsItems', 'assets/UI/levels_items.png', 230, 260, 3);
       game.load.spritesheet('levelsBlockArrows', 'assets/UI/levels_navigation.png', 108, 112, 2);
       game.load.spritesheet('languageButton', 'assets/UI/language_button.png', 370, 100, 2);
