@@ -5,11 +5,24 @@ var _manager;
 var AudioManager = function(game, Phaser){
   this.enabled = storage.getSettings().audio;
   this.currentMusic;
+  this.currentBuzz;
+
   this.play = function(sound){
     if(this.enabled){
       sound.play();
     }
   }
+
+  this.playBuzz = function(key, volume){
+    this.currentBuzz = this.playSound(key, volume);
+  }
+
+  this.stopBuzz = function(){
+    if(this.currentBuzz){
+      this.currentBuzz.stop();
+    }
+  }
+
   this.playMusic = function(key){
     if(!this.currentMusic || this.currentMusic.key !== key){
       if(this.currentMusic) this.currentMusic.stop();
@@ -17,11 +30,14 @@ var AudioManager = function(game, Phaser){
       this.play(this.currentMusic);
     }
   }
+
   this.playSound = function(key, volume){
     key = key || 'audioButton';
     var sfx = game.add.audio(key, volume || config.audio.sfxVolume);
     this.play(sfx);
+    return sfx;
   }
+
   this.onSettingsChanged = function(settings){
     if(this.currentMusic && this.enabled !== settings.audio){
       this.enabled = settings.audio;
