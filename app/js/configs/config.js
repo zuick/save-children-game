@@ -17,10 +17,10 @@ module.exports = {
     },
     sparks: ['audioSpark1', 'audioSpark2', 'audioSpark3', 'audioSpark4'],
     buzz: ['audioBuzz2', 'audioBuzz3', 'audioBuzz4'],
-    buzzInterval: 8,
+    buzzInterval: 6,
     musicVolume: 1,
     sfxVolume: 1,
-    buzzVolume: 0.5
+    buzzVolume: 0.3
   },
   map: {
     main: {
