@@ -16,11 +16,11 @@ module.exports = {
       2: 'musicHard'
     },
     sparks: ['audioSpark1', 'audioSpark2', 'audioSpark3', 'audioSpark4'],
-    buzz: ['audioBuzz1', 'audioBuzz2', 'audioBuzz3', 'audioBuzz4'],
+    buzz: ['audioBuzz2', 'audioBuzz3', 'audioBuzz4'],
     buzzInterval: 8,
     musicVolume: 1,
     sfxVolume: 1,
-    buzzVolume: 0.8
+    buzzVolume: 0.5
   },
   map: {
     main: {
