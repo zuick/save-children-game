@@ -454,6 +454,9 @@ module.exports = function(game, Phaser){
     update: function(){
       if(state === states.normal){
         var _this = this;
+        if(hero){
+          hero.setDirectionFromChildrens(children.map(function(child){ return child.position() }));
+        }
         children.forEach(function(child){
           traps.forEach(function(trap){
             game.physics.arcade.collide(child.getCollider(), trap.getCollider(), _this.trapCollision, null, _this);
