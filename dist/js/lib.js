@@ -17,11 +17,11 @@ module.exports = {
       2: 'musicHard'
     },
     sparks: ['audioSpark1', 'audioSpark2', 'audioSpark3', 'audioSpark4'],
-    buzz: ['audioBuzz1', 'audioBuzz2', 'audioBuzz3', 'audioBuzz4'],
+    buzz: ['audioBuzz2', 'audioBuzz3', 'audioBuzz4'],
     buzzInterval: 8,
     musicVolume: 1,
     sfxVolume: 1,
-    buzzVolume: 0.8
+    buzzVolume: 0.5
   },
   map: {
     main: {
@@ -1122,11 +1122,24 @@ var _manager;
 var AudioManager = function(game, Phaser){
   this.enabled = storage.getSettings().audio;
   this.currentMusic;
+  this.currentBuzz;
+
   this.play = function(sound){
     if(this.enabled){
       sound.play();
     }
   }
+
+  this.playBuzz = function(key, volume){
+    this.currentBuzz = this.playSound(key, volume);
+  }
+
+  this.stopBuzz = function(){
+    if(this.currentBuzz){
+      this.currentBuzz.stop();
+    }
+  }
+
   this.playMusic = function(key){
     if(!this.currentMusic || this.currentMusic.key !== key){
       if(this.currentMusic) this.currentMusic.stop();
@@ -1134,11 +1147,14 @@ var AudioManager = function(game, Phaser){
       this.play(this.currentMusic);
     }
   }
+
   this.playSound = function(key, volume){
     key = key || 'audioButton';
     var sfx = game.add.audio(key, volume || config.audio.sfxVolume);
     this.play(sfx);
+    return sfx;
   }
+
   this.onSettingsChanged = function(settings){
     if(this.currentMusic && this.enabled !== settings.audio){
       this.enabled = settings.audio;
@@ -2505,11 +2521,11 @@ module.exports = function(game, Phaser){
 
       this.updateStatusText();
       audioManager.playMusic(config.audio.musicByDifficulty[currentBlockIndex]);
-      this.buzzSound();
     },
     buzzSound: function(){
-      if(state === states.normal){
-        audioManager.playSound(config.audio.buzz[Math.floor(Math.random() * config.audio.buzz.length)], config.audio.buzzVolume);
+      if(state === states.normal && trapsActive){
+        audioManager.stopBuzz();
+        audioManager.playBuzz(config.audio.buzz[Math.floor(Math.random() * config.audio.buzz.length)], config.audio.buzzVolume);
       }
     },
     onSuccess: function(){
@@ -2537,6 +2553,7 @@ module.exports = function(game, Phaser){
       numberOfFails = 0;
 
       audioManager.playSound('audioWin');
+      audioManager.stopBuzz();
     },
     onFail: function(){
       numberOfFails++;
@@ -2562,6 +2579,7 @@ module.exports = function(game, Phaser){
       state = states.gameover;
 
       audioManager.playSound('audioLose');
+      audioManager.stopBuzz();
     },
     onPauseClicked: function(){
       audioManager.playSound();
@@ -2599,7 +2617,6 @@ module.exports = function(game, Phaser){
         audioManager.playSound();
       }
       state = states.normal;
-
     },
     onContinueClicked: function(){
       if(state === states.paused && pausePopup){
@@ -2643,6 +2660,7 @@ module.exports = function(game, Phaser){
         }.bind(this));
         bonuses = [];
         audioManager.playSound('audioBonus');
+        audioManager.stopBuzz();
       }
     },
     deactivateTraps: function(){
@@ -2699,6 +2717,8 @@ module.exports = function(game, Phaser){
         sparksEffects.push(sparksWrapper);
         middleLayer.add(sparksWrapper);
       });
+
+      this.buzzSound();
     },
     update: function(){
       if(state === states.normal){
@@ -2734,12 +2754,14 @@ module.exports = function(game, Phaser){
       game.state.start('levels', true, false, void 0);
 
       audioManager.playSound();
+      audioManager.stopBuzz();
     },
     returnToMenu: function(){
       this.destroyHero();
       game.state.start('start', true, false);
 
       audioManager.playSound();
+      audioManager.stopBuzz();
     },
     nextLevel: function(){
       this.destroyHero();
@@ -2750,12 +2772,14 @@ module.exports = function(game, Phaser){
       game.state.restart(true, false, nextBlockIndex, nextLevelIndex);
 
       audioManager.playSound();
+      audioManager.stopBuzz();
     },
     restartLevel: function(isSlowMode, quite){
       this.destroyHero();
       game.state.restart(true, false, currentBlockIndex, currentLevelIndex, isSlowMode === true);
 
       if(!quite) audioManager.playSound();
+      audioManager.stopBuzz();
     },
     escapeCollision: function(child, esc){
       this.removeChild(child, function(){ savedChildren++; this.updateStatusText() }.bind(this));
