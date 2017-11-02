@@ -97,6 +97,7 @@ module.exports = {
   "NEXT": "Артабан",
   "ACCEPT": "Эйе",
   "CANCEL": "Юҡ",
+  "LOADING": "Загрузка...",
   "CONFIRM_TO_LEVELS": "Киренән һайлау?",
   "LANGUAGE_NAME": 'Башкорт',
   "DIFFICULTY_LEVEL_EAZY": "Яңы кеше",
@@ -106,7 +107,7 @@ module.exports = {
   "QUIZ_TITLE_2": "Зыян күргәнгә нисек ярҙам итергә?",
   "QUIZ_TITLE_3": "Ванна бүлмәһендә нимә хәүефһеҙ?",
   "QUIZ_TITLE_4": "Эшләмәгән телевизор менән нишләргә?",
-  "LEVEL_TITLE_0_0_0": "Диңгеҙ бесәйе",
+  "LEVEL_TITLE_0_0_0": "Дәү бесәй",
   "LEVEL_TITLE_0_0_1": "Ата Бесәй",
   "LEVEL_TITLE_0_0_2": "Бесәй балаһы",
   "LEVEL_TITLE_0_1_0": "Уҡсы",
@@ -118,7 +119,7 @@ module.exports = {
   "LEVEL_TITLE_0_3_0": "Питон",
   "LEVEL_TITLE_0_3_1": "Быуар йылан",
   "LEVEL_TITLE_0_3_2": "Туҙбаш йылан",
-  "LEVEL_TITLE_0_4_0": "Отличник",
+  "LEVEL_TITLE_0_4_0": "Бишкә уҡыусы",
   "LEVEL_TITLE_0_4_1": "Яҡшы уҡыусы",
   "LEVEL_TITLE_0_4_2": "Өскә уҡыусы",
   "LEVEL_TITLE_0_5_0": "Сәйәхәтсе",
@@ -128,9 +129,9 @@ module.exports = {
   "LEVEL_TITLE_0_6_1": "Балта оҫтаҺы",
   "LEVEL_TITLE_0_6_2": "Урман ҡырҡыусы",
   "LEVEL_TITLE_0_7_0": "Танк йөрөтөүсе",
-  "LEVEL_TITLE_0_7_1": "Трактор йөрөтөүсе",
+  "LEVEL_TITLE_0_7_1": "Тракторсы",
   "LEVEL_TITLE_0_7_2": "Машина йөтөрөүсе",
-  "LEVEL_TITLE_0_8_0": "Фокуссы",
+  "LEVEL_TITLE_0_8_0": "Күнектереүсе",
   "LEVEL_TITLE_0_8_1": "Жонглер",
   "LEVEL_TITLE_0_8_2": "Клоун",
   "LEVEL_TITLE_0_9_0": "Айыу",
@@ -155,8 +156,8 @@ module.exports = {
   "LEVEL_TITLE_0_15_1": "Ҡобайырсы",
   "LEVEL_TITLE_0_15_2": "Йырсы",
   "LEVEL_TITLE_0_16_0": "Мең башлығы",
-  "LEVEL_TITLE_0_16_1": "Сотник",
-  "LEVEL_TITLE_0_16_2": "Дисәтник",
+  "LEVEL_TITLE_0_16_1": "Йөҙ башлығы",
+  "LEVEL_TITLE_0_16_2": "Ун башлығы",
   "LEVEL_TITLE_0_17_0": "АждаҺа",
   "LEVEL_TITLE_0_17_1": "Ҙур кеҫәртке",
   "LEVEL_TITLE_0_17_2": "Һыу кеҫәрткеҺе",
@@ -165,13 +166,13 @@ module.exports = {
   "LEVEL_TITLE_0_18_2": "Боксер",
   "LEVEL_TITLE_0_19_0": "Егет",
   "LEVEL_TITLE_0_19_1": "Үҫмер",
-  "LEVEL_TITLE_0_19_2": "Бәпес",
+  "LEVEL_TITLE_0_19_2": "Сабый",
   "LEVEL_TITLE_1_0_0": "Капитан",
   "LEVEL_TITLE_1_0_1": "Детектив",
-  "LEVEL_TITLE_1_0_2": "Патрульный",
+  "LEVEL_TITLE_1_0_2": "Патруль ағзаһы",
   "LEVEL_TITLE_1_1_0": "БаҺадир",
   "LEVEL_TITLE_1_1_1": "Дружинасы",
-  "LEVEL_TITLE_1_1_2": "Ратник",
+  "LEVEL_TITLE_1_1_2": "Яугир",
   "LEVEL_TITLE_1_2_0": "Архитектор",
   "LEVEL_TITLE_1_2_1": "Прораб",
   "LEVEL_TITLE_1_2_2": "Төҙөүсе",
@@ -207,7 +208,7 @@ module.exports = {
   "LEVEL_TITLE_1_12_2": "Пират",
   "LEVEL_TITLE_1_13_0": "Лейтенант",
   "LEVEL_TITLE_1_13_1": "Сержант",
-  "LEVEL_TITLE_1_13_2": "Рядовой",
+  "LEVEL_TITLE_1_13_2": "Рядовой һалдат",
   "LEVEL_TITLE_1_14_0": "Алмас",
   "LEVEL_TITLE_1_14_1": "Ҡыҙыл йәүҺәр",
   "LEVEL_TITLE_1_14_2": "Яҡут",
@@ -225,7 +226,7 @@ module.exports = {
   "LEVEL_TITLE_1_18_2": "Ҡолон",
   "LEVEL_TITLE_1_19_0": "Хөкөм итеүсе",
   "LEVEL_TITLE_1_19_1": "Һыбай көтөүсе",
-  "LEVEL_TITLE_1_19_2": "Хәйерсе",
+  "LEVEL_TITLE_1_19_2": "Берәҙәк",
   "LEVEL_TITLE_2_0_0": "Кенәз",
   "LEVEL_TITLE_2_0_1": "Граф",
   "LEVEL_TITLE_2_0_2": "Барон",
@@ -303,6 +304,7 @@ module.exports = {
   "NEXT": "Далее",
   "ACCEPT": "Да",
   "CANCEL": "Нет",
+  "LOADING": "Загрузка...",
   "CONFIRM_TO_LEVELS": "Вернуться к\n выбору уровней?",
   "LANGUAGE_NAME": "Русский",
   "DIFFICULTY_LEVEL_EAZY": "Новичок",
@@ -3061,12 +3063,14 @@ module.exports = function(game, Phaser){
 },{"../configs/config":1,"../configs/levels":4,"../configs/ui":5,"../modules/audio":7,"../modules/l10n":12,"../modules/storage":20,"../modules/utils":24}],29:[function(require,module,exports){
 var config = require('../configs/config');
 var levelsConfig = require('../configs/levels');
+var l10n = require('../modules/l10n');
+
 module.exports = function(game, Phaser){
   return {
     text: void 0,
     preload: function() {
       var splash = game.add.sprite(0, 0, 'splash');
-      var loadingText = game.add.text( game.world.centerX, game.world.centerY + 300, "Loading...", { font: "32pt KZSupercell", fill: "#fff", align: "center" } ).anchor.setTo( 0.5, 0.5 );
+      var loadingText = game.add.text( game.world.centerX, game.world.centerY + 300, l10n.get('LOADING'), { font: "32pt KZSupercell", fill: "#fff", align: "center" } ).anchor.setTo( 0.5, 0.5 );
       levelsConfig.forEach(function(levelsBlock, blockIndex){
         levelsBlock.forEach(function(level, index){
           game.load.tilemap('level' + blockIndex + '-' + index, level.src, null, Phaser.Tilemap.TILED_JSON);
@@ -3170,7 +3174,7 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../configs/config":1,"../configs/levels":4}],30:[function(require,module,exports){
+},{"../configs/config":1,"../configs/levels":4,"../modules/l10n":12}],30:[function(require,module,exports){
 var config = require('../configs/config');
 var UI = require('../configs/ui');
 var storage = require('../modules/storage');
