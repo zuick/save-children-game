@@ -1,11 +1,13 @@
 var config = require('../configs/config');
 var levelsConfig = require('../configs/levels');
+var l10n = require('../modules/l10n');
+
 module.exports = function(game, Phaser){
   return {
     text: void 0,
     preload: function() {
       var splash = game.add.sprite(0, 0, 'splash');
-      var loadingText = game.add.text( game.world.centerX, game.world.centerY + 300, "Loading...", { font: "32pt KZSupercell", fill: "#fff", align: "center" } ).anchor.setTo( 0.5, 0.5 );
+      var loadingText = game.add.text( game.world.centerX, game.world.centerY + 300, l10n.get('LOADING'), { font: "32pt KZSupercell", fill: "#fff", align: "center" } ).anchor.setTo( 0.5, 0.5 );
       levelsConfig.forEach(function(levelsBlock, blockIndex){
         levelsBlock.forEach(function(level, index){
           game.load.tilemap('level' + blockIndex + '-' + index, level.src, null, Phaser.Tilemap.TILED_JSON);

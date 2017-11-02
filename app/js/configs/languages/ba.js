@@ -12,6 +12,7 @@ module.exports = {
   "NEXT": "Артабан",
   "ACCEPT": "Эйе",
   "CANCEL": "Юҡ",
+  "LOADING": "Загрузка...",
   "CONFIRM_TO_LEVELS": "Киренән һайлау?",
   "LANGUAGE_NAME": 'Башкорт',
   "DIFFICULTY_LEVEL_EAZY": "Яңы кеше",

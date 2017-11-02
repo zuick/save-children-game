@@ -12,6 +12,7 @@ module.exports = {
   "NEXT": "Далее",
   "ACCEPT": "Да",
   "CANCEL": "Нет",
+  "LOADING": "Загрузка...",
   "CONFIRM_TO_LEVELS": "Вернуться к\n выбору уровней?",
   "LANGUAGE_NAME": "Русский",
   "DIFFICULTY_LEVEL_EAZY": "Новичок",
