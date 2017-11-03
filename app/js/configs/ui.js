@@ -73,7 +73,11 @@ module.exports = {
     }
   },
   help: {
-    fadeDuration: 300
+    fadeDuration: 300,
+    header: {
+      style: { font: "32px KZSupercell", fill: "#fff", align: "center" },
+      offsetY: 100
+    }
   },
   game: {
     backgroundColor: {
