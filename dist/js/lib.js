@@ -4,6 +4,7 @@ module.exports = {
   width: 1920,
   height: 1080,
   enableBorders: false,
+  firstVisitTutorialShow: 4,
   defaultLanguage: 'ru',
   defaultBlockIndex: 0,
   defaultBonusDelay: 15,
@@ -940,6 +941,13 @@ module.exports = {
       0: 'levelItemCity',
       1: 'levelItemCountrySide',
       2: 'levelItemHouse'
+    }
+  },
+  help: {
+    fadeDuration: 300,
+    header: {
+      style: { font: "32px KZSupercell", fill: "#fff", align: "center" },
+      offsetY: 100
     }
   },
   game: {
@@ -1939,12 +1947,37 @@ var localStorageAvailable = storageAvailable('localStorage');
 var defaultProgress = {};
 var settingsKey = 'beskman_settings';
 var progressKey = 'beskman_progress';
+var wasVisitedKey = 'beskman_was_visited';
 var listeners = [];
 
+var tutorialShownCounter = 0;
+var tutorialMode = false;
+
 module.exports = {
+  initTutorialMode: function(){
+    if(localStorageAvailable){
+      var wasVisited = localStorage.getItem(wasVisitedKey);
+      if(!wasVisited){
+        localStorage.setItem(wasVisitedKey, "true");
+        tutorialMode = true;
+      }else{
+        tutorialMode = false;
+      }
+    }
+  },
+
+  setTutorialShown: function(){
+    tutorialShownCounter++;
+  },
+
+  shouldShowTutorial: function(){
+    return tutorialMode ? tutorialShownCounter < config.firstVisitTutorialShow : tutorialShownCounter < 1;
+  },
+
   addListener: function(callback){
     listeners.push(callback);
   },
+
   getSettings: function(){
     if(localStorageAvailable){
       var settings = localStorage.getItem(settingsKey);
@@ -2348,6 +2381,7 @@ module.exports = {
 
 },{}],26:[function(require,module,exports){
 var config = require('../configs/config');
+var storage = require('../modules/storage');
 
 module.exports = function(game, Phaser){
   return {
@@ -2364,6 +2398,7 @@ module.exports = function(game, Phaser){
 
     },
     create: function(){
+      storage.initTutorialMode();
       game.add.text( 0, 0, ".", { font: "1pt Bangers" } );
       game.add.text( 0, 0, ".", { font: "1pt KZSupercell" } );
       game.state.start('preloader', true, false);
@@ -2371,7 +2406,7 @@ module.exports = function(game, Phaser){
   }
 }
 
-},{"../configs/config":1}],27:[function(require,module,exports){
+},{"../configs/config":1,"../modules/storage":20}],27:[function(require,module,exports){
 var config = require('../configs/config');
 var UI = require('../configs/ui');
 var levelsConfig = require('../configs/levels');
@@ -2663,6 +2698,10 @@ module.exports = function(game, Phaser){
 
       this.updateStatusText();
       audioManager.playMusic(config.audio.musicByDifficulty[currentBlockIndex]);
+
+      if(storage.shouldShowTutorial()){
+        this.showTutorial();
+      }
     },
     buzzSound: function(){
       if(state === states.normal && trapsActive){
@@ -2703,8 +2742,8 @@ module.exports = function(game, Phaser){
         quizPopup = quizPopupCreator.create(
           config.width / 2 - screenParams.offsetX,
           config.height / 2 - screenParams.offsetY,
-          function(){ this.restartLevel(true, true); }.bind(this),
-          function(){ this.restartLevel(false, true); }.bind(this),
+          function(){ numberOfFails = 0; this.restartLevel(true, true); }.bind(this),
+          function(){ numberOfFails = 0; this.restartLevel(false, true); }.bind(this),
           this
         );
       }else{
@@ -2897,6 +2936,26 @@ module.exports = function(game, Phaser){
           this.createBorders();
         }
       }
+    },
+    showTutorial: function(){
+      state = states.pause;
+      var help = game.add.button(
+        config.width / 2 - screenParams.offsetX,
+        config.height / 2 - screenParams.offsetY,
+        'help'
+      );
+      help.anchor.set(0.5);
+      help.onInputDown.add(function(){
+        var fade = game.add.tween(help).to({ alpha: 0 }, UI.help.fadeDuration, "Linear", true);
+        fade.onComplete.add(function(){
+          this.destroyFromLayer(UILayer, help);
+          help.destroy();
+          state = states.normal;
+        }.bind(this));
+      }.bind(this));
+
+      UILayer.add(help);
+      storage.setTutorialShown();
     },
     returnToLevels: function(){
       this.destroyHero();
@@ -3272,6 +3331,7 @@ module.exports = function(game, Phaser){
       game.load.image('pixel', 'assets/UI/pixel.png');
       game.load.image('quizCorrect', 'assets/UI/quiz_correct.png');
       game.load.image('quizQuestionBackground', 'assets/UI/quiz_question_bkg.png');
+      game.load.image('help', 'assets/help.jpg');
 
       game.load.image('borderA1', 'assets/borders/A1.png');
       game.load.image('borderA2', 'assets/borders/A2.png');
