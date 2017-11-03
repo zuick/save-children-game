@@ -73,7 +73,11 @@ module.exports = {
     }
   },
   game: {
-    backgroundColor: '#271212',
+    backgroundColor: {
+      0: '#546405',
+      1: '#776F5E',
+      2: '#5E3916'
+    },
     timer: {
       marginTop: 10,
       offsetX: -220, // from center
@@ -219,6 +223,45 @@ module.exports = {
         replayOffsetX: 0,
         toLevelsOffsetX: 150
       }
+    }
+  },
+  borders: {
+    0: {
+      back: 'borderC1',
+      front: 'borderC1',
+      fronth: 52,
+      side: 'borderC2',
+      leftSideAnchorX: -0.2,
+      rightSideAnchorX: 1.2,
+      w: 32,
+      h: 55,
+      offsetX: 0,
+      offsetY: 20
+    },
+    1: {
+      back: 'borderA2',
+      front: 'borderA2',
+      fronth: 64,
+      side: 'borderA1',
+      corner: 'borderA3',
+      leftSideAnchorX: 0,
+      rightSideAnchorX: 0,
+      w: 105,
+      h: 84,
+      offsetX: -3,
+      offsetY: 20
+    },
+	  2: {
+      back: 'borderB3',
+      front: 'borderB2',
+      fronth: 63,
+      side: 'borderB1',
+      leftSideAnchorX: 0,
+      rightSideAnchorX: 1,
+      w: 239,
+      h: 105,
+      offsetX: -3,
+      offsetY: 20
     }
   }
 }

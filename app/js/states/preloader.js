@@ -19,7 +19,7 @@ module.exports = function(game, Phaser){
 
       game.load.spritesheet('boy', 'assets/characters/boy.png', 160, 185, 12);
       game.load.spritesheet('girl', 'assets/characters/girl.png', 160, 185, 12);
-      game.load.image('hero', 'assets/characters/hero.png');
+      game.load.spritesheet('hero', 'assets/characters/hero.png', 256, 256, 3);
 
       game.load.image('ground01', 'assets/ground/01.png');
       game.load.image('ground02', 'assets/ground/02.png');
@@ -67,7 +67,7 @@ module.exports = function(game, Phaser){
       game.load.image('borderA2', 'assets/borders/A2.png');
       game.load.image('borderA3', 'assets/borders/A3.png');
       game.load.image('borderB1', 'assets/borders/B1.png');
-      game.load.image('borderB2', 'assets/borders/B1.png');
+      game.load.image('borderB2', 'assets/borders/B2.png');
       game.load.image('borderB3', 'assets/borders/B3.png');
       game.load.image('borderC1', 'assets/borders/C1.png');
       game.load.image('borderC2', 'assets/borders/C2.png');

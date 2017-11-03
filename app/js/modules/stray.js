@@ -156,6 +156,13 @@ module.exports = function(game, Phaser){
       return sprite;
     }
 
+    this.position = function(){
+      return {
+        x: sprite.x + map.get().tileWidth / 2,
+        y: sprite.y + map.get().tileHeight / 2
+      }
+    }
+
     this.render = function(){
       game.debug.body(sprite);
       if(map && currentTile && nextTile){

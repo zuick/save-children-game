@@ -25,5 +25,8 @@ module.exports = {
     var newArray = [];
     a.forEach(function(i){ newArray.push(i)});
     return newArray;
+  },
+  distance: function(a, b){
+    return Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
   }
 }

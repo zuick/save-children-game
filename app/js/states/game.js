@@ -30,10 +30,10 @@ module.exports = function(game, Phaser){
 
   var children, traps, escapes, savedChildren, hero, sparksEffects,
     currentLevelIndex, currentBlockIndex, initialChildrenCount, numberOfFails, slowMode,
-    middleLayer, backLayer, UILayer,
+    farLayer, middleLayer, backLayer, frontLayer, UILayer,
     timerText, state, pauseButton, statusText, levelNumberText, backButton,
     pausePopup, successPopup, gameoverPopup, confirmPopup, quizPopup,
-    bonusDelay, bonusPlaces, bonuses, trapsActive, bonusesMarks;
+    bonusDelay, bonusPlaces, bonuses, trapsActive, bonusesMarks, type;
 
   var screenParams = {
     scale: 1,
@@ -92,15 +92,17 @@ module.exports = function(game, Phaser){
     },
     loadMap: function(){
       map.create('level' + currentBlockIndex + '-' + currentLevelIndex, void 0, this.isTileOccupied.bind(this));
+      farLayer = game.add.group();
       backLayer = game.add.group();
       middleLayer = game.add.group();
+      frontLayer = game.add.group();
       UILayer = game.add.group();
 
       var childSpeed = slowMode
         ? config.children.slowModeSpeed
         : (levelsConfig[currentBlockIndex][currentLevelIndex].childrenSpeed || config.children.defaultSpeed ) - Math.round(Math.random() * config.children.speedAccuracy);
 
-      var type = levelsConfig[currentBlockIndex][currentLevelIndex].type || 0;
+      type = levelsConfig[currentBlockIndex][currentLevelIndex].type || 0;
 
       bonusDelay = levelsConfig[currentBlockIndex][currentLevelIndex].bonusDelay || config.defaultBonusDelay;
       bonusPlaces = map.getTilesInLayer(config.map.main.name, config.map.main.ground);
@@ -190,6 +192,41 @@ module.exports = function(game, Phaser){
       screenParams.offsetY = (config.height - map.getSize().y) / 2;
 
       game.world.setBounds(-screenParams.offsetX, -screenParams.offsetY, config.width - screenParams.offsetX, config.height - screenParams.offsetY);
+      if(config.enableBorders){
+        this.createBorders();
+      }
+    },
+    createBorders: function(){
+      var options = UI.borders[type];
+      if(options){
+        var mapSize = map.getSize();
+        var wc = Math.ceil(mapSize.x / options.w);
+        var hc = Math.ceil(mapSize.y / options.h);
+        var offsetX = (wc * options.w - mapSize.x) / 2;
+        var offsetY = (hc * options.h - mapSize.y) / 2;
+
+        for(var i = 0; i < wc; i++){
+          var bb = game.add.sprite(-offsetX + i * options.w + options.offsetX, -offsetY + options.offsetY, options.back);
+          var fb = game.add.sprite(-offsetX + i * options.w + options.offsetX, offsetY + mapSize.y + options.offsetY, options.front);
+          bb.anchor.y = 1;
+          fb.anchor.y = 1;
+          farLayer.add(bb);
+          frontLayer.add(fb);
+        }
+        for(var i = 0; i < hc; i++){
+          var lb = game.add.sprite(-offsetX + options.offsetX, -options.fronth - offsetY + i * options.h + options.offsetY, options.side);
+          var rb = game.add.sprite(offsetX + mapSize.x + options.offsetX, -options.fronth - offsetY + i * options.h + options.offsetY, options.side);
+          lb.anchor.x = options.leftSideAnchorX;
+          rb.anchor.x = options.rightSideAnchorX;
+          backLayer.add(lb);
+          backLayer.add(rb);
+        }
+        if(options.corner){
+          var c = game.add.sprite(offsetX + mapSize.x + options.offsetX, offsetY + mapSize.y + options.offsetY, options.corner);
+          c.anchor.y = 1;
+          frontLayer.add(c);
+        }
+      }
     },
     createText: function(options, text, anchor){
       var t = game.add.text(
@@ -206,7 +243,7 @@ module.exports = function(game, Phaser){
       return t;
     },
     create: function() {
-      game.stage.backgroundColor = UI.game.backgroundColor;
+      game.stage.backgroundColor = UI.game.backgroundColor[type];
       game.physics.startSystem(Phaser.Physics.ARCADE);
       game.input.onDown.add(this.onPointerDown, this);
 
@@ -454,6 +491,9 @@ module.exports = function(game, Phaser){
     update: function(){
       if(state === states.normal){
         var _this = this;
+        if(hero){
+          hero.setDirectionFromChildrens(children.map(function(child){ return child.position() }));
+        }
         children.forEach(function(child){
           traps.forEach(function(trap){
             game.physics.arcade.collide(child.getCollider(), trap.getCollider(), _this.trapCollision, null, _this);
@@ -477,6 +517,10 @@ module.exports = function(game, Phaser){
 
         if (game.input.keyboard.isDown(Phaser.Keyboard.ESC)){
           this.onBackClicked();
+        }
+
+        if (game.input.keyboard.isDown(Phaser.Keyboard.B)){
+          this.createBorders();
         }
       }
     },
