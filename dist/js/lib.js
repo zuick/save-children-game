@@ -3,6 +3,7 @@ module.exports = {
   debug: false,
   width: 1920,
   height: 1080,
+  enableBorders: false,
   defaultLanguage: 'ru',
   defaultBlockIndex: 0,
   defaultBonusDelay: 15,
@@ -17,11 +18,11 @@ module.exports = {
       2: 'musicHard'
     },
     sparks: ['audioSpark1', 'audioSpark2', 'audioSpark3', 'audioSpark4'],
-    buzz: ['audioBuzz2', 'audioBuzz3', 'audioBuzz4'],
-    buzzInterval: 8,
+    buzz: ['audioBuzz1', 'audioBuzz2', 'audioBuzz3', 'audioBuzz4'],
+    buzzInterval: 6,
     musicVolume: 1,
     sfxVolume: 1,
-    buzzVolume: 0.5
+    buzzVolume: 0.3
   },
   map: {
     main: {
@@ -942,7 +943,11 @@ module.exports = {
     }
   },
   game: {
-    backgroundColor: '#271212',
+    backgroundColor: {
+      0: '#546405',
+      1: '#776F5E',
+      2: '#5E3916'
+    },
     timer: {
       marginTop: 10,
       offsetX: -220, // from center
@@ -1088,6 +1093,45 @@ module.exports = {
         replayOffsetX: 0,
         toLevelsOffsetX: 150
       }
+    }
+  },
+  borders: {
+    0: {
+      back: 'borderC1',
+      front: 'borderC1',
+      fronth: 52,
+      side: 'borderC2',
+      leftSideAnchorX: -0.2,
+      rightSideAnchorX: 1.2,
+      w: 32,
+      h: 55,
+      offsetX: 0,
+      offsetY: 20
+    },
+    1: {
+      back: 'borderA2',
+      front: 'borderA2',
+      fronth: 64,
+      side: 'borderA1',
+      corner: 'borderA3',
+      leftSideAnchorX: 0,
+      rightSideAnchorX: 0,
+      w: 105,
+      h: 84,
+      offsetX: -3,
+      offsetY: 20
+    },
+	  2: {
+      back: 'borderB3',
+      front: 'borderB2',
+      fronth: 63,
+      side: 'borderB1',
+      leftSideAnchorX: 0,
+      rightSideAnchorX: 1,
+      w: 239,
+      h: 105,
+      offsetX: -3,
+      offsetY: 20
     }
   }
 }
@@ -1265,11 +1309,15 @@ module.exports = function(game, Phaser){
 }
 
 },{}],11:[function(require,module,exports){
+var utils = require('../modules/utils');
+
 module.exports = function(game, Phaser){
   function Hero(){
     var sprite;
+    var map;
     this.child;
-    this.create = function(x, y, map, spriteOptions, bodyScale){
+    this.create = function(x, y, _map, spriteOptions, bodyScale){
+      map = _map;
       var scale = (bodyScale || 1);
       var w = map.get().tileWidth;
       var h = map.get().tileHeight;
@@ -1295,15 +1343,57 @@ module.exports = function(game, Phaser){
       sprite.destroy();
     }
 
+    this.position = function(){
+      return {
+        x: sprite.x + map.get().tileWidth / 2,
+        y: sprite.y + map.get().tileHeight / 2
+      }
+    }
+
     this.render = function(){
       game.debug.body(sprite);
+    }
+
+    this.setDirectionFromChildrens = function(childrenPositions){
+      var heroPosition = this.position();
+      var dir = 'left';
+      if(childrenPositions.length > 0){
+        var nearest = childrenPositions[0];
+        childrenPositions.forEach(function(pos){
+          if(utils.distance(heroPosition, pos) < utils.distance(heroPosition, nearest)){
+            nearest = pos;
+          }
+        });
+        var dx = nearest.x - heroPosition.x;
+        var dy = nearest.y - heroPosition.y;
+        if(Math.abs(dx) > Math.abs(dy)){
+          dir = dx > 0 ? 'right' : 'left';
+        }else{
+          dir = dy > 0 ? 'down' : 'up';
+        }
+      }
+      if(dir === 'left'){
+        this.child.frame = 0;
+        sprite.children.forEach(function(innerSprite){
+          innerSprite.scale.x = 1;
+        })
+      }else if(dir === 'right'){
+        this.child.frame = 0;
+        sprite.children.forEach(function(innerSprite){
+          innerSprite.scale.x = -1;
+        })
+      }else if(dir === 'up'){
+        this.child.frame = 1;
+      }else if(dir === 'down'){
+        this.child.frame = 2;
+      }
     }
   }
 
   return Hero;
 }
 
-},{}],12:[function(require,module,exports){
+},{"../modules/utils":24}],12:[function(require,module,exports){
 var format = require("../modules/stringFormat");
 var config = require('../configs/config');
 var languages = {
@@ -1707,8 +1797,11 @@ module.exports = function(game, Phaser){
           index * options.answers.waveTweenDuration / 2, -1, true
         );
 
+        var clicked = false;
         answer.onInputDown.add(function(){
-          audioManager.playSound(isCorrect ? 'audioWin' : 'audioLose');        
+          if(clicked) return;
+          clicked = true;
+          audioManager.playSound(isCorrect ? 'audioWin' : 'audioLose');
           buttons.forEach(function(btn){
             btn.waveTween.pause();
             var normalPositionTween = game.add.tween(btn.button).to({ y: buttonY }, options.answers.waveTweenDuration / 3, "Linear", true );
@@ -2059,6 +2152,13 @@ module.exports = function(game, Phaser){
       return sprite;
     }
 
+    this.position = function(){
+      return {
+        x: sprite.x + map.get().tileWidth / 2,
+        y: sprite.y + map.get().tileHeight / 2
+      }
+    }
+
     this.render = function(){
       game.debug.body(sprite);
       if(map && currentTile && nextTile){
@@ -2215,6 +2315,9 @@ module.exports = {
     var newArray = [];
     a.forEach(function(i){ newArray.push(i)});
     return newArray;
+  },
+  distance: function(a, b){
+    return Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
   }
 }
 
@@ -2301,10 +2404,10 @@ module.exports = function(game, Phaser){
 
   var children, traps, escapes, savedChildren, hero, sparksEffects,
     currentLevelIndex, currentBlockIndex, initialChildrenCount, numberOfFails, slowMode,
-    middleLayer, backLayer, UILayer,
+    farLayer, middleLayer, backLayer, frontLayer, UILayer,
     timerText, state, pauseButton, statusText, levelNumberText, backButton,
     pausePopup, successPopup, gameoverPopup, confirmPopup, quizPopup,
-    bonusDelay, bonusPlaces, bonuses, trapsActive, bonusesMarks;
+    bonusDelay, bonusPlaces, bonuses, trapsActive, bonusesMarks, type;
 
   var screenParams = {
     scale: 1,
@@ -2363,15 +2466,17 @@ module.exports = function(game, Phaser){
     },
     loadMap: function(){
       map.create('level' + currentBlockIndex + '-' + currentLevelIndex, void 0, this.isTileOccupied.bind(this));
+      farLayer = game.add.group();
       backLayer = game.add.group();
       middleLayer = game.add.group();
+      frontLayer = game.add.group();
       UILayer = game.add.group();
 
       var childSpeed = slowMode
         ? config.children.slowModeSpeed
         : (levelsConfig[currentBlockIndex][currentLevelIndex].childrenSpeed || config.children.defaultSpeed ) - Math.round(Math.random() * config.children.speedAccuracy);
 
-      var type = levelsConfig[currentBlockIndex][currentLevelIndex].type || 0;
+      type = levelsConfig[currentBlockIndex][currentLevelIndex].type || 0;
 
       bonusDelay = levelsConfig[currentBlockIndex][currentLevelIndex].bonusDelay || config.defaultBonusDelay;
       bonusPlaces = map.getTilesInLayer(config.map.main.name, config.map.main.ground);
@@ -2461,6 +2566,41 @@ module.exports = function(game, Phaser){
       screenParams.offsetY = (config.height - map.getSize().y) / 2;
 
       game.world.setBounds(-screenParams.offsetX, -screenParams.offsetY, config.width - screenParams.offsetX, config.height - screenParams.offsetY);
+      if(config.enableBorders){
+        this.createBorders();
+      }
+    },
+    createBorders: function(){
+      var options = UI.borders[type];
+      if(options){
+        var mapSize = map.getSize();
+        var wc = Math.ceil(mapSize.x / options.w);
+        var hc = Math.ceil(mapSize.y / options.h);
+        var offsetX = (wc * options.w - mapSize.x) / 2;
+        var offsetY = (hc * options.h - mapSize.y) / 2;
+
+        for(var i = 0; i < wc; i++){
+          var bb = game.add.sprite(-offsetX + i * options.w + options.offsetX, -offsetY + options.offsetY, options.back);
+          var fb = game.add.sprite(-offsetX + i * options.w + options.offsetX, offsetY + mapSize.y + options.offsetY, options.front);
+          bb.anchor.y = 1;
+          fb.anchor.y = 1;
+          farLayer.add(bb);
+          frontLayer.add(fb);
+        }
+        for(var i = 0; i < hc; i++){
+          var lb = game.add.sprite(-offsetX + options.offsetX, -options.fronth - offsetY + i * options.h + options.offsetY, options.side);
+          var rb = game.add.sprite(offsetX + mapSize.x + options.offsetX, -options.fronth - offsetY + i * options.h + options.offsetY, options.side);
+          lb.anchor.x = options.leftSideAnchorX;
+          rb.anchor.x = options.rightSideAnchorX;
+          backLayer.add(lb);
+          backLayer.add(rb);
+        }
+        if(options.corner){
+          var c = game.add.sprite(offsetX + mapSize.x + options.offsetX, offsetY + mapSize.y + options.offsetY, options.corner);
+          c.anchor.y = 1;
+          frontLayer.add(c);
+        }
+      }
     },
     createText: function(options, text, anchor){
       var t = game.add.text(
@@ -2477,7 +2617,7 @@ module.exports = function(game, Phaser){
       return t;
     },
     create: function() {
-      game.stage.backgroundColor = UI.game.backgroundColor;
+      game.stage.backgroundColor = UI.game.backgroundColor[type];
       game.physics.startSystem(Phaser.Physics.ARCADE);
       game.input.onDown.add(this.onPointerDown, this);
 
@@ -2725,6 +2865,9 @@ module.exports = function(game, Phaser){
     update: function(){
       if(state === states.normal){
         var _this = this;
+        if(hero){
+          hero.setDirectionFromChildrens(children.map(function(child){ return child.position() }));
+        }
         children.forEach(function(child){
           traps.forEach(function(trap){
             game.physics.arcade.collide(child.getCollider(), trap.getCollider(), _this.trapCollision, null, _this);
@@ -2748,6 +2891,10 @@ module.exports = function(game, Phaser){
 
         if (game.input.keyboard.isDown(Phaser.Keyboard.ESC)){
           this.onBackClicked();
+        }
+
+        if (game.input.keyboard.isDown(Phaser.Keyboard.B)){
+          this.createBorders();
         }
       }
     },
@@ -3082,7 +3229,7 @@ module.exports = function(game, Phaser){
 
       game.load.spritesheet('boy', 'assets/characters/boy.png', 160, 185, 12);
       game.load.spritesheet('girl', 'assets/characters/girl.png', 160, 185, 12);
-      game.load.image('hero', 'assets/characters/hero.png');
+      game.load.spritesheet('hero', 'assets/characters/hero.png', 256, 256, 3);
 
       game.load.image('ground01', 'assets/ground/01.png');
       game.load.image('ground02', 'assets/ground/02.png');
@@ -3130,7 +3277,7 @@ module.exports = function(game, Phaser){
       game.load.image('borderA2', 'assets/borders/A2.png');
       game.load.image('borderA3', 'assets/borders/A3.png');
       game.load.image('borderB1', 'assets/borders/B1.png');
-      game.load.image('borderB2', 'assets/borders/B1.png');
+      game.load.image('borderB2', 'assets/borders/B2.png');
       game.load.image('borderB3', 'assets/borders/B3.png');
       game.load.image('borderC1', 'assets/borders/C1.png');
       game.load.image('borderC2', 'assets/borders/C2.png');
