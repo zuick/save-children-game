@@ -333,8 +333,8 @@ module.exports = function(game, Phaser){
         quizPopup = quizPopupCreator.create(
           config.width / 2 - screenParams.offsetX,
           config.height / 2 - screenParams.offsetY,
-          function(){ this.restartLevel(true, true); }.bind(this),
-          function(){ this.restartLevel(false, true); }.bind(this),
+          function(){ numberOfFails = 0; this.restartLevel(true, true); }.bind(this),
+          function(){ numberOfFails = 0; this.restartLevel(false, true); }.bind(this),
           this
         );
       }else{
