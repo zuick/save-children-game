@@ -29,12 +29,37 @@ var localStorageAvailable = storageAvailable('localStorage');
 var defaultProgress = {};
 var settingsKey = 'beskman_settings';
 var progressKey = 'beskman_progress';
+var wasVisitedKey = 'beskman_was_visited';
 var listeners = [];
 
+var tutorialShownCounter = 0;
+var tutorialMode = false;
+
 module.exports = {
+  initTutorialMode: function(){
+    if(localStorageAvailable){
+      var wasVisited = localStorage.getItem(wasVisitedKey);
+      if(!wasVisited){
+        localStorage.setItem(wasVisitedKey, "true");
+        tutorialMode = true;
+      }else{
+        tutorialMode = false;
+      }
+    }
+  },
+
+  setTutorialShown: function(){
+    tutorialShownCounter++;
+  },
+
+  shouldShowTutorial: function(){
+    return tutorialMode ? tutorialShownCounter < config.firstVisitTutorialShow : tutorialShownCounter < 1;
+  },
+
   addListener: function(callback){
     listeners.push(callback);
   },
+
   getSettings: function(){
     if(localStorageAvailable){
       var settings = localStorage.getItem(settingsKey);

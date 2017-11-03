@@ -62,6 +62,7 @@ module.exports = function(game, Phaser){
       game.load.image('pixel', 'assets/UI/pixel.png');
       game.load.image('quizCorrect', 'assets/UI/quiz_correct.png');
       game.load.image('quizQuestionBackground', 'assets/UI/quiz_question_bkg.png');
+      game.load.image('help', 'assets/help.jpg');
 
       game.load.image('borderA1', 'assets/borders/A1.png');
       game.load.image('borderA2', 'assets/borders/A2.png');

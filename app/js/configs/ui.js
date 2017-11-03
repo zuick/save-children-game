@@ -72,6 +72,9 @@ module.exports = {
       2: 'levelItemHouse'
     }
   },
+  help: {
+    fadeDuration: 300
+  },
   game: {
     backgroundColor: {
       0: '#546405',
