@@ -289,6 +289,10 @@ module.exports = function(game, Phaser){
 
       this.updateStatusText();
       audioManager.playMusic(config.audio.musicByDifficulty[currentBlockIndex]);
+
+      if(storage.shouldShowTutorial()){
+        this.showTutorial();
+      }
     },
     buzzSound: function(){
       if(state === states.normal && trapsActive){
@@ -329,8 +333,8 @@ module.exports = function(game, Phaser){
         quizPopup = quizPopupCreator.create(
           config.width / 2 - screenParams.offsetX,
           config.height / 2 - screenParams.offsetY,
-          function(){ this.restartLevel(true, true); }.bind(this),
-          function(){ this.restartLevel(false, true); }.bind(this),
+          function(){ numberOfFails = 0; this.restartLevel(true, true); }.bind(this),
+          function(){ numberOfFails = 0; this.restartLevel(false, true); }.bind(this),
           this
         );
       }else{
@@ -523,6 +527,26 @@ module.exports = function(game, Phaser){
           this.createBorders();
         }
       }
+    },
+    showTutorial: function(){
+      state = states.pause;
+      var help = game.add.button(
+        config.width / 2 - screenParams.offsetX,
+        config.height / 2 - screenParams.offsetY,
+        'help'
+      );
+      help.anchor.set(0.5);
+      help.onInputDown.add(function(){
+        var fade = game.add.tween(help).to({ alpha: 0 }, UI.help.fadeDuration, "Linear", true);
+        fade.onComplete.add(function(){
+          this.destroyFromLayer(UILayer, help);
+          help.destroy();
+          state = states.normal;
+        }.bind(this));
+      }.bind(this));
+
+      UILayer.add(help);
+      storage.setTutorialShown();
     },
     returnToLevels: function(){
       this.destroyHero();

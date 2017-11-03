@@ -72,6 +72,13 @@ module.exports = {
       2: 'levelItemHouse'
     }
   },
+  help: {
+    fadeDuration: 300,
+    header: {
+      style: { font: "32px KZSupercell", fill: "#fff", align: "center" },
+      offsetY: 100
+    }
+  },
   game: {
     backgroundColor: {
       0: '#546405',

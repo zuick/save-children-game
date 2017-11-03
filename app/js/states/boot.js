@@ -1,4 +1,5 @@
 var config = require('../configs/config');
+var storage = require('../modules/storage');
 
 module.exports = function(game, Phaser){
   return {
@@ -15,6 +16,7 @@ module.exports = function(game, Phaser){
 
     },
     create: function(){
+      storage.initTutorialMode();
       game.add.text( 0, 0, ".", { font: "1pt Bangers" } );
       game.add.text( 0, 0, ".", { font: "1pt KZSupercell" } );
       game.state.start('preloader', true, false);

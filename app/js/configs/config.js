@@ -3,6 +3,7 @@ module.exports = {
   width: 1920,
   height: 1080,
   enableBorders: false,
+  firstVisitTutorialShow: 4,
   defaultLanguage: 'ru',
   defaultBlockIndex: 0,
   defaultBonusDelay: 15,
