@@ -73,7 +73,11 @@ module.exports = {
     }
   },
   game: {
-    backgroundColor: '#271212',
+    backgroundColor: {
+      0: '#546405',
+      1: '#776F5E',
+      2: '#5E3916'
+    },
     timer: {
       marginTop: 10,
       offsetX: -220, // from center
@@ -247,15 +251,15 @@ module.exports = {
       offsetX: -3,
       offsetY: 20
     },
-	2: {
+	  2: {
       back: 'borderB3',
       front: 'borderB2',
       fronth: 63,
       side: 'borderB1',
       leftSideAnchorX: 0,
-      rightSideAnchorX: 0,
+      rightSideAnchorX: 1,
       w: 239,
-      h: 248,
+      h: 105,
       offsetX: -3,
       offsetY: 20
     }

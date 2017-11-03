@@ -192,7 +192,9 @@ module.exports = function(game, Phaser){
       screenParams.offsetY = (config.height - map.getSize().y) / 2;
 
       game.world.setBounds(-screenParams.offsetX, -screenParams.offsetY, config.width - screenParams.offsetX, config.height - screenParams.offsetY);
-      this.createBorders();
+      if(config.enableBorders){
+        this.createBorders();
+      }
     },
     createBorders: function(){
       var options = UI.borders[type];
@@ -241,7 +243,7 @@ module.exports = function(game, Phaser){
       return t;
     },
     create: function() {
-      game.stage.backgroundColor = UI.game.backgroundColor;
+      game.stage.backgroundColor = UI.game.backgroundColor[type];
       game.physics.startSystem(Phaser.Physics.ARCADE);
       game.input.onDown.add(this.onPointerDown, this);
 
@@ -515,6 +517,10 @@ module.exports = function(game, Phaser){
 
         if (game.input.keyboard.isDown(Phaser.Keyboard.ESC)){
           this.onBackClicked();
+        }
+
+        if (game.input.keyboard.isDown(Phaser.Keyboard.B)){
+          this.createBorders();
         }
       }
     },

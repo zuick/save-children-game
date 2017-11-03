@@ -67,7 +67,7 @@ module.exports = function(game, Phaser){
       game.load.image('borderA2', 'assets/borders/A2.png');
       game.load.image('borderA3', 'assets/borders/A3.png');
       game.load.image('borderB1', 'assets/borders/B1.png');
-      game.load.image('borderB2', 'assets/borders/B1.png');
+      game.load.image('borderB2', 'assets/borders/B2.png');
       game.load.image('borderB3', 'assets/borders/B3.png');
       game.load.image('borderC1', 'assets/borders/C1.png');
       game.load.image('borderC2', 'assets/borders/C2.png');

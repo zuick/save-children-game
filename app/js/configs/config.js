@@ -2,6 +2,7 @@ module.exports = {
   debug: false,
   width: 1920,
   height: 1080,
+  enableBorders: false,
   defaultLanguage: 'ru',
   defaultBlockIndex: 0,
   defaultBonusDelay: 15,
