@@ -449,6 +449,7 @@ module.exports = function(game, Phaser){
         mark.scale.y = config.bonusMarkScale;
         mark.anchor.set(0.5);
         game.add.tween(mark).to( { y: - 5 - offset}, 1400, "Linear", true, 0, -1, true);
+        game.add.tween(mark).to( { alpha: 0 }, config.bonusDeactivateAnimationDuration * 500, "Linear", true, (config.bonusActiveTime - config.bonusDeactivateAnimationDuration * 5) * 1000, 5, true);
         bonusesMarks.push(markWrapper);
         middleLayer.add(markWrapper);
       });

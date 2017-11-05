@@ -8,6 +8,7 @@ module.exports = {
   defaultBlockIndex: 0,
   defaultBonusDelay: 15,
   bonusActiveTime: 7,
+  bonusDeactivateAnimationDuration: 0.2,
   bonusMarkScale: 0.9,
   failDelay: 800,
   failsToStartQuiz: 5,
