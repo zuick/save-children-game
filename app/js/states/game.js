@@ -314,7 +314,7 @@ module.exports = function(game, Phaser){
       successPopup = successPopupCreator.create(
         config.width / 2 - screenParams.offsetX,
         config.height / 2 - screenParams.offsetY,
-        l10n.get(titleKey), time, savedChildren, initialChildrenCount,
+        l10n.get(titleKey), time, savedChildren, initialChildrenCount, levelsConfig[currentBlockIndex].length === currentLevelIndex + 1,
         this.returnToMenu,
         this.returnToLevels,
         this.restartLevel,

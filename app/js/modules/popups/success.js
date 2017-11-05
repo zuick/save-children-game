@@ -6,7 +6,7 @@ var utils = require('../utils');
 module.exports = function(game, Phaser){
   var basic = require('../popups/basic')(game, Phaser);
   return {
-    create: function(x, y, titleText, time, children, childrenTotal, onToMenu, onToLevels, onReplay, onNext, context){
+    create: function(x, y, titleText, time, children, childrenTotal, isLastLevel, onToMenu, onToLevels, onReplay, onNext, context){
       var options = UI.popups.success;
       var base = basic.create(x, y, options.opacity);
       var win = basic.tint(x, y, options.width, options.height, 1, 0xc24729, 'popup');
@@ -21,7 +21,13 @@ module.exports = function(game, Phaser){
       text.stroke = options.header.stroke;
       text.strokeThickness = options.header.strokeThickness;
 
-      var icon = game.add.sprite(x, y + options.icon.offsetY, 'iconSuccess');
+      var icon;
+      if(isLastLevel){
+        icon = game.add.text(x, y + options.icon.offsetY, l10n.get('LAST_LEVEL_DESCRIPTION'), options.time.style);
+      }else{
+        icon = game.add.sprite(x, y + options.icon.offsetY, 'iconSuccess');
+      }
+      
       icon.anchor.set(0.5);
 
       var time = game.add.text(x, y + options.time.offsetY, l10n.get('TIME', [utils.formatTime(time)]), options.time.style);
