@@ -248,10 +248,8 @@ module.exports = function(game, Phaser){
       game.input.onDown.add(this.onPointerDown, this);
 
       game.input.keyboard.addKey(Phaser.Keyboard.N).onUp.add(this.nextLevel, this);
-      game.input.keyboard.addKey(Phaser.Keyboard.S).onUp.add(this.onSuccess, this);
       game.time.events.loop(Phaser.Timer.SECOND, this.updateTime, this);
       game.time.events.loop(Phaser.Timer.SECOND * config.audio.buzzInterval, this.buzzSound, this);
-      this.activateTraps();
 
       timerText = this.createText(UI.game.timerText, utils.formatTime(time), 0.5);
       levelNumberText = this.createText(UI.game.levelNumberText, utils.levelNumber(currentBlockIndex, currentLevelIndex), 0.5);
@@ -292,6 +290,8 @@ module.exports = function(game, Phaser){
 
       if(storage.shouldShowTutorial()){
         this.showTutorial();
+      }else{
+        this.activateTraps();
       }
     },
     buzzSound: function(){
@@ -542,6 +542,7 @@ module.exports = function(game, Phaser){
           this.destroyFromLayer(UILayer, help);
           help.destroy();
           state = states.normal;
+          this.activateTraps();
         }.bind(this));
       }.bind(this));
 
