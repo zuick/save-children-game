@@ -18,6 +18,7 @@ module.exports = {
   "DIFFICULTY_LEVEL_EAZY": "Новичок",
   "DIFFICULTY_LEVEL_MIDDLE": "Опытный",
   "DIFFICULTY_LEVEL_HARD": "Эксперт",
+  "LAST_LEVEL_DESCRIPTION": "Вот и все, ребята!",
   "QUIZ_TITLE_1": "Как спасти котенка?",
   "QUIZ_TITLE_2": "Как помочь пострадавшему?",
   "QUIZ_TITLE_3": "Что безопасно в ванной?",

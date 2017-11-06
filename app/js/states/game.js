@@ -248,10 +248,8 @@ module.exports = function(game, Phaser){
       game.input.onDown.add(this.onPointerDown, this);
 
       game.input.keyboard.addKey(Phaser.Keyboard.N).onUp.add(this.nextLevel, this);
-      game.input.keyboard.addKey(Phaser.Keyboard.S).onUp.add(this.onSuccess, this);
       game.time.events.loop(Phaser.Timer.SECOND, this.updateTime, this);
       game.time.events.loop(Phaser.Timer.SECOND * config.audio.buzzInterval, this.buzzSound, this);
-      this.activateTraps();
 
       timerText = this.createText(UI.game.timerText, utils.formatTime(time), 0.5);
       levelNumberText = this.createText(UI.game.levelNumberText, utils.levelNumber(currentBlockIndex, currentLevelIndex), 0.5);
@@ -292,6 +290,8 @@ module.exports = function(game, Phaser){
 
       if(storage.shouldShowTutorial()){
         this.showTutorial();
+      }else{
+        this.activateTraps();
       }
     },
     buzzSound: function(){
@@ -314,7 +314,7 @@ module.exports = function(game, Phaser){
       successPopup = successPopupCreator.create(
         config.width / 2 - screenParams.offsetX,
         config.height / 2 - screenParams.offsetY,
-        l10n.get(titleKey), time, savedChildren, initialChildrenCount,
+        l10n.get(titleKey), time, savedChildren, initialChildrenCount, levelsConfig[currentBlockIndex].length === currentLevelIndex + 1,
         this.returnToMenu,
         this.returnToLevels,
         this.restartLevel,
@@ -449,6 +449,7 @@ module.exports = function(game, Phaser){
         mark.scale.y = config.bonusMarkScale;
         mark.anchor.set(0.5);
         game.add.tween(mark).to( { y: - 5 - offset}, 1400, "Linear", true, 0, -1, true);
+        game.add.tween(mark).to( { alpha: 0 }, config.bonusDeactivateAnimationDuration * 500, "Linear", true, (config.bonusActiveTime - config.bonusDeactivateAnimationDuration * 5) * 1000, 5, true);
         bonusesMarks.push(markWrapper);
         middleLayer.add(markWrapper);
       });
@@ -542,6 +543,7 @@ module.exports = function(game, Phaser){
           this.destroyFromLayer(UILayer, help);
           help.destroy();
           state = states.normal;
+          this.activateTraps();
         }.bind(this));
       }.bind(this));
 

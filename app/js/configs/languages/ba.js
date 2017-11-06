@@ -18,6 +18,7 @@ module.exports = {
   "DIFFICULTY_LEVEL_EAZY": "Яңы кеше",
   "DIFFICULTY_LEVEL_MIDDLE": "Тәжрибәле кеше",
   "DIFFICULTY_LEVEL_HARD": "Эксперт",
+  "LAST_LEVEL_DESCRIPTION": "Бына шулай, балалар,\nбөттө!",
   "QUIZ_TITLE_1": "Бесәй балаһын нисек ҡотҡарырға?",
   "QUIZ_TITLE_2": "Зыян күргәнгә нисек ярҙам итергә?",
   "QUIZ_TITLE_3": "Ванна бүлмәһендә нимә хәүефһеҙ?",
