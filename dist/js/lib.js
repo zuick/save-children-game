@@ -9,6 +9,7 @@ module.exports = {
   defaultBlockIndex: 0,
   defaultBonusDelay: 15,
   bonusActiveTime: 7,
+  bonusDeactivateAnimationDuration: 0.2,
   bonusMarkScale: 0.9,
   failDelay: 800,
   failsToStartQuiz: 5,
@@ -105,6 +106,7 @@ module.exports = {
   "DIFFICULTY_LEVEL_EAZY": "Яңы кеше",
   "DIFFICULTY_LEVEL_MIDDLE": "Тәжрибәле кеше",
   "DIFFICULTY_LEVEL_HARD": "Эксперт",
+  "LAST_LEVEL_DESCRIPTION": "Бына шулай, балалар,\nбөттө!",
   "QUIZ_TITLE_1": "Бесәй балаһын нисек ҡотҡарырға?",
   "QUIZ_TITLE_2": "Зыян күргәнгә нисек ярҙам итергә?",
   "QUIZ_TITLE_3": "Ванна бүлмәһендә нимә хәүефһеҙ?",
@@ -312,6 +314,7 @@ module.exports = {
   "DIFFICULTY_LEVEL_EAZY": "Новичок",
   "DIFFICULTY_LEVEL_MIDDLE": "Опытный",
   "DIFFICULTY_LEVEL_HARD": "Эксперт",
+  "LAST_LEVEL_DESCRIPTION": "Вот и все, ребята!",
   "QUIZ_TITLE_1": "Как спасти котенка?",
   "QUIZ_TITLE_2": "Как помочь пострадавшему?",
   "QUIZ_TITLE_3": "Что безопасно в ванной?",
@@ -1868,7 +1871,7 @@ var utils = require('../utils');
 module.exports = function(game, Phaser){
   var basic = require('../popups/basic')(game, Phaser);
   return {
-    create: function(x, y, titleText, time, children, childrenTotal, onToMenu, onToLevels, onReplay, onNext, context){
+    create: function(x, y, titleText, time, children, childrenTotal, isLastLevel, onToMenu, onToLevels, onReplay, onNext, context){
       var options = UI.popups.success;
       var base = basic.create(x, y, options.opacity);
       var win = basic.tint(x, y, options.width, options.height, 1, 0xc24729, 'popup');
@@ -1883,7 +1886,13 @@ module.exports = function(game, Phaser){
       text.stroke = options.header.stroke;
       text.strokeThickness = options.header.strokeThickness;
 
-      var icon = game.add.sprite(x, y + options.icon.offsetY, 'iconSuccess');
+      var icon;
+      if(isLastLevel){
+        icon = game.add.text(x, y + options.icon.offsetY, l10n.get('LAST_LEVEL_DESCRIPTION'), options.time.style);
+      }else{
+        icon = game.add.sprite(x, y + options.icon.offsetY, 'iconSuccess');
+      }
+      
       icon.anchor.set(0.5);
 
       var time = game.add.text(x, y + options.time.offsetY, l10n.get('TIME', [utils.formatTime(time)]), options.time.style);
@@ -2657,10 +2666,8 @@ module.exports = function(game, Phaser){
       game.input.onDown.add(this.onPointerDown, this);
 
       game.input.keyboard.addKey(Phaser.Keyboard.N).onUp.add(this.nextLevel, this);
-      game.input.keyboard.addKey(Phaser.Keyboard.S).onUp.add(this.onSuccess, this);
       game.time.events.loop(Phaser.Timer.SECOND, this.updateTime, this);
       game.time.events.loop(Phaser.Timer.SECOND * config.audio.buzzInterval, this.buzzSound, this);
-      this.activateTraps();
 
       timerText = this.createText(UI.game.timerText, utils.formatTime(time), 0.5);
       levelNumberText = this.createText(UI.game.levelNumberText, utils.levelNumber(currentBlockIndex, currentLevelIndex), 0.5);
@@ -2701,6 +2708,8 @@ module.exports = function(game, Phaser){
 
       if(storage.shouldShowTutorial()){
         this.showTutorial();
+      }else{
+        this.activateTraps();
       }
     },
     buzzSound: function(){
@@ -2723,7 +2732,7 @@ module.exports = function(game, Phaser){
       successPopup = successPopupCreator.create(
         config.width / 2 - screenParams.offsetX,
         config.height / 2 - screenParams.offsetY,
-        l10n.get(titleKey), time, savedChildren, initialChildrenCount,
+        l10n.get(titleKey), time, savedChildren, initialChildrenCount, levelsConfig[currentBlockIndex].length === currentLevelIndex + 1,
         this.returnToMenu,
         this.returnToLevels,
         this.restartLevel,
@@ -2858,6 +2867,7 @@ module.exports = function(game, Phaser){
         mark.scale.y = config.bonusMarkScale;
         mark.anchor.set(0.5);
         game.add.tween(mark).to( { y: - 5 - offset}, 1400, "Linear", true, 0, -1, true);
+        game.add.tween(mark).to( { alpha: 0 }, config.bonusDeactivateAnimationDuration * 500, "Linear", true, (config.bonusActiveTime - config.bonusDeactivateAnimationDuration * 5) * 1000, 5, true);
         bonusesMarks.push(markWrapper);
         middleLayer.add(markWrapper);
       });
@@ -2951,6 +2961,7 @@ module.exports = function(game, Phaser){
           this.destroyFromLayer(UILayer, help);
           help.destroy();
           state = states.normal;
+          this.activateTraps();
         }.bind(this));
       }.bind(this));
 
