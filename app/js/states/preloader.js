@@ -4,10 +4,23 @@ var l10n = require('../modules/l10n');
 
 module.exports = function(game, Phaser){
   return {
-    text: void 0,
-    preload: function() {
-      var splash = game.add.sprite(0, 0, 'splash');
-      var loadingText = game.add.text( game.world.centerX, game.world.centerY + 300, l10n.get('LOADING'), { font: "32pt KZSupercell", fill: "#fff", align: "center" } ).anchor.setTo( 0.5, 0.5 );
+    loadingText: void 0,
+    fileComplete: function(progress, cacheKey, success, totalLoaded, totalFiles){
+      if(loadingText){
+        loadingText.setText(l10n.get('LOADING') + progress + '%', true);
+      }
+    },
+    loadComplete: function(){
+      game.state.start('start', true, false);
+    },
+    create: function(){
+      game.add.sprite(0, 0, 'splash');
+
+      game.load.onFileComplete.add(this.fileComplete, this);
+      game.load.onLoadComplete.add(this.loadComplete, this);
+
+      loadingText = game.add.text( game.world.centerX, game.world.centerY + 300, l10n.get('LOADING'), { font: "32pt KZSupercell", fill: "#fff", align: "center" } );
+      loadingText.anchor.setTo( 0.5, 0.5 );
       levelsConfig.forEach(function(levelsBlock, blockIndex){
         levelsBlock.forEach(function(level, index){
           game.load.tilemap('level' + blockIndex + '-' + index, level.src, null, Phaser.Tilemap.TILED_JSON);
@@ -105,9 +118,8 @@ module.exports = function(game, Phaser){
       game.load.audio('audioBuzz4', 'assets/sfx/buzz4.mp3');
       game.load.audio('audioTarget', 'assets/sfx/target.mp3');
       game.load.audio('audioClash', 'assets/sfx/clash.mp3');
-    },
-    create: function(){
-      game.state.start('start', true, false);
+
+      game.load.start();
     }
   }
 }

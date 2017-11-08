@@ -19,7 +19,7 @@ module.exports = {
     return this.getRandomFrom(this.getAll());
   },
   getRandomFrom: function(directions){
-    if(directions.length == 0) return '';
+    if(directions.length == 0) return void 0;
     return directions[parseInt(Math.random() * directions.length)];
   },
   isVertical: function(dir){
