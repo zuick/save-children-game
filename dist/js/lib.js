@@ -49,13 +49,14 @@ module.exports = {
     }
   },
   children: {
-    bodyScale: 0.5, // 1 - full tile, 0 - no body
+    bodyScale: 0.45, // 1 - full tile, 0 - no body
     defaultSpeed: 110,
     speedAccuracy: 10,
-    slowModeSpeed: 70
+    slowModeSpeed: 70,
+    overlapCheckingOvertaking: 15
   },
   hero: {
-    bodyScale: 0.35 // 1 - full tile, 0 - no body
+    bodyScale: 0.3 // 1 - full tile, 0 - no body
   },
   quiz: [
     {
@@ -1286,7 +1287,7 @@ module.exports = {
     return this.getRandomFrom(this.getAll());
   },
   getRandomFrom: function(directions){
-    if(directions.length == 0) return '';
+    if(directions.length == 0) return void 0;
     return directions[parseInt(Math.random() * directions.length)];
   },
   isVertical: function(dir){
@@ -2038,6 +2039,7 @@ module.exports = {
 },{"../configs/config":1}],21:[function(require,module,exports){
 var directions = require('./directions');
 var difference = require('lodash.difference');
+var config = require('../configs/config');
 
 module.exports = function(game, Phaser){
   function Stray(){
@@ -2091,15 +2093,16 @@ module.exports = function(game, Phaser){
         var oldValue = currentDir;
 
         if(!currentDir){
-          var possibleWays = map.getTileWays(map.getTileAt(sprite.x, sprite.y));
+          var tileBehind = map.getTileAt(sprite.x, sprite.y);
+          var possibleWays = map.getTileWays(tileBehind);
           if(preferedDir && possibleWays.indexOf(preferedDir) !== -1){
             currentDir = preferedDir;
           }else{
             currentDir = directions.getRandomFrom(possibleWays);
           }
         }else{
-          var x = currentDir === 'right' || currentDir === 'down' ? floatX : floatX + sprite.texture.width - 1;
-          var y = currentDir === 'right' || currentDir === 'down' ? floatY : floatY + sprite.texture.height - 1;
+          var x = Math.max(0, currentDir === 'right' || currentDir === 'down' ? floatX : floatX + sprite.texture.width - 1);
+          var y = Math.max(0, currentDir === 'right' || currentDir === 'down' ? floatY : floatY + sprite.texture.height - 1);
           currentTile = map.getTileAt(x, y);
           nextTile = map.getNextTileFrom(currentTile, currentDir);
           if(nextTile){
@@ -2111,7 +2114,7 @@ module.exports = function(game, Phaser){
               var canMoveForward = ways.indexOf(currentDir) !== -1;
               var canMoveBackward = ways.indexOf(backwardDir) !== -1;
               var exludeWays = [backwardDir];
-              if(preferTurning) exludeWays.push(currentDir);
+              if(preferTurning && difference(ways, [backwardDir, currentDir]).length > 0) exludeWays.push(currentDir);
 
               var turnWays = difference(ways, exludeWays);
               if(preferForward){
@@ -2137,8 +2140,8 @@ module.exports = function(game, Phaser){
             }
             floatX += delta.x;
             floatY += delta.y;
-            sprite.x = Math.round(floatX);
-            sprite.y = Math.round(floatY);
+            sprite.x = Math.max(0, Math.round(floatX));
+            sprite.y = Math.max(0, Math.round(floatY));
           }else{
             currentDir = void 0;
             var pos = map.getTileWorldXY(currentTile);
@@ -2148,7 +2151,6 @@ module.exports = function(game, Phaser){
             floatY = sprite.y;
           }
         }
-
         if(currentDir === 'left'){
           sprite.children.forEach(function(innerSprite){
             innerSprite.scale.x = 1;
@@ -2224,8 +2226,8 @@ module.exports = function(game, Phaser){
       var otherRect = {
         x: other.x + other.body.offset.x,
         y: other.y + other.body.offset.y,
-        w: other.body.width,
-        h: other.body.height
+        w: other.body.width + config.children.overlapCheckingOvertaking,
+        h: other.body.height + config.children.overlapCheckingOvertaking
       }
       var res =  this.isPointInRect({ x: otherRect.x, y: otherRect.y }, rect) ||
              this.isPointInRect({ x: otherRect.x + otherRect.w, y: otherRect.y }, rect) ||
@@ -2258,7 +2260,7 @@ module.exports = function(game, Phaser){
   return Stray;
 }
 
-},{"./directions":9,"lodash.difference":32}],22:[function(require,module,exports){
+},{"../configs/config":1,"./directions":9,"lodash.difference":32}],22:[function(require,module,exports){
 module.exports = function (string, params){
   var replaced = string;
   replaced = replaced.replace(/\·\{(.*?)\}\·/gmi,function(match,capture,index,all){
@@ -3284,10 +3286,23 @@ var l10n = require('../modules/l10n');
 
 module.exports = function(game, Phaser){
   return {
-    text: void 0,
-    preload: function() {
-      var splash = game.add.sprite(0, 0, 'splash');
-      var loadingText = game.add.text( game.world.centerX, game.world.centerY + 300, l10n.get('LOADING'), { font: "32pt KZSupercell", fill: "#fff", align: "center" } ).anchor.setTo( 0.5, 0.5 );
+    loadingText: void 0,
+    fileComplete: function(progress, cacheKey, success, totalLoaded, totalFiles){
+      if(loadingText){
+        loadingText.setText(l10n.get('LOADING') + progress + '%', true);
+      }
+    },
+    loadComplete: function(){
+      game.state.start('start', true, false);
+    },
+    create: function(){
+      game.add.sprite(0, 0, 'splash');
+
+      game.load.onFileComplete.add(this.fileComplete, this);
+      game.load.onLoadComplete.add(this.loadComplete, this);
+
+      loadingText = game.add.text( game.world.centerX, game.world.centerY + 300, l10n.get('LOADING'), { font: "32pt KZSupercell", fill: "#fff", align: "center" } );
+      loadingText.anchor.setTo( 0.5, 0.5 );
       levelsConfig.forEach(function(levelsBlock, blockIndex){
         levelsBlock.forEach(function(level, index){
           game.load.tilemap('level' + blockIndex + '-' + index, level.src, null, Phaser.Tilemap.TILED_JSON);
@@ -3385,9 +3400,8 @@ module.exports = function(game, Phaser){
       game.load.audio('audioBuzz4', 'assets/sfx/buzz4.mp3');
       game.load.audio('audioTarget', 'assets/sfx/target.mp3');
       game.load.audio('audioClash', 'assets/sfx/clash.mp3');
-    },
-    create: function(){
-      game.state.start('start', true, false);
+
+      game.load.start();
     }
   }
 }
