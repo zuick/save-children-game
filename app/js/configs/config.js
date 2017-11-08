@@ -51,10 +51,11 @@ module.exports = {
     bodyScale: 0.5, // 1 - full tile, 0 - no body
     defaultSpeed: 110,
     speedAccuracy: 10,
-    slowModeSpeed: 70
+    slowModeSpeed: 70,
+    overlapCheckingOvertaking: 12
   },
   hero: {
-    bodyScale: 0.35 // 1 - full tile, 0 - no body
+    bodyScale: 0.3 // 1 - full tile, 0 - no body
   },
   quiz: [
     {

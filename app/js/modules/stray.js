@@ -1,5 +1,6 @@
 var directions = require('./directions');
 var difference = require('lodash.difference');
+var config = require('../configs/config');
 
 module.exports = function(game, Phaser){
   function Stray(){
@@ -186,8 +187,8 @@ module.exports = function(game, Phaser){
       var otherRect = {
         x: other.x + other.body.offset.x,
         y: other.y + other.body.offset.y,
-        w: other.body.width,
-        h: other.body.height
+        w: other.body.width + config.children.overlapCheckingOvertaking,
+        h: other.body.height + config.children.overlapCheckingOvertaking
       }
       var res =  this.isPointInRect({ x: otherRect.x, y: otherRect.y }, rect) ||
              this.isPointInRect({ x: otherRect.x + otherRect.w, y: otherRect.y }, rect) ||
