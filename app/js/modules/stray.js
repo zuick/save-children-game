@@ -75,7 +75,7 @@ module.exports = function(game, Phaser){
               var canMoveForward = ways.indexOf(currentDir) !== -1;
               var canMoveBackward = ways.indexOf(backwardDir) !== -1;
               var exludeWays = [backwardDir];
-              if(preferTurning) exludeWays.push(currentDir);
+              if(preferTurning && difference(ways, [backwardDir, currentDir]).length > 0) exludeWays.push(currentDir);
 
               var turnWays = difference(ways, exludeWays);
               if(preferForward){

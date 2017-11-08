@@ -13,6 +13,7 @@
         }, 
         {
          "draworder":"topdown",
+         "height":0,
          "name":"objects",
          "objects":[
                 {
@@ -42,13 +43,21 @@
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
+         "width":0,
          "x":0,
          "y":0
         }],
  "nextobjectid":31,
  "orientation":"orthogonal",
+ "properties":
+    {
+     "preferTurning":"true"
+    },
+ "propertytypes":
+    {
+     "preferTurning":"string"
+    },
  "renderorder":"right-down",
- "tiledversion":"1.0.3",
  "tileheight":135,
  "tilesets":[
         {
@@ -65,7 +74,6 @@
          "tilewidth":157
         }],
  "tilewidth":157,
- "type":"map",
  "version":1,
  "width":5
 }
