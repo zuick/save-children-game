@@ -54,15 +54,16 @@ module.exports = function(game, Phaser){
         var oldValue = currentDir;
 
         if(!currentDir){
-          var possibleWays = map.getTileWays(map.getTileAt(sprite.x, sprite.y));
+          var tileBehind = map.getTileAt(sprite.x, sprite.y);
+          var possibleWays = map.getTileWays(tileBehind);
           if(preferedDir && possibleWays.indexOf(preferedDir) !== -1){
             currentDir = preferedDir;
           }else{
             currentDir = directions.getRandomFrom(possibleWays);
           }
         }else{
-          var x = currentDir === 'right' || currentDir === 'down' ? floatX : floatX + sprite.texture.width - 1;
-          var y = currentDir === 'right' || currentDir === 'down' ? floatY : floatY + sprite.texture.height - 1;
+          var x = Math.max(0, currentDir === 'right' || currentDir === 'down' ? floatX : floatX + sprite.texture.width - 1);
+          var y = Math.max(0, currentDir === 'right' || currentDir === 'down' ? floatY : floatY + sprite.texture.height - 1);
           currentTile = map.getTileAt(x, y);
           nextTile = map.getNextTileFrom(currentTile, currentDir);
           if(nextTile){
@@ -100,8 +101,8 @@ module.exports = function(game, Phaser){
             }
             floatX += delta.x;
             floatY += delta.y;
-            sprite.x = Math.round(floatX);
-            sprite.y = Math.round(floatY);
+            sprite.x = Math.max(0, Math.round(floatX));
+            sprite.y = Math.max(0, Math.round(floatY));
           }else{
             currentDir = void 0;
             var pos = map.getTileWorldXY(currentTile);
@@ -111,7 +112,6 @@ module.exports = function(game, Phaser){
             floatY = sprite.y;
           }
         }
-
         if(currentDir === 'left'){
           sprite.children.forEach(function(innerSprite){
             innerSprite.scale.x = 1;
