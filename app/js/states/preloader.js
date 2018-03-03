@@ -99,25 +99,25 @@ module.exports = function(game, Phaser){
       game.load.spritesheet('quizQuestions', 'assets/UI/quiz_questions.png', 500, 390, 4);
       game.load.spritesheet('quizAnswers', 'assets/UI/quiz_answers.png', 250, 251, 12);
 
-      game.load.audio('musicEasy', 'assets/music/easy.mp3');
-      game.load.audio('musicMedium', 'assets/music/medium.mp3');
-      game.load.audio('musicHard', 'assets/music/hard.mp3');
-      game.load.audio('musicMenu', 'assets/music/menu.mp3');
+      game.load.audio('musicEasy', 'assets/music/easy.ogg');
+      game.load.audio('musicMedium', 'assets/music/medium.ogg');
+      game.load.audio('musicHard', 'assets/music/hard.ogg');
+      game.load.audio('musicMenu', 'assets/music/menu.ogg');
 
-      game.load.audio('audioButton', 'assets/sfx/button.mp3');
-      game.load.audio('audioWin', 'assets/sfx/win.mp3');
-      game.load.audio('audioLose', 'assets/sfx/lose.mp3');
-      game.load.audio('audioBonus', 'assets/sfx/bonus.mp3');
-      game.load.audio('audioSpark1', 'assets/sfx/spark1.mp3');
-      game.load.audio('audioSpark2', 'assets/sfx/spark2.mp3');
-      game.load.audio('audioSpark3', 'assets/sfx/spark3.mp3');
-      game.load.audio('audioSpark4', 'assets/sfx/spark4.mp3');
-      game.load.audio('audioBuzz1', 'assets/sfx/buzz1.mp3');
-      game.load.audio('audioBuzz2', 'assets/sfx/buzz2.mp3');
-      game.load.audio('audioBuzz3', 'assets/sfx/buzz3.mp3');
-      game.load.audio('audioBuzz4', 'assets/sfx/buzz4.mp3');
-      game.load.audio('audioTarget', 'assets/sfx/target.mp3');
-      game.load.audio('audioClash', 'assets/sfx/clash.mp3');
+      game.load.audio('audioButton', 'assets/sfx/button.ogg');
+      game.load.audio('audioWin', 'assets/sfx/win.ogg');
+      game.load.audio('audioLose', 'assets/sfx/lose.ogg');
+      game.load.audio('audioBonus', 'assets/sfx/bonus.ogg');
+      game.load.audio('audioSpark1', 'assets/sfx/spark1.ogg');
+      game.load.audio('audioSpark2', 'assets/sfx/spark2.ogg');
+      game.load.audio('audioSpark3', 'assets/sfx/spark3.ogg');
+      game.load.audio('audioSpark4', 'assets/sfx/spark4.ogg');
+      game.load.audio('audioBuzz1', 'assets/sfx/buzz1.ogg');
+      game.load.audio('audioBuzz2', 'assets/sfx/buzz2.ogg');
+      game.load.audio('audioBuzz3', 'assets/sfx/buzz3.ogg');
+      game.load.audio('audioBuzz4', 'assets/sfx/buzz4.ogg');
+      game.load.audio('audioTarget', 'assets/sfx/target.ogg');
+      game.load.audio('audioClash', 'assets/sfx/clash.ogg');
 
       game.load.start();
     }
