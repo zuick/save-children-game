@@ -54,6 +54,7 @@ module.exports = function(game, Phaser){
       base.add(toLevels);
       base.add(replay);
       base.add(next);
+      base.add(nextText);
       return base;
     }
   }

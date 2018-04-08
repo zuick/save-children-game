@@ -10,7 +10,7 @@ module.exports = function(game, Phaser){
     create: function(x, y, onAccept, onCancel, context){
       var options = UI.popups.quiz;
       var quizOptions = config.quiz[Math.floor(Math.random() * config.quiz.length)];
-      var base = basic.create(x, y, options.opacity);
+      var base = basic.create(x, y, options.opacity, void 0, options.mobileScale);
       var win = basic.tint(x, y, options.width, options.height, 1, 0xc24729, 'popupQuiz');
       win.scale.set(options.scale);
 

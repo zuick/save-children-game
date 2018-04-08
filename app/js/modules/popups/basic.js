@@ -3,10 +3,15 @@ var UI = require('../../configs/ui');
 
 module.exports = function(game, Phaser){
   return {
-    create: function(x, y, opacity, key){
+    create: function(x, y, opacity, key, mobileScale){
+      var scale = (Phaser.Device.iOS || Phaser.Device.android) ? (mobileScale || UI.popups.mobileScale) : 1;
       var popup = game.add.group();
       var tint = this.tint(x, y, config.width, config.height, opacity, key);
       popup.add(tint);
+      
+      popup.scale.setTo(scale, scale);
+      popup.x -= config.width / 4 * (scale - 1);
+      popup.y -= config.height / 4 * (scale - 1);
       return popup;
     },
     tint: function(x, y, w, h, opacity, color, key){

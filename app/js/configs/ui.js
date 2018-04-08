@@ -128,6 +128,7 @@ module.exports = {
     }
   },
   popups: {
+    mobileScale: 1.5,
     textButtonStyle: { font: "36px KZSupercell", fill: "#fff", align: "center" },
     pause: {
       textStyle: { font: "48px KZSupercell", fill: "#dd0", align: "center" },
@@ -147,6 +148,7 @@ module.exports = {
       }
     },
     quiz: {
+      mobileScale: 1.2,
       opacity: 0.5,
       scale: 1,
       question: {
