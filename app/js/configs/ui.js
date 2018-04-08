@@ -85,38 +85,77 @@ module.exports = {
       1: '#776F5E',
       2: '#5E3916'
     },
-    timer: {
-      marginTop: 10,
-      offsetX: -220, // from center
+    desktop: {
+      scale: 1,
+      timer: {
+        top: 10,
+        offsetX: -220, // from center
+      },
+      status: {
+        top: 50,
+        right: 150
+      },
+      timerText: {
+        top: 47,
+        offsetX: -90, // from center
+        style: { font: "22px KZSupercell", fill: "#fff", align: "center" },
+        stroke: { color: '#111', thickness: 2 }
+      },
+      levelNumberText: {
+        top: 45,
+        right: 60,
+        style: { font: "42px Bangers", fill: "#fff", align: "center" },
+        stroke: { color: '#111', thickness: 3 }
+      },
+      statusText: {
+        top: 50,
+        right: 160,
+        style: { font: "28px KZSupercell", fill: "#579D00", align: "center" }
+      },
+      pauseButton: {
+        top: 48,
+        offsetX: 60, // from center
+      },
+      backButton: {
+        top: 48,
+        left: 48
+      },
     },
-    status: {
-      marginTop: 5,
-      offsetX: 600, // from center
-    },
-    timerText: {
-      marginTop: 47,
-      offsetX: -90, // from center
-      style: { font: "22px KZSupercell", fill: "#fff", align: "center" },
-      stroke: { color: '#111', thickness: 2 }
-    },
-    levelNumberText: {
-      marginTop: 50,
-      offsetX: 836, // from center
-      style: { font: "42px Bangers", fill: "#fff", align: "center" },
-      stroke: { color: '#111', thickness: 2 }
-    },
-    statusText: {
-      marginTop: 55,
-      offsetX: 735, // from center
-      style: { font: "28px KZSupercell", fill: "#579D00", align: "center" }
-    },
-    pauseButton: {
-      marginTop: 48,
-      offsetX: 60, // from center
-    },
-    backButton: {
-      marginTop: 48,
-      offsetX: -800, // from center
+    mobile: {
+      scale: 1.5,
+      timer: {
+        top: 20,
+        offsetX: -280, // from center
+      },
+      status: {
+        top: 80,
+        right: 240
+      },
+      timerText: {
+        top: 75,
+        offsetX: -80, // from center
+        style: { font: "30px KZSupercell", fill: "#fff", align: "center" },
+        stroke: { color: '#111', thickness: 2 }
+      },
+      levelNumberText: {
+        top: 70,
+        right: 105,
+        style: { font: "52px Bangers", fill: "#fff", align: "center" },
+        stroke: { color: '#111', thickness: 3 }
+      },
+      statusText: {
+        top: 80,
+        right: 255,
+        style: { font: "34px KZSupercell", fill: "#579D00", align: "center" }
+      },
+      pauseButton: {
+        top: 75,
+        offsetX: 140, // from center
+      },
+      backButton: {
+        top: 75,
+        left: 75
+      },
     },
     sparks: {
       simple: {

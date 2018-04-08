@@ -91,7 +91,7 @@ module.exports = function(game, Phaser){
       header.anchor.y = 0.5;
     },
 
-    drawArrows: function(){
+    drawArrows: function(scale){
       // clear first
       if(prevArrow) prevArrow.destroy();
       if(nextArrow) nextArrow.destroy();
@@ -124,7 +124,7 @@ module.exports = function(game, Phaser){
       headerTint.alpha = 0.5;
     },
 
-    drawBackButton: function(){
+    drawBackButton: function(scale){      
       backButton = game.add.button(
         config.width / 2  + UI.levels.backButton.offsetX,
         config.height / 2  + UI.levels.backButton.offsetY,
@@ -135,6 +135,7 @@ module.exports = function(game, Phaser){
       );
       backButton.anchor.set(0.5);
       backButton.setFrames(2, 2, 2);
+      backButton.scale.set(scale);
     },
 
     onNextBlock: function(){
@@ -161,18 +162,19 @@ module.exports = function(game, Phaser){
       audioManager.playSound();
     },
 
-    redraw: function(){
+    redraw: function(scale){
       this.drawBlock();
-      this.drawArrows();
+      this.drawArrows(scale);
     },
 
     create: function(){
+      var scale = (Phaser.Device.iOS || Phaser.Device.android) ? 1.5 : 1;
       game.add.sprite(0, 0, 'levelsBackground');
       this.drawHeaderTint();
-      this.drawBackButton();
+      this.drawBackButton(scale);
       game.stage.backgroundColor = UI.levels.backgroundColor;
       game.world.setBounds(0, 0, config.width, config.height);
-      this.redraw();
+      this.redraw(scale);
       audioManager.playMusic('musicMenu');
     }
   }

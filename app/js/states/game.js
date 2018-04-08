@@ -229,9 +229,10 @@ module.exports = function(game, Phaser){
       }
     },
     createText: function(options, text, anchor){
+      var offsetFromCenter = typeof(options.offsetX) !== 'undefined';    
       var t = game.add.text(
-        config.width / 2 - screenParams.offsetX + options.offsetX,
-        options.marginTop - screenParams.offsetY,
+        offsetFromCenter ? config.width / 2 - screenParams.offsetX + options.offsetX : config.width - screenParams.offsetX - options.right,
+        options.top - screenParams.offsetY,
         text,
         options.style
       );
@@ -243,6 +244,10 @@ module.exports = function(game, Phaser){
       return t;
     },
     create: function() {
+      var isMobile = (Phaser.Device.iOS || Phaser.Device.android);
+      var uiConfig = isMobile ? UI.game.mobile : UI.game.desktop;
+      var scale = uiConfig.scale;
+
       game.stage.backgroundColor = UI.game.backgroundColor[type];
       game.physics.startSystem(Phaser.Physics.ARCADE);
       game.input.onDown.add(this.onPointerDown, this);
@@ -251,12 +256,18 @@ module.exports = function(game, Phaser){
       game.time.events.loop(Phaser.Timer.SECOND, this.updateTime, this);
       game.time.events.loop(Phaser.Timer.SECOND * config.audio.buzzInterval, this.buzzSound, this);
 
-      timerText = this.createText(UI.game.timerText, utils.formatTime(time), 0.5);
-      levelNumberText = this.createText(UI.game.levelNumberText, utils.levelNumber(currentBlockIndex, currentLevelIndex), 0.5);
-      statusText = this.createText(UI.game.statusText, "", 0.5);
+      timerText = this.createText(uiConfig.timerText, utils.formatTime(time), 0.5, scale);
+      timerText.scale.set(scale);
+
+      levelNumberText = this.createText(uiConfig.levelNumberText, utils.levelNumber(currentBlockIndex, currentLevelIndex), 0.5, scale);
+      levelNumberText.scale.set(scale);
+
+      statusText = this.createText(uiConfig.statusText, "", 0.5, scale);
+      statusText.scale.set(scale);
+
       backButton = game.add.button(
-        config.width / 2 - screenParams.offsetX + UI.game.backButton.offsetX,
-        UI.game.backButton.marginTop - screenParams.offsetY,
+        -screenParams.offsetX + uiConfig.backButton.left,
+        uiConfig.backButton.top - screenParams.offsetY,
         'buttons',
         this.onBackClicked,
         this,
@@ -264,18 +275,33 @@ module.exports = function(game, Phaser){
       );
       backButton.anchor.set(0.5);
       backButton.setFrames(2, 2, 2);
+      backButton.scale.set(scale);
 
+      var timerSprite = game.add.sprite(
+        config.width / 2 - screenParams.offsetX + uiConfig.timer.offsetX, 
+        uiConfig.timer.top - screenParams.offsetY, 
+        'timer'
+      );
+      timerSprite.scale.set(scale);
 
-      UILayer.add(game.add.sprite(config.width / 2 - screenParams.offsetX + UI.game.timer.offsetX, UI.game.timer.marginTop - screenParams.offsetY, 'timer'));
-      UILayer.add(game.add.sprite(config.width / 2 - screenParams.offsetX + UI.game.status.offsetX, UI.game.status.marginTop - screenParams.offsetY, 'levelStatus'));
+      var levelStatSprite = game.add.sprite(
+        config.width - screenParams.offsetX - uiConfig.status.right, 
+        uiConfig.status.top - screenParams.offsetY, 
+        'levelStatus'
+      );
+      levelStatSprite.scale.set(scale);
+      levelStatSprite.anchor.set(0.5);
+
+      UILayer.add(timerSprite);
+      UILayer.add(levelStatSprite);
       UILayer.add(backButton);
       UILayer.add(timerText);
       UILayer.add(levelNumberText);
       UILayer.add(statusText);
 
       pauseButton = game.add.button(
-        config.width / 2 - screenParams.offsetX + UI.game.pauseButton.offsetX,
-        UI.game.pauseButton.marginTop - screenParams.offsetY,
+        config.width / 2 - screenParams.offsetX + uiConfig.pauseButton.offsetX,
+        uiConfig.pauseButton.top - screenParams.offsetY,
         'buttons',
         this.onPauseClicked,
         this,
@@ -283,6 +309,7 @@ module.exports = function(game, Phaser){
       );
 
       pauseButton.anchor.set(0.5);
+      pauseButton.scale.set(scale);
       UILayer.add(pauseButton);
 
       this.updateStatusText();
