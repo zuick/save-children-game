@@ -126,7 +126,7 @@ module.exports = function(game, Phaser){
 
     drawBackButton: function(scale){      
       backButton = game.add.button(
-        config.width / 2  + UI.levels.backButton.offsetX,
+        UI.levels.backButton.left,
         config.height / 2  + UI.levels.backButton.offsetY,
         'buttons',
         this.onBack,
@@ -169,7 +169,7 @@ module.exports = function(game, Phaser){
 
     create: function(){
       var scale = (Phaser.Device.iOS || Phaser.Device.android) ? 1.5 : 1;
-      game.add.sprite(0, 0, 'levelsBackground');
+      utils.backgroundFullSize(game.add.sprite(0, 0, 'levelsBackground'), true);
       this.drawHeaderTint();
       this.drawBackButton(scale);
       game.stage.backgroundColor = UI.levels.backgroundColor;

@@ -1,6 +1,8 @@
 var config = require('../configs/config');
+var UI = require('../configs/ui');
 var levelsConfig = require('../configs/levels');
 var l10n = require('../modules/l10n');
+var utils = require('../modules/utils');
 
 module.exports = function(game, Phaser){
   return {
@@ -14,7 +16,8 @@ module.exports = function(game, Phaser){
       game.state.start('start', true, false);
     },
     create: function(){
-      game.add.sprite(0, 0, 'splash');
+      utils.backgroundFullSize(game.add.sprite(0, 0, 'splash'));
+      game.stage.backgroundColor = UI.menu.backgroundColor;
 
       game.load.onFileComplete.add(this.fileComplete, this);
       game.load.onLoadComplete.add(this.loadComplete, this);
@@ -63,7 +66,7 @@ module.exports = function(game, Phaser){
       game.load.image('danger07', 'assets/danger/07.png');
       game.load.image('houseShadow', 'assets/walls/shadow.png');
 
-      game.load.image('levelsBackground', 'assets/UI/bkg.jpg');
+      game.load.image('levelsBackground', 'assets/UI/bkg.png');
       game.load.image('popup', 'assets/UI/popup.png');
       game.load.image('popupSmall', 'assets/UI/popup_small.png');
       game.load.image('popupQuiz', 'assets/UI/popup_quiz.png');

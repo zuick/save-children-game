@@ -1,4 +1,5 @@
 var config = require('../configs/config');
+var utils = require('../modules/utils');
 var UI = require('../configs/ui');
 var storage = require('../modules/storage');
 var l10n = require('../modules/l10n');
@@ -11,7 +12,9 @@ module.exports = function(game, Phaser){
 
   return {
     preload: function(){
-      var splash = game.add.sprite(0, 0, 'splash');
+      utils.backgroundFullSize(game.add.sprite(0, 0, 'splash'));
+      game.stage.backgroundColor = UI.menu.backgroundColor;
+
       var play = game.add.button(
         config.width / 2 + UI.menu.playButton.offsetX,
         config.height / 2 + UI.menu.playButton.offsetY,
@@ -64,7 +67,7 @@ module.exports = function(game, Phaser){
     },
     drawLanguageButton: function(options, code, flagFrame){
       var language = game.add.button(
-        config.width / 2 + options.offsetX,
+        options.left,
         config.height / 2 + options.offsetY,
         'languageButton',
         this.onLanguage.bind(this, code),
@@ -75,14 +78,14 @@ module.exports = function(game, Phaser){
       language.setFrames(0,0,0);
 
       var languageButtonSprite =  game.add.sprite(
-        config.width / 2 + options.offsetX + options.flag.x,
+        options.left + options.flag.x,
         config.height / 2 + options.offsetY + options.flag.y,
         'buttons'
       );
       languageButtonSprite.anchor.set(0.5);
 
       var languageButtonText = game.add.text(
-        config.width / 2 + options.offsetX + options.text.x,
+        options.left + options.text.x,
         config.height / 2 + options.offsetY + options.text.y,
         'language',
         options.text.style

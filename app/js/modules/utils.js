@@ -1,4 +1,5 @@
 var levelsConfig = require('../configs/levels');
+var config = require('../configs/config');
 
 module.exports = {
   formatTime: function(timeInSeconds){
@@ -28,5 +29,13 @@ module.exports = {
   },
   distance: function(a, b){
     return Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+  },
+  backgroundFullSize: function(sprite, doScale){
+    sprite.anchor.set(0.5);
+    sprite.x = config.width / 2;
+    sprite.y = config.height / 2;
+
+    if(doScale)
+      sprite.scale.set(config.width / sprite.width);
   }
 }

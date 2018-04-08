@@ -1,5 +1,6 @@
 module.exports = {
   menu: {
+    backgroundColor: '#003050',
     playButton: {
       offsetX: 0,
       offsetY: 300
@@ -21,7 +22,7 @@ module.exports = {
       offsetY: 255
     },
     languageButtonRU: {
-      offsetX: -710,
+      left: 250,
       offsetY: -420,
       flag: {
         x: 110,
@@ -34,7 +35,7 @@ module.exports = {
       }
     },
     languageButtonBA: {
-      offsetX: -710,
+      left: 250,
       offsetY: -300,
       flag: {
         x: 110,
@@ -64,7 +65,7 @@ module.exports = {
     headerHeight: 100,
     backButton: {
       offsetY: -440,
-      offsetX: -800, // from center
+      left: 150,
     },
     types: {
       0: 'levelItemCity',
@@ -129,7 +130,7 @@ module.exports = {
       },
       status: {
         top: 80,
-        right: 240
+        right: 265
       },
       timerText: {
         top: 75,
@@ -139,13 +140,13 @@ module.exports = {
       },
       levelNumberText: {
         top: 70,
-        right: 105,
+        right: 130,
         style: { font: "52px Bangers", fill: "#fff", align: "center" },
         stroke: { color: '#111', thickness: 3 }
       },
       statusText: {
         top: 80,
-        right: 255,
+        right: 280,
         style: { font: "34px KZSupercell", fill: "#579D00", align: "center" }
       },
       pauseButton: {
@@ -154,7 +155,7 @@ module.exports = {
       },
       backButton: {
         top: 75,
-        left: 75
+        left: 100
       },
     },
     sparks: {

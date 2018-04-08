@@ -11,7 +11,7 @@ module.exports = function(game, Phaser){
     },
     preload: function() {
       this.doScale();
-      game.load.image('splash', 'assets/splash.jpg');
+      game.load.image('splash', 'assets/splash.png');
       game.scale.setResizeCallback(this.doScale, this);
 
     },
