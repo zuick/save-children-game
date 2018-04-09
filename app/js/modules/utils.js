@@ -1,5 +1,6 @@
 var levelsConfig = require('../configs/levels');
 var config = require('../configs/config');
+var UI = require('../configs/ui');
 
 module.exports = {
   formatTime: function(timeInSeconds){
@@ -11,6 +12,9 @@ module.exports = {
   },
   levelNumber: function(block, level){
     return levelsConfig.slice(0, block).reduce(function(acc, curr){ return acc + curr.length; }, 0) + level + 1;
+  },
+  getUIScale: function(mobileScale){
+    return (Phaser.Device.iOS || Phaser.Device.android) ? (mobileScale || UI.popups.mobileScale) : 1;
   },
   shuffle: function(a) {
     var j, x, i;

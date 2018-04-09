@@ -10,15 +10,16 @@ module.exports = function(game, Phaser){
       var options = UI.popups.confirm;
       var base = basic.create(x, y, options.opacity);
       var win = basic.tint(x, y, options.width, options.height, 1, 0xc24729, 'popupSmall');
-
-      var descriptionText = game.add.text(x, y + options.description.offsetY, description, options.description.style);
+      var scale = utils.getUIScale();
+      
+      var descriptionText = game.add.text(x, y + options.description.offsetY * scale, description, options.description.style);
       descriptionText.anchor.set(0.5);
 
-      var acceptButton = basic.button(x + options.buttons.acceptOffsetX, y + options.buttons.offsetY, 'buttonsLarge', 0, onAccept, context);
-      var acceptButtonText = game.add.text(x + options.buttons.acceptOffsetX, y + options.buttons.offsetY, l10n.get('ACCEPT'), options.buttons.style );
+      var acceptButton = basic.button(x + options.buttons.acceptOffsetX * scale, y + options.buttons.offsetY * scale, 'buttonsLarge', 0, onAccept, context);
+      var acceptButtonText = game.add.text(x + options.buttons.acceptOffsetX * scale, y + options.buttons.offsetY * scale, l10n.get('ACCEPT'), options.buttons.style );
       acceptButtonText.anchor.set(0.5);
-      var cancelButton = basic.button(x + options.buttons.cancelOffsetX, y + options.buttons.offsetY, 'buttonsLarge', 2, onCancel, context);
-      var cancelButtonText = game.add.text(x + options.buttons.cancelOffsetX, y + options.buttons.offsetY, l10n.get('CANCEL'), options.buttons.style );
+      var cancelButton = basic.button(x + options.buttons.cancelOffsetX * scale, y + options.buttons.offsetY * scale, 'buttonsLarge', 2, onCancel, context);
+      var cancelButtonText = game.add.text(x + options.buttons.cancelOffsetX * scale, y + options.buttons.offsetY * scale, l10n.get('CANCEL'), options.buttons.style );
       cancelButtonText.anchor.set(0.5);
 
       base.add(win);
@@ -28,6 +29,8 @@ module.exports = function(game, Phaser){
       base.add(acceptButtonText);
       base.add(cancelButton);
       base.add(cancelButtonText);
+
+      basic.scale(base, scale);
       return base;
     }
   }
