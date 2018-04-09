@@ -187,9 +187,13 @@ module.exports = function(game, Phaser){
       }
 
       initialChildrenCount = children.length;
-
+      
       screenParams.offsetX = (config.width - map.getSize().x) / 2;
       screenParams.offsetY = (config.height - map.getSize().y) / 2;
+      
+      var isUIoverlap = screenParams.offsetY <= map.get().tileHeight;
+      if(isUIoverlap)
+        screenParams.offsetY += map.get().tileHeight / 3;
 
       game.world.setBounds(-screenParams.offsetX, -screenParams.offsetY, config.width - screenParams.offsetX, config.height - screenParams.offsetY);
       if(config.enableBorders){
