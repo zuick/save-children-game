@@ -15,7 +15,7 @@
     "express": "^4.15.2",
     "lodash.difference": "^4.5.0",
     "mkdirp": "^0.5.1",
-    "phaser": "^2.6.2",
+    "phaser-ce": "2.10.5",
     "underscore": "^1.8.3",
     "watchify": "^3.9.0"
   }
