@@ -2,61 +2,81 @@ var config = require('../configs/config');
 var storage = require('../modules/storage');
 var _manager;
 
-var AudioManager = function(game, Phaser){
-  this.enabled = storage.getSettings().audio;
-  this.currentMusic;
-  this.currentBuzz;
+function NativeSound(name, loop) {
+	this.play = function () {
+		window.plugins.NativeAudio.play(name);
+		if (loop)
+			window.plugins.NativeAudio.loop(name);
+	}
+	this.stop = function () {
+		window.plugins.NativeAudio.stop(name);
+	}
+}
 
-  this.play = function(sound){
-    if(this.enabled){
-      sound.play();
-    }
-  }
+var AudioManager = function (game, Phaser) {
+	this.isNativeAudioEnabled = function() {
+		return !!(window.plugins && window.plugins.NativeAudio);
+	}
+	this.enabled = storage.getSettings().audio;
+	this.currentMusic;
+	this.currentBuzz;
+	
+	this.play = function (sound) {
+		if (this.enabled) {
+			sound.play();
+		}
+	}
 
-  this.playBuzz = function(key, volume){
-    this.currentBuzz = this.playSound(key, volume);
-  }
+	this.playBuzz = function (key, volume) {
+		this.currentBuzz = this.playSound(key, volume);
+	}
 
-  this.stopBuzz = function(){
-    if(this.currentBuzz){
-      this.currentBuzz.stop();
-    }
-  }
+	this.stopBuzz = function () {
+		if (this.currentBuzz) {
+			this.currentBuzz.stop();
+		}
+	}
 
-  this.playMusic = function(key){
-    if(!this.currentMusic || this.currentMusic.key !== key){
-      if(this.currentMusic) this.currentMusic.stop();
-      this.currentMusic = game.add.audio(key, config.audio.musicVolume, true);
-      this.play(this.currentMusic);
-    }
-  }
+	this.playMusic = function (key) {
+		if (!this.currentMusic || this.currentMusic.key !== key) {
+			if (this.currentMusic) this.currentMusic.stop();
+			this.currentMusic = this.isNativeAudioEnabled()
+				? new NativeSound(key, true)
+				: game.add.audio(key, config.audio.musicVolume, true);
 
-  this.playSound = function(key, volume){
-    key = key || 'audioButton';
-    var sfx = game.add.audio(key, volume || config.audio.sfxVolume);
-    this.play(sfx);
-    return sfx;
-  }
+			this.play(this.currentMusic);
+		}
+	}
 
-  this.onSettingsChanged = function(settings){
-    if(this.currentMusic && this.enabled !== settings.audio){
-      this.enabled = settings.audio;
-      if(settings.audio){
-        this.play(this.currentMusic);
-      }else{
-        this.currentMusic.stop();
-      }
-    }
-  }
+	this.playSound = function (key, volume) {
+		key = key || 'audioButton';
+		var sfx = this.isNativeAudioEnabled()
+			? new NativeSound(key)
+			: game.add.audio(key, volume || config.audio.sfxVolume);
 
-  storage.addListener(this.onSettingsChanged.bind(this))
+		this.play(sfx);
+		return sfx;
+	}
+
+	this.onSettingsChanged = function (settings) {
+		if (this.currentMusic && this.enabled !== settings.audio) {
+			this.enabled = settings.audio;
+			if (settings.audio) {
+				this.play(this.currentMusic);
+			} else {
+				this.currentMusic.stop();
+			}
+		}
+	}
+
+	storage.addListener(this.onSettingsChanged.bind(this))
 }
 
 module.exports = {
-  init: function(game, Phaser){
-    _manager = new AudioManager(game, Phaser);
-  },
-  manager: function(){
-    return _manager;
-  }
+	init: function (game, Phaser) {
+		_manager = new AudioManager(game, Phaser);
+	},
+	manager: function () {
+		return _manager;
+	}
 }

@@ -142,7 +142,8 @@ module.exports = function(game, Phaser){
     },
     create: function(){
       game.world.setBounds(0, 0, config.width, config.height);
-      audioManager.playMusic('musicMenu');
+	  audioManager.playMusic('musicMenu');
+	  game.add.text(70, 350,"isNativeAudioEnabled: " + audioManager.isNativeAudioEnabled(), { font: "22px KZSupercell", fill: "#fff", align: "center" });
     }
   }
 }
