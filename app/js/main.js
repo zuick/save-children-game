@@ -1,5 +1,5 @@
 (function(){
-  document.addEventListener('DOMContentLoaded', function () {    
+  document.addEventListener('deviceready', function () {    
     window.PIXI = require('phaser-ce/build/custom/pixi');
     window.p2 = require('phaser-ce/build/custom/p2');
     window.Phaser = require('phaser-ce/build/custom/phaser-split');
@@ -18,7 +18,6 @@
     game.state.add('start', startState);
     game.state.add('game', gameState);
     game.state.add('boot', bootState);
-  
   
     game.state.start('boot');
   });

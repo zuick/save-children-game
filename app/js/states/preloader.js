@@ -134,25 +134,25 @@ module.exports = function (game, Phaser) {
 					console.log('error: ' + msg);
 				});
 			} else {
-				preloadMusic('musicEasy', 'assets/music/easy.ogg');
-				preloadMusic('musicMedium', 'assets/music/medium.ogg');
-				preloadMusic('musicHard', 'assets/music/hard.ogg');
-				preloadMusic('musicMenu', 'assets/music/menu.ogg');
+				preloadMusic('musicEasy', 'assets/music/easy.m4a');
+				preloadMusic('musicMedium', 'assets/music/medium.m4a');
+				preloadMusic('musicHard', 'assets/music/hard.m4a');
+				preloadMusic('musicMenu', 'assets/music/menu.m4a');
 
-				preloadSound('audioButton', 'assets/sfx/button.ogg');
-				preloadSound('audioWin', 'assets/sfx/win.ogg');
-				preloadSound('audioLose', 'assets/sfx/lose.ogg');
-				preloadSound('audioBonus', 'assets/sfx/bonus.ogg');
-				preloadSound('audioSpark1', 'assets/sfx/spark1.ogg');
-				preloadSound('audioSpark2', 'assets/sfx/spark2.ogg');
-				preloadSound('audioSpark3', 'assets/sfx/spark3.ogg');
-				preloadSound('audioSpark4', 'assets/sfx/spark4.ogg');
-				preloadSound('audioBuzz1', 'assets/sfx/buzz1.ogg');
-				preloadSound('audioBuzz2', 'assets/sfx/buzz2.ogg');
-				preloadSound('audioBuzz3', 'assets/sfx/buzz3.ogg');
-				preloadSound('audioBuzz4', 'assets/sfx/buzz4.ogg');
-				preloadSound('audioTarget', 'assets/sfx/target.ogg');
-				preloadSound('audioClash', 'assets/sfx/clash.ogg');
+				preloadSound('audioButton', 'assets/sfx/button.m4a');
+				preloadSound('audioWin', 'assets/sfx/win.m4a');
+				preloadSound('audioLose', 'assets/sfx/lose.m4a');
+				preloadSound('audioBonus', 'assets/sfx/bonus.m4a');
+				preloadSound('audioSpark1', 'assets/sfx/spark1.m4a');
+				preloadSound('audioSpark2', 'assets/sfx/spark2.m4a');
+				preloadSound('audioSpark3', 'assets/sfx/spark3.m4a');
+				preloadSound('audioSpark4', 'assets/sfx/spark4.m4a');
+				preloadSound('audioBuzz1', 'assets/sfx/buzz1.m4a');
+				preloadSound('audioBuzz2', 'assets/sfx/buzz2.m4a');
+				preloadSound('audioBuzz3', 'assets/sfx/buzz3.m4a');
+				preloadSound('audioBuzz4', 'assets/sfx/buzz4.m4a');
+				preloadSound('audioTarget', 'assets/sfx/target.m4a');
+				preloadSound('audioClash', 'assets/sfx/clash.m4a');
 			}
 
 			game.load.start();

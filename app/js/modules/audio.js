@@ -2,7 +2,10 @@ var config = require('../configs/config');
 var storage = require('../modules/storage');
 var _manager;
 
-function NativeSound(name, loop) {
+function NativeSound(name, loop, volume) {
+	volume = volume || 1;
+	window.plugins.NativeAudio.setVolumeForComplexAsset(name, volume);
+	
 	this.play = function () {
 		window.plugins.NativeAudio.play(name);
 		if (loop)
@@ -51,7 +54,7 @@ var AudioManager = function (game, Phaser) {
 	this.playSound = function (key, volume) {
 		key = key || 'audioButton';
 		var sfx = this.isNativeAudioEnabled()
-			? new NativeSound(key)
+			? new NativeSound(key, false, volume)
 			: game.add.audio(key, volume || config.audio.sfxVolume);
 
 		this.play(sfx);
