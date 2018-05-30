@@ -7,18 +7,6 @@ var utils = require('../modules/utils');
 module.exports = function (game, Phaser) {
 	function preloadSound(name, src) {
 		if (window.plugins && window.plugins.NativeAudio) {
-			window.plugins.NativeAudio.preloadSimple(
-				name, src,
-				function (msg) { },
-				function (msg) {
-					console.log('error: ' + msg);
-				});
-		}else{
-			game.load.audio(name, src);
-		}
-	}
-	function preloadMusic(name, src) {
-		if (window.plugins && window.plugins.NativeAudio) {
 			window.plugins.NativeAudio.preloadComplex(
 				name, src, 1, 1, 0,
 				function (msg) { },
@@ -127,33 +115,25 @@ module.exports = function (game, Phaser) {
 			game.load.spritesheet('quizQuestions', 'assets/UI/quiz_questions.png', 500, 390, 4);
 			game.load.spritesheet('quizAnswers', 'assets/UI/quiz_answers.png', 250, 251, 12);
 
-			if (window.plugins && window.plugins.NativeAudio) {
-				// Preload audio resources
-				window.plugins.NativeAudio.preloadComplex('music', 'audio/music.mp3', 1, 1, 0, function (msg) {
-				}, function (msg) {
-					console.log('error: ' + msg);
-				});
-			} else {
-				preloadMusic('musicEasy', 'assets/music/easy.m4a');
-				preloadMusic('musicMedium', 'assets/music/medium.m4a');
-				preloadMusic('musicHard', 'assets/music/hard.m4a');
-				preloadMusic('musicMenu', 'assets/music/menu.m4a');
+			preloadSound('musicEasy', 'assets/music/easy.m4a');
+			preloadSound('musicMedium', 'assets/music/medium.m4a');
+			preloadSound('musicHard', 'assets/music/hard.m4a');
+			preloadSound('musicMenu', 'assets/music/menu.m4a');
 
-				preloadSound('audioButton', 'assets/sfx/button.m4a');
-				preloadSound('audioWin', 'assets/sfx/win.m4a');
-				preloadSound('audioLose', 'assets/sfx/lose.m4a');
-				preloadSound('audioBonus', 'assets/sfx/bonus.m4a');
-				preloadSound('audioSpark1', 'assets/sfx/spark1.m4a');
-				preloadSound('audioSpark2', 'assets/sfx/spark2.m4a');
-				preloadSound('audioSpark3', 'assets/sfx/spark3.m4a');
-				preloadSound('audioSpark4', 'assets/sfx/spark4.m4a');
-				preloadSound('audioBuzz1', 'assets/sfx/buzz1.m4a');
-				preloadSound('audioBuzz2', 'assets/sfx/buzz2.m4a');
-				preloadSound('audioBuzz3', 'assets/sfx/buzz3.m4a');
-				preloadSound('audioBuzz4', 'assets/sfx/buzz4.m4a');
-				preloadSound('audioTarget', 'assets/sfx/target.m4a');
-				preloadSound('audioClash', 'assets/sfx/clash.m4a');
-			}
+			preloadSound('audioButton', 'assets/sfx/button.m4a');
+			preloadSound('audioWin', 'assets/sfx/win.m4a');
+			preloadSound('audioLose', 'assets/sfx/lose.m4a');
+			preloadSound('audioBonus', 'assets/sfx/bonus.m4a');
+			preloadSound('audioSpark1', 'assets/sfx/spark1.m4a');
+			preloadSound('audioSpark2', 'assets/sfx/spark2.m4a');
+			preloadSound('audioSpark3', 'assets/sfx/spark3.m4a');
+			preloadSound('audioSpark4', 'assets/sfx/spark4.m4a');
+			preloadSound('audioBuzz1', 'assets/sfx/buzz1.m4a');
+			preloadSound('audioBuzz2', 'assets/sfx/buzz2.m4a');
+			preloadSound('audioBuzz3', 'assets/sfx/buzz3.m4a');
+			preloadSound('audioBuzz4', 'assets/sfx/buzz4.m4a');
+			preloadSound('audioTarget', 'assets/sfx/target.m4a');
+			preloadSound('audioClash', 'assets/sfx/clash.m4a');
 
 			game.load.start();
 		}
