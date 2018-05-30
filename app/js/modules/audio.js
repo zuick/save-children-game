@@ -5,7 +5,7 @@ var _manager;
 function NativeSound(name, loop, volume) {
 	volume = volume || 1;
 	window.plugins.NativeAudio.setVolumeForComplexAsset(name, volume);
-	
+	this.key = name;
 	this.play = function () {
 		window.plugins.NativeAudio.play(name);
 		if (loop)
@@ -28,6 +28,11 @@ var AudioManager = function (game, Phaser) {
 		if (this.enabled) {
 			sound.play();
 		}
+	}
+
+	this.stopCurrentMusic = function(){
+		if(this.currentMusic)
+		this.currentMusic.stop();
 	}
 
 	this.playBuzz = function (key, volume) {

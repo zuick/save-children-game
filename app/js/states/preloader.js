@@ -8,7 +8,7 @@ module.exports = function (game, Phaser) {
 	function preloadSound(name, src) {
 		if (window.plugins && window.plugins.NativeAudio) {
 			window.plugins.NativeAudio.preloadComplex(
-				name, src, 1, 1, 0,
+				name, src, 1, 2, 0,
 				function (msg) { },
 				function (msg) {
 					console.log('error: ' + msg);
