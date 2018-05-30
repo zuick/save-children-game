@@ -71,7 +71,8 @@ module.exports = {
       0: 'levelItemCity',
       1: 'levelItemCountrySide',
       2: 'levelItemHouse'
-    }
+	},
+	blockScaleForSmallAspect: 0.8
   },
   help: {
     fadeDuration: 300,

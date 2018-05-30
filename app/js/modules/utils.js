@@ -46,5 +46,9 @@ module.exports = {
 					: config.height / sprite.height
 			);
 		}
+	},
+	isSmallAspect: function()
+	{
+		return config.width / config.height < 1.6
 	}
 }
