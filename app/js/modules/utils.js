@@ -50,5 +50,14 @@ module.exports = {
 	isSmallAspect: function()
 	{
 		return config.width / config.height < 1.6
+	},
+	setBodySize: function(body, w, h, bodyScale, worldScale)
+	{
+		body.setSize(
+			w * bodyScale * worldScale, 
+			h * bodyScale * worldScale, 
+			(w * worldScale- w * bodyScale * worldScale) /2, 
+			(h * worldScale - h * bodyScale * worldScale) /2
+		);
 	}
 }

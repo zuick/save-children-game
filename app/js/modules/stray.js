@@ -1,6 +1,7 @@
 var directions = require('./directions');
 var difference = require('lodash.difference');
 var config = require('../configs/config');
+var utils = require('./utils');
 
 module.exports = function(game, Phaser){
   function Stray(){
@@ -42,8 +43,8 @@ module.exports = function(game, Phaser){
       sprite.texture.width = w;
       sprite.texture.height = h;
 
-      game.physics.enable(sprite);
-      sprite.body.setSize(w * scale, h * scale, (w - w * scale) /2, (h - h * scale) /2);
+	  game.physics.enable(sprite);
+	  utils.setBodySize(sprite.body, w, h, scale, map.worldScale);
 
       floatX = x;
       floatY = y;
@@ -166,10 +167,6 @@ module.exports = function(game, Phaser){
 
     this.render = function(){
       game.debug.body(sprite);
-      if(map && currentTile && nextTile){
-        map.debugTile(currentTile);
-        map.debugTile(nextTile);
-      }
     }
 
     this.destroy = function(){

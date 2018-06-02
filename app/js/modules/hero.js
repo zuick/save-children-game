@@ -1,4 +1,4 @@
-var utils = require('../modules/utils');
+var utils = require('./utils');
 
 module.exports = function(game, Phaser){
   function Hero(){
@@ -21,7 +21,7 @@ module.exports = function(game, Phaser){
       sprite.texture.height = h;
 
       game.physics.enable(sprite);
-      sprite.body.setSize(w * scale, h * scale, (w - w * scale) /2, (h - h * scale) /2);
+	  utils.setBodySize(sprite.body, w, h, scale, map.worldScale);
     }
 
     this.getCollider = function(){

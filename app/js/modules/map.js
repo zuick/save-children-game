@@ -6,15 +6,18 @@ module.exports = function(game, Phaser){
     var map;
     var mainLayer;
     var children;
-    var _isTileOccupied;
-    this.create = function(tilemap, mainLayerName, isTileOccupied){
+	var _isTileOccupied;
+	this.worldScale = 1;
+
+    this.create = function(tilemap, mainLayerName, isTileOccupied, worldScale){
       _isTileOccupied = isTileOccupied;
       map = game.add.tilemap(tilemap);
       map.addTilesetImage('tilemap', 'tilemap');
 
       if(typeof(mainLayerName) !== 'undefined'){
         mainLayer = map.createLayer(mainLayerName);
-      }
+	  }
+	  this.worldScale = worldScale;
     }
 
     this.getTilesInLayer = function(layerName, indexes, reversed){
@@ -143,7 +146,10 @@ module.exports = function(game, Phaser){
     }
 
     this.ceilPosition = function(x, y){
-      return { x: Math.floor(Math.round(x) / map.tileWidth) * map.tileWidth, y: Math.floor(Math.round(y) / map.tileHeight) * map.tileHeight };
+      return { 
+		x: Math.floor(Math.round(x) / map.tileWidth) * map.tileWidth,
+		y: Math.floor(Math.round(y) / map.tileHeight) * map.tileHeight
+	  };
     }
 
     this.debugTile = function(tile){

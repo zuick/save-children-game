@@ -41,6 +41,8 @@ module.exports = function(game, Phaser){
     offsetY: 0
   }
   var time = 0;
+  var worldScale = 1;
+  var mapPosition = { x: 0, y: 0 };
   return {
     init: function(blockIndex, levelIndex, isSlowMode){
       children = [];
@@ -89,14 +91,28 @@ module.exports = function(game, Phaser){
       if(!vis.state()){
         this.onPauseClicked();
       }
-    },
+	},
+	adjustLayer: function(layer){
+	  layer.scale.set(worldScale);
+	  
+	  layer.x += mapPosition.x;
+	  layer.y += mapPosition.y; 
+	},
     loadMap: function(){
-      map.create('level' + currentBlockIndex + '-' + currentLevelIndex, void 0, this.isTileOccupied.bind(this));
+	  map.create('level' + currentBlockIndex + '-' + currentLevelIndex, void 0, this.isTileOccupied.bind(this), worldScale);
+	  mapPosition.x = (map.getSize().x * (1 - worldScale)) / 2;
+	  mapPosition.y = (map.getSize().y * (1 - worldScale)) / 2;
+
       farLayer = game.add.group();
       backLayer = game.add.group();
       middleLayer = game.add.group();
       frontLayer = game.add.group();
       UILayer = game.add.group();
+	
+	  this.adjustLayer(farLayer);
+	  this.adjustLayer(backLayer);
+	  this.adjustLayer(middleLayer);
+	  this.adjustLayer(frontLayer);
 
       var childSpeed = slowMode
         ? config.children.slowModeSpeed
@@ -172,7 +188,7 @@ module.exports = function(game, Phaser){
 
             }else if(config.map.objects.escapes.indexOf(obj.gid) !== -1){
               var instance = new Escape();
-              instance.create(worldPosition.x, worldPosition.y, spriteOptions);
+              instance.create(worldPosition.x, worldPosition.y, map, spriteOptions);
               backLayer.add(instance.getCollider());
               escapes.push(instance);
 
@@ -676,7 +692,9 @@ module.exports = function(game, Phaser){
       if(state === states.paused){
         this.onContinueClicked();
       }else if(state === states.normal){
-        var ceiled = map.ceilPosition(pointer.x - screenParams.offsetX, pointer.y - screenParams.offsetY);
+		var scaledX = pointer.x - mapPosition.x - screenParams.offsetX;
+		var scaledY = pointer.y - mapPosition.y - screenParams.offsetY;
+        var ceiled = map.ceilPosition(scaledX / worldScale, scaledY / worldScale);
         if(bonuses.map(function(b){ return map.ceilPosition(b.sprite.x, b.sprite.y) }).filter(function(b){ return ceiled.x === b.x && ceiled.y === b.y }).length === 0){
           this.destroyHero();
 
@@ -700,7 +718,13 @@ module.exports = function(game, Phaser){
       if(config.debug){
         children.forEach(function(child){
           child.render();
-        });
+		});
+		traps.forEach(function(item){
+			item.render();
+		});
+		escapes.forEach(function(item){
+			item.render();
+		});
         if(hero){
           hero.render();
         }

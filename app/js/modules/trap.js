@@ -1,3 +1,5 @@
+var utils = require('./utils');
+
 module.exports = function(game, Phaser){
   function Trap(){
     var sprite;
@@ -17,12 +19,16 @@ module.exports = function(game, Phaser){
       sprite.texture.height = h;
 
       game.physics.enable(sprite);
-      sprite.body.setSize(w * scale, h * scale, (w - w * scale) /2, (h - h * scale) /2);
+	  utils.setBodySize(sprite.body, w, h, scale, map.worldScale);
     }
 
     this.getCollider = function(){
       return sprite;
-    }
+	}
+
+	this.render = function(){
+		game.debug.body(sprite);
+	}
   }
 
   return Trap;
