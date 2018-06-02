@@ -6,7 +6,7 @@
     window.Phaser = require('phaser-ce/build/custom/phaser-split');
     var config = require('./configs/config');
     config.width = (document.body.clientWidth / document.body.clientHeight) * config.height;
-    var game = new Phaser.Game(config.width, config.height, window.Phaser.AUTO);
+    var game = new Phaser.Game(config.width, config.height, window.Phaser.CANVAS);
   
     require('./modules/audio').init(game, window.Phaser);
     var gameState = require('./states/game')(game, window.Phaser);

@@ -43,9 +43,13 @@ module.exports = function(game, Phaser){
   var time = 0;
   var worldScale = 1;
   var mapPosition = { x: 0, y: 0 };
+  var disableCollisions, disableFX, disableStrayUpdate;
   return {
-    init: function(blockIndex, levelIndex, isSlowMode){
-      children = [];
+    init: function(blockIndex, levelIndex, isSlowMode, _disableCollisions, _disableFX, _disableStrayUpdate){
+	  disableCollisions = _disableCollisions;
+	  disableFX = _disableFX;
+	  disableStrayUpdate = _disableStrayUpdate;
+	  children = [];
       traps = [];
       escapes = [];
       sparksEffects = [];
@@ -518,6 +522,8 @@ module.exports = function(game, Phaser){
       bonusesMarks = [];
 
       traps.forEach(function(trap){
+		if(disableFX)
+		  	return;
         var options = UI.game.sparks.simple;
         var basicFrames = [0,1,2,3,4,5,6,7,8,9,10,10,10];
         for(var i = 0; i < Math.floor(Math.random() * options.emptyFramesRange); i++){
@@ -548,18 +554,21 @@ module.exports = function(game, Phaser){
           hero.setDirectionFromChildrens(children.map(function(child){ return child.position() }));
         }
         children.forEach(function(child){
-          traps.forEach(function(trap){
-            game.physics.arcade.collide(child.getCollider(), trap.getCollider(), _this.trapCollision, null, _this);
-          });
-
-          escapes.forEach(function(esc){
-            game.physics.arcade.collide(child.getCollider(), esc.getCollider(), _this.escapeCollision, null, _this);
-          });
-
-          if(hero){
-            game.physics.arcade.collide(child.getCollider(), hero.getCollider(), _this.heroCollision, null, _this);
-          }
-          child.update();
+			if(!disableCollisions){
+				traps.forEach(function(trap){
+				  game.physics.arcade.collide(child.getCollider(), trap.getCollider(), _this.trapCollision, null, _this);
+				});
+	  
+				escapes.forEach(function(esc){
+				  game.physics.arcade.collide(child.getCollider(), esc.getCollider(), _this.escapeCollision, null, _this);
+				});
+	  
+				if(hero){
+				  game.physics.arcade.collide(child.getCollider(), hero.getCollider(), _this.heroCollision, null, _this);
+				}
+			}
+			if(!disableStrayUpdate)
+          		child.update();
         });
 
         if(initialChildrenCount !== 0 && initialChildrenCount === savedChildren){
@@ -716,6 +725,7 @@ module.exports = function(game, Phaser){
       }
     },
     render: function(){
+	  game.debug.text(Math.floor(1000 / game.time.elapsed), 80, 25, '#00ff00');
       if(config.debug){
         children.forEach(function(child){
           child.render();

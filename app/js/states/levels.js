@@ -28,7 +28,15 @@ module.exports = function(game, Phaser){
     },
 
     drawLevelItem: function(x, y, index, number, type, scale, resolved){
-      var item = game.add.button(x, y, 'levelsItems', function(){ game.state.start('game', true, false, currentBlockIndex, index);}, this, type);
+      var item = game.add.button(x, y, 'levelsItems', function(){ 
+		  game.state.start(
+			'game', true, false, currentBlockIndex, index, false, 
+			levelsConfig[currentBlockIndex][index].disableCollisions,
+			levelsConfig[currentBlockIndex][index].disableFX,
+			levelsConfig[currentBlockIndex][index].disableStrayUpdate
+		  );
+		}, this, type
+	  );
 	  item.setFrames(type, type, type);
 	  
 	  item.scale.set(scale);
@@ -183,6 +191,10 @@ module.exports = function(game, Phaser){
       game.world.setBounds(0, 0, config.width, config.height);
       this.redraw(scale);
       audioManager.playMusic('musicMenu');
-    }
+	},
+	
+	render: function(){
+		game.debug.text(Math.floor(1000 / game.time.elapsed), 80, 25, '#00ff00');
+	}
   }
 }
