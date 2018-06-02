@@ -6,7 +6,6 @@ var utils = require('../modules/utils');
 
 module.exports = function (game, Phaser) {
 	function preloadSound(name, src) {
-		return;
 		if (window.plugins && window.plugins.NativeAudio) {
 			window.plugins.NativeAudio.preloadComplex(
 				name, src, 1, 2, 0,

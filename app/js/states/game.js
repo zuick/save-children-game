@@ -41,7 +41,7 @@ module.exports = function(game, Phaser){
     offsetY: 0
   }
   var time = 0;
-  var worldScale = 0.5;
+  var worldScale = 1;
   var mapPosition = { x: 0, y: 0 };
   return {
     init: function(blockIndex, levelIndex, isSlowMode){
@@ -99,7 +99,8 @@ module.exports = function(game, Phaser){
 	  layer.y += mapPosition.y; 
 	},
     loadMap: function(){
-	  map.create('level' + currentBlockIndex + '-' + currentLevelIndex, void 0, this.isTileOccupied.bind(this), worldScale);
+	  worldScale = map.create('level' + currentBlockIndex + '-' + currentLevelIndex, void 0, this.isTileOccupied.bind(this));
+
 	  mapPosition.x = (map.getSize().x * (1 - worldScale)) / 2;
 	  mapPosition.y = (map.getSize().y * (1 - worldScale)) / 2;
 

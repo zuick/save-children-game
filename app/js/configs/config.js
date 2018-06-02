@@ -1,7 +1,7 @@
 module.exports = {
   debug: false,
-  width: 1024,
-  height: 768,
+  width: 1920,
+  height: 1080,
   enableBorders: false,
   firstVisitTutorialShow: 4,
   defaultLanguage: 'ru',
@@ -26,6 +26,9 @@ module.exports = {
     buzzVolume: 0.3
   },
   map: {
+	heightOverflow: 300,
+	widthOverflow: 157,
+	additionalScale: 0.04,
     main: {
       name: "main",
       walls: [7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24],

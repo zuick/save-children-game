@@ -15,7 +15,7 @@ module.exports = {
 	},
 	isMobile: function()
 	{
-		return false; //(Phaser.Device.iOS || Phaser.Device.android);
+		return Phaser.Device.iOS || Phaser.Device.android;
 	},
 	getUIScale: function (mobileScale) {
 		return this.isMobile() ? (mobileScale || UI.popups.mobileScale) : 1;
