@@ -1,7 +1,7 @@
 module.exports = {
   debug: false,
-  width: 1920,
-  height: 1080,
+  width: 1024,
+  height: 768,
   enableBorders: false,
   firstVisitTutorialShow: 4,
   defaultLanguage: 'ru',

@@ -6,6 +6,7 @@ var utils = require('../modules/utils');
 
 module.exports = function (game, Phaser) {
 	function preloadSound(name, src) {
+		return;
 		if (window.plugins && window.plugins.NativeAudio) {
 			window.plugins.NativeAudio.preloadComplex(
 				name, src, 1, 2, 0,
@@ -26,7 +27,7 @@ module.exports = function (game, Phaser) {
 			}
 		},
 		loadComplete: function () {
-			game.state.start('start', true, false);
+			game.state.start('game', true, false, 1, 0);
 		},
 		create: function () {
 			utils.backgroundFullSize(game.add.sprite(0, 0, 'splash'));

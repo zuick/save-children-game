@@ -41,7 +41,7 @@ module.exports = function(game, Phaser){
     offsetY: 0
   }
   var time = 0;
-  var worldScale = 1;
+  var worldScale = 0.5;
   var mapPosition = { x: 0, y: 0 };
   return {
     init: function(blockIndex, levelIndex, isSlowMode){
@@ -113,7 +113,8 @@ module.exports = function(game, Phaser){
 	  this.adjustLayer(backLayer);
 	  this.adjustLayer(middleLayer);
 	  this.adjustLayer(frontLayer);
-
+	  
+		
       var childSpeed = slowMode
         ? config.children.slowModeSpeed
         : (levelsConfig[currentBlockIndex][currentLevelIndex].childrenSpeed || config.children.defaultSpeed ) - Math.round(Math.random() * config.children.speedAccuracy);
@@ -264,8 +265,7 @@ module.exports = function(game, Phaser){
       return t;
     },
     create: function() {
-      var isMobile = (Phaser.Device.iOS || Phaser.Device.android);
-      var uiConfig = isMobile ? UI.game.mobile : UI.game.desktop;
+      var uiConfig = utils.isMobile() ? UI.game.mobile : UI.game.desktop;
       var scale = uiConfig.scale;
 
       game.stage.backgroundColor = UI.game.backgroundColor[type];

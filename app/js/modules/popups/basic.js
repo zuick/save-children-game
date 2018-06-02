@@ -1,6 +1,6 @@
 var config = require('../../configs/config');
 var UI = require('../../configs/ui');
-
+var utils = require('../utils')
 module.exports = function(game, Phaser){
   return {
     create: function(x, y, opacity, key){      
@@ -11,8 +11,7 @@ module.exports = function(game, Phaser){
       return popup;
     },
     scale: function(baseGroup, mobileScale){
-      var scale = (Phaser.Device.iOS || Phaser.Device.android) ? (mobileScale || UI.popups.mobileScale) : 1;
-      baseGroup.forEach(function(child){ child.scale.set(scale); }, this, true);
+      baseGroup.forEach(function(child){ child.scale.set(utils.getUIScale(mobileScale)); }, this, true);
     },
     tint: function(x, y, w, h, opacity, color, key){
       var tint = game.add.sprite(x || config.width / 2, y || config.height / 2, key || 'pixel');
