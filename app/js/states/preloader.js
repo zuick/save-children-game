@@ -26,7 +26,7 @@ module.exports = function (game, Phaser) {
 			}
 		},
 		loadComplete: function () {
-			game.state.start('game', true, false, 1, 0);
+			game.state.start('start', true, false);
 		},
 		create: function () {
 			utils.backgroundFullSize(game.add.sprite(0, 0, 'splash'));
