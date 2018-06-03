@@ -7,9 +7,10 @@ function NativeSound(name, loop, volume) {
 	window.plugins.NativeAudio.setVolumeForComplexAsset(name, volume);
 	this.key = name;
 	this.play = function () {
-		window.plugins.NativeAudio.play(name);
 		if (loop)
 			window.plugins.NativeAudio.loop(name);
+		else
+			window.plugins.NativeAudio.play(name);
 	}
 	this.stop = function () {
 		window.plugins.NativeAudio.stop(name);
