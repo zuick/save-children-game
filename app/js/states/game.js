@@ -725,7 +725,6 @@ module.exports = function(game, Phaser){
       }
     },
     render: function(){
-	  game.debug.text(Math.floor(1000 / game.time.elapsed), 80, 25, '#00ff00');
       if(config.debug){
         children.forEach(function(child){
           child.render();
